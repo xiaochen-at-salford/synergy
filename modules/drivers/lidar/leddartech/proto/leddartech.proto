@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package apollo.drivers.leddartech;
+
+import "modules/common/proto/header.proto";
+
+message LeddartechPacket {
+    optional uint64 frame = 1;
+    optional uint64 timestamp = 2;
+    optional uint32 channel = 3;
+    optional uint32 distance = 4;
+    optional uint32 amplitude = 5;
+}
+
+message LeddartechScan {
+    optional apollo.common.Header header = 1;  // apollo header
+    optional uint32 model = 2;                 // device model
+    optional string sn = 4;
+    repeated LeddartechPacket detections = 5;
+}

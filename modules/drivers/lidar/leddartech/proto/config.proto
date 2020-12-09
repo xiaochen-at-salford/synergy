@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package apollo.drivers.leddartech;
+
+import "modules/drivers/lidar/leddartech/proto/leddartech.proto";
+
+message Config {
+    optional string ip = 1 [default = "192.168.0.2"];
+    optional string device_name = 2;
+    optional string firware_version = 3;
+    optional string hw_part_number = 4;
+    optional string sw_part_number = 5;
+    optional string serial_number = 6;
+    optional string mac_address = 7;
+    optional uint32 sensor_state = 8;
+    optional uint32 data_port = 9;
+}
