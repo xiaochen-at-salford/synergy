@@ -1,10 +1,10 @@
 module_config {
     module_library : "/apollo/bazel-bin/modules/drivers/lidar/leddartech/driver/libleddartech_driver_component.so"
-
     components {
       class_name : "LeddartechDriverComponent"
       config {
         name : "leddartech_driver"
+        config_file_path : "/apollo/modules/drivers/lidar/leddartech/conf/leddartech_conf.pb.txt"
         readers {
             channel: "/apollo/test"
         }

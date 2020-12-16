@@ -6,24 +6,18 @@
 
 ## 1.1 Requirements
 
-The Leddartech Apollo's driver depends on the LeddarSDK package. At the moment of writing we opted for a custom Apollo docker that bundled the LeddarSDK.
+The Leddartech Apollo's driver depends on the LeddarSDK package which is provided in the third_party folder. 
 
-Here is how to use the custom docker:
-```bash
-$ cd apollo/docker/build
-$ ./build_dev.sh -f dev.x86_64.dockerfile -m build
-```
-Once the custom docker is built the `dev_start.sh` script will need to be modified.
-
-It `dev_start.sh` look for the variable `VERSION_X86_64` and change the string to the string given by `build_dev.sh`. In my case my new image is called: `dev-x86_64-18.04-20201209_1649`
-
-Running the newly created image:
-```bash
-$ bash docker/scripts/dev_start.sh -l
-```
-
-At this point you can follow the documentation here:
+One can follow the direction here to setup apollo.
 https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
+
+## 1.2 Notes
+If changes needs to be done to the protobuf format. There is a tool available from apollo that automatically generates all the required files.
+For the script to works one needs to be in apollo dev shell.
+
+```sh
+$ proto_build_generator.py modules/drivers/lidar/leddartech/proto/BUILD
+```
 
 ## 2 Run
 
@@ -32,13 +26,13 @@ https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software
 #### 2.1 RS16
 
 ```sh
-cyber_launch start /apollo/modules/drivers/lidar/robosense/launch/rs16.launch
+cyber_launch start /apollo/modules/drivers/lidar/leddartech/launch/leddartech.launch
 ```
 
 or
 
 ```sh
-mainboard -d /apollo/modules/drivers/lidar/robosenseag/rs16.dag
+mainboard -d /apollo/modules/drivers/lidar/leddartech/dag/leddartech.dag
 ```
 
 Default Channel Name：

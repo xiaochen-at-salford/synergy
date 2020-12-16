@@ -9,7 +9,9 @@ message LeddartechPacket {
     optional uint64 timestamp = 2;
     optional uint32 channel = 3;
     optional uint32 distance = 4;
-    optional uint32 amplitude = 5;
+    optional uint32 distance_scale = 5;
+    optional uint32 amplitude = 6;
+    optional uint32 amplitude_scale = 7;
 }
 
 message LeddartechScan {
@@ -17,4 +19,4 @@ message LeddartechScan {
     optional uint32 model = 2;                 // device model
     optional string sn = 4;
     repeated LeddartechPacket detections = 5;
-}
+} 

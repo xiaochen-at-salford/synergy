@@ -24,6 +24,28 @@ cc_library(
     deps = [
         "//cyber",
         "//modules/common/util:message_util",
+        "//modules/drivers/lidar/leddartech/driver",
+        "@leddarSDK//:lib",
+    ],
+)
+
+cc_library(
+    name = "driver",
+    srcs = [
+        "driver.cc",
+    ],
+    hdrs = [
+        "driver.h",
+    ],
+    copts = [
+        '-DMODULE_NAME=\\"leddartech\\"',
+        '-Iexternal/leddarSDK/src/Leddar',
+        '-Iexternal/leddarSDK/src/LeddarTech',
+        '-Iexternal/leddarSDK/src/shared',
+        '-Iexternal/leddarSDK/libs/RapidJson',
+        ],
+    deps = [
+        "//cyber",
         "//modules/common/util",
         "//modules/drivers/lidar/leddartech/proto:config_cc_proto",
         "@leddarSDK//:lib",

@@ -1,93 +1,93 @@
-#include "modules/drivers/lidar/leddartech/driver/leddartech_driver_component.h"
 #include "LdConnectionFactory.h"
 #include "LdDeviceFactory.h"
-#include "LdPropertyIds.h"
-#include "LdResultEchoes.h"
 #include "LdLjrRecorder.h"
+#include "LdPropertyIds.h"
 #include "LdRecordPlayer.h"
+#include "LdResultEchoes.h"
 
-//Ethernet
+// Ethernet
 #include "LdConnectionInfoEthernet.h"
 #include "LdEthernet.h"
 #include "LdSensorPixell.h"
 
-//Utils
+// Utils
 #include "LtExceptions.h"
 #include "LtKeyboardUtils.h"
 #include "LtStringUtils.h"
 #include "LtTimeUtils.h"
 #include "comm/LtComLeddarTechPublic.h"
-#include  "cyber/cyber.h"
+
+#include "cyber/cyber.h"
+#include "modules/common/util/message_util.h"
+#include "modules/drivers/lidar/leddartech/driver/driver.h"
+#include "modules/drivers/lidar/leddartech/driver/leddartech_driver_component.h"
 
 namespace apollo {
 namespace drivers {
 namespace leddartech {
 
-LeddartechDriverComponent::LeddartechDriverComponent() {
-  AINFO << "Leddartech component constructor";
+LeddartechDriverComponent::~LeddartechDriverComponent(){
+  if (device_thread_->joinable()){
+    device_thread_->join();
+    drv_->GetSensor()->Disconnect();
+  }
 }
-
-LeddartechDriverComponent::~LeddartechDriverComponent() {
-  AINFO << "Leddartech component destuctor";
-}
-
 bool LeddartechDriverComponent::Init() {
-  auto *lConnectionInfo = new LeddarConnection::LdConnectionInfoEthernet( "192.168.0.2", 48630, "", LeddarConnection::LdConnectionInfo::CT_ETHERNET_LEDDARTECH );
-  auto *lConnectionEthernet =  new LeddarConnection::LdEthernet( lConnectionInfo );
-  auto *lProtocol = new LeddarConnection::LdProtocolLeddartechEthernet( lConnectionInfo, lConnectionEthernet );
-  LeddarDevice::LdSensor *lSensor = new LeddarDevice::LdSensorPixell( lProtocol );
-
-  AINFO << "Leddartech driver" << std::endl;
-  // Connect the device
-  lSensor->Connect();
-
-  if (lSensor == nullptr) {
-    AINFO << "Error connecting to the sensor";
+  AINFO << "LeddarTech driver component init" << std::endl;
+  Config leddartech_config;
+  if (!GetProtoConfig(&leddartech_config)) {
+    std::cout << "cannot open file" << std::endl;
+    return false;
   }
-  else if (lSensor != nullptr) {
-    lSensor->GetConstants();
-    lSensor->GetConfig();
-    lSensor->SetDataMask( LeddarDevice::LdSensor::DM_ALL );
-    uint32_t count = 0;
-    std::cout <<"Sensor found" << std::endl;
-    while(count < 10) {
-      bool newData = lSensor->GetData();
-      if (newData) {
-        std::cout << "newData" << std::endl;
-        LeddarConnection::LdResultEchoes *lResultEchoes = lSensor->GetResultEchoes();
-        uint32_t lDistanceScale = lResultEchoes->GetDistanceScale();
-        uint32_t lAmplitudeScale = lResultEchoes->GetAmplitudeScale();
 
-        lResultEchoes->Lock(LeddarConnection::B_GET);
-        std::cout << "Pixell" << std::endl;
-        std::cout << "Channel\tDistance\tAmplitude" << std::endl;
-        std::vector<LeddarConnection::LdEcho> &lEchoes = *( lResultEchoes->GetEchoes() );
+  writer_ = node_->CreateWriter<LeddartechScan>("1");
+  LeddartechDriver *driver =
+      LeddartechDriverFactory::CreateDriver(leddartech_config);
 
-        for( uint32_t i = 0; i < lResultEchoes->GetEchoCount(); ++i )
-        {
-          std::cout << lEchoes[i].mChannelIndex;
-          std::cout << "\t" << std::setprecision( 3 ) << ( ( float )lEchoes[i].mDistance / ( float )lDistanceScale );
-          std::cout << "\t\t" << std::setprecision( 3 ) << ( ( float )lEchoes[i].mAmplitude / ( float )lAmplitudeScale );
-
-          if( lEchoes[i].mTimestamp != 0 ) {
-            std::cout << "\t@" << lEchoes[i].mTimestamp << std::endl;
-          }
-          std::cout << std::endl;
-        }
-
-        lResultEchoes->UnLock( LeddarConnection::B_GET );
-        count++;
-      } else {
-        std::cout << "no new data" << std::endl;
-      }
+  if (driver == nullptr) {
+    std::cout << "cannot open driver" << std::endl;
+    return false;
   }
-  lSensor->Disconnect();
-  delete lSensor;
-  }
+
+  std::cout << "driver opened" << std::endl;
+  drv_.reset(driver);
+  drv_->Init();
+  drv_->GetSensor()->Connect();
+  drv_->GetSensor()->GetConstants();
+  drv_->GetSensor()->GetConfig();
+  drv_->GetSensor()->SetDataMask(LeddarDevice::LdSensor::DM_ALL);
+  running_ = true;
+  device_thread_ = std::shared_ptr<std::thread> (
+      new std::thread(std::bind(&LeddartechDriverComponent::device_poll, this)));
+  device_thread_->detach();
+
   return true;
 }
 
+void LeddartechDriverComponent::device_poll() {
+  std::cout << "Device poll" << std::endl;
+  while (!apollo::cyber::IsShutdown()) {
+    std::shared_ptr<LeddartechScan> scan = std::make_shared<LeddartechScan>();
+    bool ret = drv_->Poll(scan);
+    std::cout << "One:" << scan->DebugString() << std::endl;
+    std::cout << "after one" << std::endl;
+    if (ret) {
+      std::cout << "before fill hrd" << std::endl;
+      common::util::FillHeader("leddartech", scan.get());
+      std::cout << "FillHeader" << std::endl;
+      //std::cout << "values:" << writer_->Write(scan) << std::endl;
+      std::cout << "after writer" << std::endl;
+    } else {
+      AWARN << "device poll failed";
+      std::cout << "error writing" << std::endl;
+    }
+  }
 
+  AERROR << "LeddartechDriver thread exit";
+  std::cout << " error thread exit" << std::endl;
+  running_ = false;
 }
-}
-}
+
+}  // namespace leddartech
+}  // namespace drivers
+}  // namespace apollo
