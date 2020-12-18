@@ -12,6 +12,12 @@ message LeddartechPacket {
     optional uint32 distance_scale = 5;
     optional uint32 amplitude = 6;
     optional uint32 amplitude_scale = 7;
+    optional uint32 hIndex = 8;
+    optional uint32 vIndex = 9;
+    optional double x = 10;
+    optional double y = 11;
+    optional double z = 12;
+    optional uint32 flag = 13;
 }
 
 message LeddartechScan {

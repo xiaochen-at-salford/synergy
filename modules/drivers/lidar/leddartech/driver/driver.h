@@ -5,6 +5,7 @@
 
 #include "modules/drivers/lidar/leddartech/proto/config.pb.h"
 #include "modules/drivers/lidar/leddartech/proto/leddartech.pb.h"
+#include "cyber/cyber.h"
 
 #include "LdConnectionFactory.h"
 #include "LdDeviceFactory.h"
@@ -33,8 +34,10 @@ class LeddartechDriver {
  public:
     explicit LeddartechDriver(const Config &config) : config_(config){}
     virtual ~LeddartechDriver();
-    std::shared_ptr<LeddarDevice::LdSensor> GetSensor();
+    std::shared_ptr<LeddarDevice::LdSensorPixell> GetSensor();
     virtual bool Poll(const std::shared_ptr<LeddartechScan> &scan);
+    void KeepAlive();
+    std::unique_ptr<cyber::Timer> keep_alive_thread_;
 
     virtual void Init();
     void SetEthernetConnectionInfo(std::string ip, uint32_t port);
@@ -45,15 +48,15 @@ class LeddartechDriver {
  protected:
     Config config_;
     std::string topic_;
-    std::shared_ptr<LeddarConnection::LdConnectionInfoEthernet> lConnectionInfo;
-    std::shared_ptr<LeddarConnection::LdEthernet> lConnectionEthernet;
-    std::shared_ptr<LeddarConnection::LdProtocolLeddartechEthernet> lProtocol;
+    std::unique_ptr<LeddarConnection::LdConnectionInfoEthernet> lConnectionInfo;
+    std::unique_ptr<LeddarConnection::LdEthernet> lConnectionEthernet;
+    std::unique_ptr<LeddarConnection::LdProtocolLeddartechEthernet> lProtocol;
     std::shared_ptr<LeddarDevice::LdSensorPixell> lSensor;
 };
 
 class LeddartechDriverFactory {
     public:
-        static LeddartechDriver *CreateDriver(const Config &config);
+        static std::shared_ptr<LeddartechDriver> CreateDriver(const Config& config);
 };
 
 } //leddartech
