@@ -45,21 +45,25 @@ bool LeddartechDriver::Poll(const std::shared_ptr<LeddartechScan>& scan) {
     for (uint32_t i = 0; i < lResultEchoes->GetEchoCount(); ++i) {
       LeddartechPacket* packet = scan->add_detections();
       uint16_t channelIndex = lEchoes[i].mChannelIndex;
-      LeddarUtils::LtMathUtils::LtPointXYZ xyz =
-          lEchoes[i].ToXYZ(177.5, 16.0, 96, 8, lDistanceScale);
-
-      packet->set_channel(channelIndex);
-      packet->set_distance(lEchoes[i].mDistance);
-      packet->set_distance_scale(lDistanceScale);
-      packet->set_amplitude(lEchoes[i].mAmplitude);
-      packet->set_amplitude_scale(lAmplitudeScale);
-      packet->set_timestamp(lEchoes[i].mTimestamp);
-      packet->set_hindex(channelIndex % 96);
-      packet->set_vindex(channelIndex / 96);
-      packet->set_x(xyz.x);
-      packet->set_y(xyz.y);
-      packet->set_z(xyz.z);
-      packet->set_flag(lEchoes[i].mFlag);
+      try {
+        LeddarUtils::LtMathUtils::LtPointXYZ xyz =
+            lEchoes[i].ToXYZ(177.5, 16.0, 96, 8, lDistanceScale);
+        packet->set_channel(channelIndex);
+        packet->set_distance(lEchoes[i].mDistance);
+        packet->set_distance_scale(lDistanceScale);
+        packet->set_amplitude(lEchoes[i].mAmplitude);
+        packet->set_amplitude_scale(lAmplitudeScale);
+        packet->set_timestamp(lEchoes[i].mTimestamp);
+        packet->set_hindex(channelIndex % 96);
+        packet->set_vindex(channelIndex / 96);
+        packet->set_x(xyz.x);
+        packet->set_y(xyz.y);
+        packet->set_z(xyz.z);
+        packet->set_flag(lEchoes[i].mFlag);
+      } catch (std::out_of_range) {
+        std::cout << "LeddarUtils: error" << std::endl;
+        continue;
+      }
     }
 
     lResultEchoes->UnLock(LeddarConnection::B_GET);
