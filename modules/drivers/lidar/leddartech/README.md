@@ -11,19 +11,11 @@ The Leddartech Apollo's driver depends on the LeddarSDK package which is provide
 One can follow the direction here to setup apollo.
 https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
 
-## 1.2 Notes
-If changes needs to be done to the protobuf format. There is a tool available from apollo that automatically generates all the required files.
-For the script to works one needs to be in apollo dev shell.
-
-```sh
-$ proto_build_generator.py modules/drivers/lidar/leddartech/proto/BUILD
-```
-
 ## 2 Run
 
 **All the drivers need to be excuted under Apollo docker environment.**
 
-#### 2.1 RS16
+#### 2.1 Single Pixell Sensor
 
 ```sh
 cyber_launch start /apollo/modules/drivers/lidar/leddartech/launch/leddartech.launch
@@ -35,14 +27,44 @@ or
 mainboard -d /apollo/modules/drivers/lidar/leddartech/dag/leddartech.dag
 ```
 
-Default Channel Name：
+Default Configuration:
+- ip: 192.168.0.2
+- port: 48630
+- Scan channel: /apollo/sensor/lidar/leddartech/scan
+- PointCloud channel: /apollo/sensor/lidar/leddartech/PointCloud
 
-- Original point cloud -- /apollo/sensor/rs16/PointCloud2
+### 2.2 Multi Pixell Sensor
 
-- Scan--/apollo/sensor/rs16/Scan
-- Compensation point cloud -- /apollo/sensor/rs16/compensator/PointCloud2
+```sh
+cyber_launch start /apollo/modules/drivers/lidar/leddartech/launch/leddartech-multi.launch
+```
+
+or
+
+```sh
+mainboard -d /apollo/modules/drivers/lidar/leddartech/dag/leddartech-multi-pixell.dag
+```
+
+Default Configuration:
+Left Sensor:
+- ip: 192.168.1.2
+- port: 48630
+- Scan channel: /apollo/sensor/lidar/leddartech/left/scan
+- PointCloud channel: /apollo/sensor/lidar/leddartech/left/PointCloud
+
+Right Sensor:
+- ip: 192.168.0.2
+- port: 48630
+- Scan channel: /apollo/sensor/lidar/leddartech/right/scan
+- PointCloud channel: /apollo/sensor/lidar/leddartech/right/PointCloud
 
 ## 3 Parameters Intro
+
+Visualisation can be done through
+- cyber_monitor
+  - Console display of data
+- cyber_visualizer
+  - GUI that display the data on a scene
 
 [Intro to parameters](doc/parameter_intro.md)
 
