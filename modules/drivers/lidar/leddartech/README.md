@@ -11,6 +11,13 @@ The Leddartech Apollo's driver depends on the LeddarSDK package which is provide
 One can follow the direction here to setup apollo.
 https://github.com/ApolloAuto/apollo/blob/master/docs/quickstart/apollo_software_installation_guide.md
 
+## 1.2 Configuration
+The first step to configure the sensor is to determine which configuration files that will be use.
+
+- Open the dag file that is going to be used.
+- All `config_file_path` will need to be edited
+- Change the `ip` and `port` listed here according to the sensor configuration.
+
 ## 2 Run
 
 **All the drivers need to be excuted under Apollo docker environment.**
