@@ -15,9 +15,6 @@ void LeddartechParser::ConvertPointXYZ(const LeddartechPacket& pkt,
     return;
   }
 
-  std::cout << "xyz :" << pkt.x() << "," << pkt.y() << "," << pkt.z() << ","
-            << pkt.amplitude() << "," << pkt.timestamp() << "," << std::hex
-            << pkt.flag() << std::endl;
   apollo::drivers::PointXYZIT* point_new = pc->add_point();
   // convert LeddarSDK coordinates to apollo's
   point_new->set_x(pkt.z());
@@ -30,7 +27,6 @@ void LeddartechParser::ConvertPointXYZ(const LeddartechPacket& pkt,
 void LeddartechParser::GeneratePointCloud(
     const std::shared_ptr<LeddartechScan>& scan_msg,
     std::shared_ptr<PointCloud> point_cloud) {
-  ADEBUG << "Convert scan msg seq" << scan_msg->header().sequence_num();
   size_t packet_size = scan_msg->detections_size();
   point_cloud->mutable_header()->set_frame_id(scan_msg->header().frame_id());
   point_cloud->set_height(1);
@@ -45,11 +41,9 @@ void LeddartechParser::GeneratePointCloud(
 }
 
 bool LeddartechParser::Init() {
-  std::cout << "Init got called" << std::endl;
   Config leddartech_config;
   if (!GetProtoConfig(&leddartech_config)) {
     AWARN << "Load config failed, config file" << config_file_path_;
-    std::cout << "load failed" << std::endl;
     return false;
   }
 
@@ -69,7 +63,6 @@ bool LeddartechParser::Proc(const std::shared_ptr<LeddartechScan>& scan_msg) {
   std::shared_ptr<PointCloud> point_cloud_out = std::make_shared<PointCloud>();
   if (point_cloud_out == nullptr) {
     AWARN << "point_cloud_out is empty";
-    std::cout << "point cloud is empty" << std::endl;
     return false;
   }
   point_cloud_out->Clear();
@@ -77,7 +70,7 @@ bool LeddartechParser::Proc(const std::shared_ptr<LeddartechScan>& scan_msg) {
   GeneratePointCloud(scan_msg, point_cloud_out);
 
   if (point_cloud_out == nullptr || point_cloud_out->point().empty()) {
-    std::cout << "pc probably empty" << std::endl;
+    AWARN << "point cloud is empty";
     return false;
   }
 

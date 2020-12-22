@@ -26,8 +26,8 @@ namespace apollo {
 namespace drivers {
 namespace leddartech {
 
-LeddartechDriverComponent::~LeddartechDriverComponent(){
-  if (device_thread_->joinable()){
+LeddartechDriverComponent::~LeddartechDriverComponent() {
+  if (device_thread_->joinable()) {
     device_thread_->join();
     drv_->GetSensor()->Disconnect();
   }
@@ -38,14 +38,15 @@ bool LeddartechDriverComponent::Init() {
     return false;
   }
 
-  writer_ = node_->CreateWriter<LeddartechScan>(leddartech_config.scan_channel());
+  writer_ =
+      node_->CreateWriter<LeddartechScan>(leddartech_config.scan_channel());
   drv_ = LeddartechDriverFactory::CreateDriver(leddartech_config);
 
   drv_->Init();
 
   running_ = true;
-  device_thread_ = std::shared_ptr<std::thread> (
-      new std::thread(std::bind(&LeddartechDriverComponent::device_poll, this)));
+  device_thread_ = std::shared_ptr<std::thread>(new std::thread(
+      std::bind(&LeddartechDriverComponent::device_poll, this)));
   device_thread_->detach();
 
   return true;

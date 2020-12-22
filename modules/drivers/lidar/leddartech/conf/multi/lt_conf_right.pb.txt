@@ -1,0 +1,4 @@
+ip: "192.168.0.2"
+port: 48630
+scan_channel: "/apollo/sensor/lidar/leddartech/right/scan"
+pointcloud_channel: "/apollo/sensor/lidar/leddartech/right/PointCloud"

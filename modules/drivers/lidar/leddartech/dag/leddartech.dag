@@ -5,20 +5,16 @@ module_config {
       config {
         name : "leddartech_driver"
         config_file_path : "/apollo/modules/drivers/lidar/leddartech/conf/leddartech_conf.pb.txt"
-        readers {
-            channel: "/apollo/test"
-        }
       }
     }
 }
 
 module_config {
   module_library : "/apollo/bazel-bin/modules/drivers/lidar/leddartech/parser/libleddartech_parser.so"
-
   components {
     class_name : "LeddartechParser"
     config {
-      name : ""
+      name : "LtParser"
       config_file_path : "/apollo/modules/drivers/lidar/leddartech/conf/leddartech_conf.pb.txt"
       readers {
         channel: "/apollo/sensor/lidar/leddartech/scan"
@@ -26,3 +22,4 @@ module_config {
     }
   }
 }
+
