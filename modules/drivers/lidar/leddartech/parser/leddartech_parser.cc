@@ -19,7 +19,7 @@ void LeddartechParser::ConvertPointXYZ(const LeddartechPacket& pkt,
   // convert LeddarSDK coordinates to apollo's
   point_new->set_x(pkt.z());
   point_new->set_y(-pkt.x());
-  point_new->set_z(pkt.y());
+  point_new->set_z(-pkt.y());
 
   point_new->set_timestamp(pkt.timestamp());
 }
