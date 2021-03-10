@@ -21,6 +21,7 @@ source "${CURR_DIR}/docker_base.sh"
 CACHE_ROOT_DIR="${APOLLO_ROOT_DIR}/.cache"
 
 DOCKER_REPO="apolloauto/apollo"
+SYNERGY_REPO="xiaochenatsalford/synergy"
 DEV_CONTAINER="synergy_niro_dev_${USER}"
 DEV_INSIDE="in-dev-niro"
 
@@ -29,7 +30,7 @@ TARGET_ARCH="$(uname -m)"
 
 # VERSION_X86_64="dev-x86_64-18.04-20210204_2153"
 # Use the latest CUDA 10.2 Docker container
-VERSION_X86_64="dev-x86_64-18.04-20210108_1105"
+VERSION_X86_64="apollo-dev-x86_64-18.04-20210108_1105-synergy-niro-v0.1"
 TESTING_VERSION_X86_64="dev-x86_64-18.04-testing-20210112_0008"
 
 VERSION_AARCH64="dev-aarch64-18.04-20201218_0030"
@@ -170,7 +171,7 @@ function determine_dev_image() {
             exit 3
         fi
     fi
-    DEV_IMAGE="${DOCKER_REPO}:${version}"
+    DEV_IMAGE="${SYNERGY_REPO}:${version}"
 }
 
 function check_host_environment() {
