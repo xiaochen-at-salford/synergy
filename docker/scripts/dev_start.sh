@@ -21,8 +21,8 @@ source "${CURR_DIR}/docker_base.sh"
 CACHE_ROOT_DIR="${APOLLO_ROOT_DIR}/.cache"
 
 DOCKER_REPO="apolloauto/apollo"
-DEV_CONTAINER="apollo_dev_${USER}"
-DEV_INSIDE="in-dev-docker"
+DEV_CONTAINER="synergy_niro_dev_${USER}"
+DEV_INSIDE="in-dev-niro"
 
 SUPPORTED_ARCHS=(x86_64 aarch64)
 TARGET_ARCH="$(uname -m)"
