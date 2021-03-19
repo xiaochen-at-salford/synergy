@@ -51,8 +51,7 @@ class VehicleFactory
    * @brief Creates an AbstractVehicleFactory object based on vehicle_parameter
    * @param vehicle_parameter is defined in vehicle_parameter.proto
    */
-  std::unique_ptr<AbstractVehicleFactory> CreateVehicle(
-      const VehicleParameter &vehicle_parameter);
+  std::unique_ptr<AbstractVehicleFactory> CreateVehicle(const VehicleParameter &vehicle_parameter);
 };
 
 }  // namespace canbus

@@ -30,7 +30,8 @@
 namespace apollo {
 namespace canbus {
 
-void VehicleFactory::RegisterVehicleFactory() {
+void VehicleFactory::RegisterVehicleFactory() 
+{
   Register(apollo::common::LINCOLN_MKZ, []() -> AbstractVehicleFactory * {
     return new LincolnVehicleFactory();
   });
@@ -61,15 +62,22 @@ void VehicleFactory::RegisterVehicleFactory() {
   Register(apollo::common::NEOLIX, []() -> AbstractVehicleFactory * {
     return new Neolix_eduVehicleFactory();
   });
+  Register(apollo::common::NIRO, []() -> AbstractVehicleFactory * {
+    return new NiroVehicleFactory();
+  });
 }
 
-std::unique_ptr<AbstractVehicleFactory> VehicleFactory::CreateVehicle(
-    const VehicleParameter &vehicle_parameter) {
+std::unique_ptr<AbstractVehicleFactory> 
+VehicleFactory::CreateVehicle(const VehicleParameter &vehicle_parameter) 
+{
   auto abstract_factory = CreateObject(vehicle_parameter.brand());
-  if (!abstract_factory) {
+  if (!abstract_factory) 
+  {
     AERROR << "failed to create vehicle factory with "
            << vehicle_parameter.DebugString();
-  } else {
+  } 
+  else 
+  {
     abstract_factory->SetVehicleParameter(vehicle_parameter);
     AINFO << "successfully created vehicle factory with "
           << vehicle_parameter.DebugString();

@@ -101,7 +101,7 @@ class VehicleController {
   /*
    * @brief main logical function for operation the car enter or exit the auto
    * driving
-   */
+   */cc
   virtual void Emergency() = 0;
 
   virtual common::ErrorCode EnableAutoMode() = 0;

@@ -20,10 +20,9 @@
 #if USE_ESD_CAN == true
 #include "modules/drivers/canbus/can_client/esd/esd_can_client.h"
 #endif
-
 #include "modules/drivers/canbus/can_client/socket/socket_can_client_raw.h"
-
 #include "modules/drivers/canbus/can_client/hermes_can/hermes_can_client.h"
+#include "modules/drivers/canbus/can_client/oscc/oscc_can_client.h"
 
 #include "cyber/common/log.h"
 #include "modules/common/util/util.h"
@@ -34,7 +33,9 @@ namespace canbus {
 
 CanClientFactory::CanClientFactory() {}
 
-void CanClientFactory::RegisterCanClients() {
+//wip...
+void CanClientFactory::RegisterCanClients() 
+{
   AINFO << "CanClientFactory::RegisterCanClients";
   Register(CANCardParameter::FAKE_CAN,
            []() -> CanClient* { return new can::FakeCanClient(); });
@@ -48,17 +49,24 @@ void CanClientFactory::RegisterCanClients() {
 
   Register(CANCardParameter::HERMES_CAN,
            []() -> CanClient* { return new can::HermesCanClient(); });
+  
+  Register(CANCardParameter::OSCC_CAN,
+           []() -> CanClient* { return new can::OsccCanClient(); });
 }
 
-std::unique_ptr<CanClient> CanClientFactory::CreateCANClient(
-    const CANCardParameter& parameter) {
+std::unique_ptr<CanClient> 
+CanClientFactory::CreateCANClient(const CANCardParameter &parameter) 
+{
   auto factory = CreateObject(parameter.brand());
-  if (!factory) {
+  if (!factory) 
+  {
     AERROR << "Failed to create CAN client with parameter: "
-           << parameter.DebugString();
-  } else if (!factory->Init(parameter)) {
+           << parameter.DebugString() ;
+  } 
+  else if (!factory->Init(parameter)) 
+  {
     AERROR << "Failed to initialize CAN card with parameter: "
-           << parameter.DebugString();
+           << parameter.DebugString() ;
   }
   return factory;
 }
