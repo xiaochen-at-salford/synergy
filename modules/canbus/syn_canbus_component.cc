@@ -61,17 +61,16 @@ bool SynCanbusComponent::Init()
   }
   AINFO << "Message manager is successfully created.";
 
-  if (can_receiver_.Init(can_client_.get(), 
-                         message_manager_.get(), 
-                         canbus_conf_.enable_receiver_log() ) != ErrorCode::OK ) 
+  if (can_receiver_.Init(
+         can_client_.get(), message_manager_.get(), canbus_conf_.enable_receiver_log() ) != ErrorCode::OK ) 
   {
     AERROR << "Failed to init can receiver.";
     return false;
   }
   AINFO << "The can receiver is successfully initialized.";
 
-  if (can_sender_.Init(can_client_.get(), 
-                       canbus_conf_.enable_sender_log() ) != ErrorCode::OK ) 
+  if (can_sender_.Init(
+          can_client_.get(), canbus_conf_.enable_sender_log() ) != ErrorCode::OK ) 
   {
     AERROR << "Failed to init can sender.";
     return false;
@@ -86,9 +85,8 @@ bool SynCanbusComponent::Init()
   }
   AINFO << "The vehicle controller is successfully created.";
 
-  if (vehicle_controller_->Init(canbus_conf_.vehicle_parameter(), 
-                                &can_sender_,
-                                message_manager_.get() ) != ErrorCode::OK ) 
+  if (vehicle_controller_->Init(
+         canbus_conf_.vehicle_parameter(), &can_sender_, message_manager_.get() ) != ErrorCode::OK ) 
   {
     AERROR << "Failed to init vehicle controller.";
     return false;
@@ -110,19 +108,23 @@ bool SynCanbusComponent::Init()
   {
     guardian_cmd_reader_ = node_->CreateReader<GuardianCommand>(
         guardian_cmd_reader_config,
-        [this](const std::shared_ptr<GuardianCommand> &cmd) {
+        [this]
+        (const std::shared_ptr<GuardianCommand> &cmd) 
+        {
           ADEBUG << "Received guardian data: run canbus callback.";
           OnGuardianCommand(*cmd);
-        });
+        } );
   } 
   else 
   {
     control_command_reader_ = node_->CreateReader<ControlCommand>(
         control_cmd_reader_config,
-        [this](const std::shared_ptr<ControlCommand> &cmd) {
+        [this]
+        (const std::shared_ptr<ControlCommand> &cmd) 
+        {
           ADEBUG << "Received control data: run canbus callback.";
           OnControlCommand(*cmd);
-        });
+        } );
   }
 
   chassis_writer_ = node_->CreateWriter<Chassis>(FLAGS_chassis_topic);
@@ -201,7 +203,7 @@ void SynCanbusComponent::OnControlCommand(const ControlCommand &control_command)
 {
   int64_t current_timestamp = Time::Now().ToMicrosecond();
   // if command coming too soon, just ignore it.
-  if (current_timestamp - last_timestamp_ < FLAGS_min_cmd_interval * 1000) 
+  if (current_timestamp-last_timestamp_ < FLAGS_min_cmd_interval*1000) 
   {
     ADEBUG << "Control command comes too soon. Ignore.\n Required "
               "FLAGS_min_cmd_interval["
@@ -214,9 +216,9 @@ void SynCanbusComponent::OnControlCommand(const ControlCommand &control_command)
   ADEBUG << "Control_sequence_number:"
          << control_command.header().sequence_num() << ", Time_of_delay:"
          << current_timestamp -
-                static_cast<int64_t>(control_command.header().timestamp_sec() *
-                                     1e6)
-         << " micro seconds";
+                static_cast<int64_t>(
+                    control_command.header().timestamp_sec() * 1e6 )
+         << " micro seconds" ;
 
   if (vehicle_controller_->Update(control_command) != ErrorCode::OK) 
   {

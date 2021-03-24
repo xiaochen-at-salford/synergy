@@ -136,10 +136,10 @@ class CanClient {
    * @return The status of the sending single message action which is defined by
    *         apollo::common::ErrorCode.
    */
-  virtual apollo::common::ErrorCode SendSingleFrame(
-      const std::vector<CanFrame> &frames) {
-    CHECK_EQ(frames.size(), 1U)
-        << "frames size not equal to 1, actual frame size :" << frames.size();
+  virtual apollo::common::ErrorCode SendSingleFrame(const std::vector<CanFrame> &frames) 
+  {
+    CHECK_EQ(frames.size(), 1U) 
+        << "frames size not equal to 1, actual frame size :" << frames.size() ;
     int32_t n = 1;
     return Send(frames, &n);
   }

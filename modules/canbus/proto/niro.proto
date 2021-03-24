@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package apollo.canbus;
+
+message Brake_Enable_0x70 {
+  optional bool brake_enable = 1;
+}
+
+message Brake_Disable_0x71 {
+  optional bool brake_disable = 1;
+}
+
+message Brake_Command_0x72 {
+  // [%] [0, 100] 
+  optional double brake_pedal_percent = 1;
+}
+
+message Brake_Report_0x73 {
+  enum Brake_Report_Dtc_Type {
+    NO_COMMUNICATION = 0;
+    OPERATOR_OVERRIDE = 1;
+  }
+
+  optional bool brake_report_enabled = 1;
+
+  optional bool brake_operator_override = 2;
+ 
+  optional Brake_Report_Dtc_Type brake_report_dtc = 3;
+}
+

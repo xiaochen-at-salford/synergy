@@ -1,0 +1,333 @@
+VERSION ""
+
+NS_ :
+	BA_
+	BA_DEF_
+	BA_DEF_DEF_
+	BA_DEF_DEF_REL_
+	BA_DEF_REL_
+	BA_DEF_SGTYPE_
+	BA_REL_
+	BA_SGTYPE_
+	BO_TX_BU_
+	BU_BO_REL_
+	BU_EV_REL_
+	BU_SG_REL_
+	CAT_
+	CAT_DEF_
+	CM_G
+   SG_ steering_disable_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+
+BO_ 130 STEERING_TORQUE_COMMAND: 8 STEERING
+   SG_ steering_command_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_torque_command : 16|32@1- (1,0) [-1|1] "percent" STEERING
+
+BO_ 131 STEERING_REPORT: 8 STEERING
+   SG_ steering_report_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_report_enabled : 16|8@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_operator_override : 24|8@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_dtcs : 32|8@1+ (1,0) [0|0] "" STEERING
+
+BO_ 144 THROTTLE_ENABLE: 8 THROTTLE
+   SG_ throttle_enable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 145 THROTTLE_DISABLE: 8 THROTTLE
+   SG_ throttle_disable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 146 THROTTLE_COMMAND: 8 THROTTLE
+   SG_ throttle_command_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_pedal_command : 16|32@1+ (1,0) [0|1] "percent" THROTTLE
+
+BO_ 147 THROTTLE_REPORT: 8 THROTTLE
+   SG_ throttle_report_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_report_enabled : 16|8@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_operator_override : 24|8@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_dtcs : 32|8@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 160 CLD_REPORT: 8 CLD
+   SG_ state : 0|3@1+ (1,0) [0|7] "" CLD
+   SG_ last_disable_reason : 3|3@1+ (1,0) [0|7] "" CLD
+   SG_ last_transition_ago : 6|16@1+ (100,0) [0|1] "milliseconds" CLD
+   SG_ bus_frame_rate : 22|14@1+ (1,0) [0|1] "frames/sec" CLD
+   SG_ bus_error_count : 36|10@1+ (1,0) [0|1] "" CLD
+   SG_ frame_rate_steering : 46|6@1+ (1,0) [0|64] "hertz" CLD
+   SG_ frame_rate_throttle : 52|6@1+ (1,0) [0|64] "hertz" CLD
+   SG_ frame_rate_brake : 58|6@1+ (1,0) [0|64] "hertz" CLD
+
+BO_ 161 CLD_CONFIGURATION_REPORT: 8 CLD
+   SG_ operational_mode : 0|8@1+ (1,0) [0|255] "" CLD
+   SG_ min_update_interval : 8|8@1+ (1,0) [0|255] "milliseconds" CLD
+
+BO_ 162 CLD_CONFIGURE_COMMAND: 8 CLD
+   SG_ operational_mode : 0|8@1+ (1,0) [0|255] "" CLD
+   SG_ min_update_interval : 8|8@1+ (1,0) [0|255] "milliseconds" CLD
+
+BO_ 175 FAULT_REPORT: 8 FAULT
+   SG_ fault_report_magic : 0|16@1+ (1,0) [0|0] "" FAULT
+   SG_ fault_origin_id : 16|32@1+ (1,0) [0|0] "" FAULT
+   SG_ fault_dtcs : 48|8@1+ (1,0) [0|0] "" FAULT
+
+BO_ 184 STEERING_ANGLE_COMMAND: 8 STEERING_CTRL
+   SG_ steering_angle_cmd_flags : 0|8@1+ (1,0) [0|0] "" STEERING_CTRL
+   SG_ steering_angle_cmd_angle : 8|16@1- (0.1,0) [-600|600] "degrees" STEERING_CTRL
+   SG_ steering_angle_cmd_max_velocity : 24|16@1- (0.1,0) [-0|800] "degrees/second" STEERING_CTRL
+
+BO_ 185 STEERING_ANGLE_REPORT: 8 STEERING_CTRL
+   SG_ steering_angle_report_flags : 0|8@1+ (1,0) [0|0] "" STEERING_CTRL
+   SG_ steering_angle_report_errors : 8|8@1+ (1,0) [0|0] "" STEERING_CTRL
+
+BO_ 200 CHASSIS_CONTROL_COMMAND: 8 DIAGNOSTICS
+   SG_ front_wipers : 0|8@1+ (1,0) 
+	ENVVAR_DATA_
+	EV_DATA_
+	FILTER
+	NS_DESC_
+	SGTYPE_
+	SGTYPE_VAL_
+	SG_MUL_VAL_
+	SIGTYPE_VALTYPE_
+	SIG_GROUP_
+	SIG_TYPE_REF_
+	SIG_VALTYPE_
+	VAL_
+	VAL_TABLE_
+
+BS_: 
+BU_: BRAKE STEERING THROTTLE FAULT STEERING_CTRL DIAGNOSTICS CLD
+BO_ 112 BRAKE_ENABLE: 8 BRAKE
+   SG_ brake_enable_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
+
+BO_ 113 BRAKE_DISABLE: 8 BRAKE
+   SG_ brake_disable_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
+
+BO_ 114 BRAKE_COMMAND: 8 BRAKE
+   SG_ brake_command_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
+   SG_ brake_pedal_command : 16|32@1+ (1,0) [0|1] "percent" BRAKE
+
+BO_ 115 BRAKE_REPORT: 8 BRAKE
+   SG_ brake_report_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
+   SG_ brake_report_enabled : 16|8@1+ (1,0) [0|0] "" BRAKE
+   SG_ brake_operator_override : 24|8@1+ (1,0) [0|0] "" BRAKE
+   SG_ brake_dtcs : 32|8@1+ (1,0) [0|0] "" BRAKE
+
+BO_ 128 STEERING_ENABLE: 8 STEERING
+   SG_ steering_enable_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+
+BO_ 129 STEERING_DISABLE: 8 STEERING
+   SG_ steering_disable_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+
+BO_ 130 STEERING_TORQUE_COMMAND: 8 STEERING
+   SG_ steering_command_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_torque_command : 16|32@1- (1,0) [-1|1] "percent" STEERING
+
+BO_ 131 STEERING_REPORT: 8 STEERING
+   SG_ steering_report_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_report_enabled : 16|8@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_operator_override : 24|8@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_dtcs : 32|8@1+ (1,0) [0|0] "" STEERING
+
+BO_ 144 THROTTLE_ENABLE: 8 THROTTLE
+   SG_ throttle_enable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 145 THROTTLE_DISABLE: 8 THROTTLE
+   SG_ throttle_disable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 146 THROTTLE_COMMAND: 8 THROTTLE
+   SG_ throttle_command_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_pedal_command : 16|32@1+ (1,0) [0|1] "percent" THROTTLE
+
+BO_ 147 THROTTLE_REPORT: 8 THROTTLE
+   SG_ throttle_report_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_report_enabled : 16|8@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_operator_override : 24|8@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_dtcs : 32|8@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 160 CLD_REPORT: 8 CLD
+   SG_ state : 0|3@1+ (1,0) [0|7] "" CLD
+   SG_ last_disable_reason : 3|3@1+ (1,0) [0|7] "" CLD
+   SG_ last_transition_ago : 6|16@1+ (100,0) [0|1] "milliseconds" CLD
+   SG_ bus_frame_rate : 22|14@1+ (1,0) [0|1] "frames/sec" CLD
+   SG_ bus_error_count : 36|10@1+ (1,0) [0|1] "" CLD
+   SG_ frame_rate_steering : 46|6@1+ (1,0) [0|64] "hertz" CLD
+   SG_ frame_rate_throttle : 52|6@1+ (1,0) [0|64] "hertz" CLD
+   SG_ frame_rate_brake : 58|6@1+ (1,0) [0|64] "hertz" CLD
+
+BO_ 161 CLD_CONFIGURATION_REPORT: 8 CLD
+   SG_ operational_mode : 0|8@1+ (1,0) [0|255] "" CLD
+   SG_ min_update_interval : 8|8@1+ (1,0) [0|255] "milliseconds" CLD
+
+BO_ 162 CLD_CONFIGURE_COMMAND: 8 CLD
+   SG_ operational_mode : 0|8@1+ (1,0) [0|255] "" CLD
+   SG_ min_update_interval : 8|8@1+ (1G
+   SG_ steering_disable_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+
+BO_ 130 STEERING_TORQUE_COMMAND: 8 STEERING
+   SG_ steering_command_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_torque_command : 16|32@1- (1,0) [-1|1] "percent" STEERING
+
+BO_ 131 STEERING_REPORT: 8 STEERING
+   SG_ steering_report_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_report_enabled : 16|8@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_operator_override : 24|8@1+ (1,0) [0|0] "" STEERING
+   SG_ steering_dtcs : 32|8@1+ (1,0) [0|0] "" STEERING
+
+BO_ 144 THROTTLE_ENABLE: 8 THROTTLE
+   SG_ throttle_enable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 145 THROTTLE_DISABLE: 8 THROTTLE
+   SG_ throttle_disable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 146 THROTTLE_COMMAND: 8 THROTTLE
+   SG_ throttle_command_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_pedal_command : 16|32@1+ (1,0) [0|1] "percent" THROTTLE
+
+BO_ 147 THROTTLE_REPORT: 8 THROTTLE
+   SG_ throttle_report_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_report_enabled : 16|8@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_operator_override : 24|8@1+ (1,0) [0|0] "" THROTTLE
+   SG_ throttle_dtcs : 32|8@1+ (1,0) [0|0] "" THROTTLE
+
+BO_ 160 CLD_REPORT: 8 CLD
+   SG_ state : 0|3@1+ (1,0) [0|7] "" CLD
+   SG_ last_disable_reason : 3|3@1+ (1,0) [0|7] "" CLD
+   SG_ last_transition_ago : 6|16@1+ (100,0) [0|1] "milliseconds" CLD
+   SG_ bus_frame_rate : 22|14@1+ (1,0) [0|1] "frames/sec" CLD
+   SG_ bus_error_count : 36|10@1+ (1,0) [0|1] "" CLD
+   SG_ frame_rate_steering : 46|6@1+ (1,0) [0|64] "hertz" CLD
+   SG_ frame_rate_throttle : 52|6@1+ (1,0) [0|64] "hertz" CLD
+   SG_ frame_rate_brake : 58|6@1+ (1,0) [0|64] "hertz" CLD
+
+BO_ 161 CLD_CONFIGURATION_REPORT: 8 CLD
+   SG_ operational_mode : 0|8@1+ (1,0) [0|255] "" CLD
+   SG_ min_update_interval : 8|8@1+ (1,0) [0|255] "milliseconds" CLD
+
+BO_ 162 CLD_CONFIGURE_COMMAND: 8 CLD
+   SG_ operational_mode : 0|8@1+ (1,0) [0|255] "" CLD
+   SG_ min_update_interval : 8|8@1+ (1,0) [0|255] "milliseconds" CLD
+
+BO_ 175 FAULT_REPORT: 8 FAULT
+   SG_ fault_report_magic : 0|16@1+ (1,0) [0|0] "" FAULT
+   SG_ fault_origin_id : 16|32@1+ (1,0) [0|0] "" FAULT
+   SG_ fault_dtcs : 48|8@1+ (1,0) [0|0] "" FAULT
+
+BO_ 184 STEERING_ANGLE_COMMAND: 8 STEERING_CTRL
+   SG_ steering_angle_cmd_flags : 0|8@1+ (1,0) [0|0] "" STEERING_CTRL
+   SG_ steering_angle_cmd_angle : 8|16@1- (0.1,0) [-600|600] "degrees" STEERING_CTRL
+   SG_ steering_angle_cmd_max_velocity : 24|16@1- (0.1,0) [-0|800] "degrees/second" STEERING_CTRL
+
+BO_ 185 STEERING_ANGLE_REPORT: 8 STEERING_CTRL
+   SG_ steering_angle_report_flags : 0|8@1+ (1,0) [0|0] "" STEERING_CTRL
+   SG_ steering_angle_report_errors : 8|8@1+ (1,0) [0|0] "" STEERING_CTRL
+
+BO_ 200 CHASSIS_CONTROL_COMMAND: 8 DIAGNOSTICS
+   SG_ front_wipers : 0|8@1+ (1,0) 0) [0|0] "" FAULT
+   SG_ fault_origin_id : 16|32@1+ (1,0) [0|0] "" FAULT
+   SG_ fault_dtcs : 48|8@1+ (1,0) [0|0] "" FAULT
+
+BO_ 184 STEERING_ANGLE_COMMAND: 8 STEERING_CTRL
+   SG_ steering_angle_cmd_flags : 0|8@1+ (1,0) [0|0] "" STEERING_CTRL
+   SG_ steering_angle_cmd_angle : 8|16@1- (0.1,0) [-600|600] "degrees" STEERING_CTRL
+   SG_ steering_angle_cmd_max_velocity : 24|16@1- (0.1,0) [-0|800] "degrees/second" STEERING_CTRL
+
+BO_ 185 STEERING_ANGLE_REPORT: 8 STEERING_CTRL
+   SG_ steering_angle_report_flags : 0|8@1+ (1,0) [0|0] "" STEERING_CTRL
+   SG_ steering_angle_report_errors : 8|8@1+ (1,0) [0|0] "" STEERING_CTRL
+
+BO_ 200 CHASSIS_CONTROL_COMMAND: 8 DIAGNOSTICS
+   SG_ front_wipers : 0|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ rear_wiper : 8|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ right_signal : 16|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ left_signal : 24|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ horn : 32|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ vin : 40|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ headlamps : 48|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+
+BO_ 216 CHASSIS_CONTROL_REPORT: 8 DIAGNOSTICS
+   SG_ front_wipers : 0|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ rear_wiper : 8|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ right_signal : 16|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ left_signal : 24|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ horn : 32|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ vin_request : 40|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+   SG_ headlamps : 48|8@1+ (1,0) [0|0] "" DIAGNOSTICS
+
+CM_ BU_ BRAKE "DriveKit braking control channel";
+CM_ BU_ STEERING "DriveKit steering control channel";
+CM_ BU_ THROTTLE "DriveKit throttle control channel";
+CM_ BU_ FAULT "DriveKit fault reporting channel";
+CM_ BU_ STEERING_CTRL "DriveKit angle-based steering control channel (experimental)";
+
+CM_ SG_ 115 brake_dtcs "Only valid when FAULT_REPORT (msg 175) is transmitted.";
+CM_ SG_ 130 steering_torque_command "Emulated operator steering torque value. -1 full left, +1 full right.";
+CM_ SG_ 131 steering_dtcs "Only valid when FAULT_REPORT (msg 175) is transmitted.";
+CM_ SG_ 146 throttle_pedal_command "Emulated acclerator pedal depression percentage.";
+CM_ SG_ 147 throttle_dtcs "Only valid when FAULT_REPORT (msg 175) is transmitted.";
+CM_ SG_ 175 fault_dtcs "Corresponds to <channel>_dtcs signal values for channel indicated by fault_origin_id.";
+CM_ SG_ 184 steering_angle_cmd_angle "Commanded steering angle in degrees (-left, +right).";
+CM_ SG_ 184 steering_angle_cmd_max_velocity "The maximum velocity at which the steering wheel should rotate.";
+CM_ BO_ 185 "Periodically-transmitted steering angle controller report.";
+
+CM_ BO_ 112 "Enable computer control of braking.";
+CM_ BO_ 113 "Relinquish computer control of braking to operator.";
+CM_ BO_ 114 "Set brake application percentage.";
+CM_ BO_ 115 "Periodically-transmitted braking control channel status.";
+CM_ BO_ 128 "Enable computer control of steering.";
+CM_ BO_ 129 "Relinquish computer control of steering to operator.";
+CM_ BO_ 130 "Set emulated operator steering torque.";
+CM_ BO_ 131 "Periodically-transmitted steering control channel status.";
+CM_ BO_ 144 "Enable computer control of throttle.";
+CM_ BO_ 145 "Relinquish computer control of throttle to operator.";
+CM_ BO_ 146 "Set emulated acclerator pedal depression.";
+CM_ BO_ 147 "Periodically-transmitted throttle control channel status.";
+CM_ BO_ 175 "Report of a fault condition.";
+CM_ BO_ 184 "Set desired steering angle and rate (experimental).";
+CM_ BO_ 200 "Control chassis features.";
+CM_ BO_ 216 "Periodically-transmitted chassis control report.";
+
+VAL_ 112 brake_enable_magic 1372 "Default Magic Number";
+VAL_ 113 brake_disable_magic 1372 "Default Magic Number";
+VAL_ 114 brake_command_magic 1372 "Default Magic Number";
+VAL_ 115 brake_report_magic 1372 "Default Magic Number";
+VAL_ 115 brake_dtcs 0 "No communication with brake sensor" 1 "Operator Override: Brake";
+VAL_ 115 brake_operator_override 0 "Not overridden by operator." 1 "Control overridden by operator.";
+VAL_ 128 steering_enable_magic 1372 "Default Magic Number";
+VAL_ 129 steering_disable_magic 1372 "Default Magic Number";
+VAL_ 130 steering_command_magic 1372 "Default Magic Number";
+VAL_ 131 steering_report_magic 1372 "Default Magic Number";
+VAL_ 131 steering_report_enabled 0 "Disabled" 1 "Enabled";
+VAL_ 131 steering_operator_override 0 "Not overridden by operator." 1 "Control overridden by operator.";
+VAL_ 131 steering_dtcs 0 "No communication with steering sensor" 1 "Operator Override: Steering";
+VAL_ 144 throttle_enable_magic 1372 "Default Magic Number";
+VAL_ 145 throttle_disable_magic 1372 "Default Magic Number";
+VAL_ 146 throttle_command_magic 1372 "Default Magic Number";
+VAL_ 147 throttle_report_magic 1372 "Default Magic Number";
+VAL_ 147 throttle_report_enabled 0 "Disabled" 1 "Enabled";
+VAL_ 147 throttle_operator_override 0 "Not overridden by operator." 1 "Control overridden by operator.";
+VAL_ 147 throttle_dtcs 0 "No communication with steering sensor" 1 "Operator Override: Steering";
+VAL_ 160 state 0 "unknown" 1 "initializing" 2 "recovering" 3 "idle" 4 "active" 5 "internal failure" 6 "transparent";
+VAL_ 160 last_disable_reason 0 "unknown" 1 "reset" 2 "controller timeout" 3 "implausible report interval";
+VAL_ 161 operational_mode 0 "normal" 170 "disabled";
+VAL_ 162 operational_mode 0 "normal" 170 "disabled";
+VAL_ 175 fault_report_magic 1372 "Default Magic Number";
+VAL_ 175 fault_origin_id 0 "brake control channel" 1 "steering control channel" 2 "throttle control channel";
+VAL_ 184 steering_angle_cmd_flags 0 "Disabled" 1 "Enabled";
+VAL_ 185 steering_angle_report_flags 0 "Enable" 1 "Disable";
+VAL_ 185 steering_angle_report_errors 6 "Command Rejected" 4 "Module Disabled" 2 "Angle Irrational" 1 "Angle Missing" 0 "None";
+VAL_ 200 front_wipers 0 "Do Nothing" 1 "Disable" 2 "Intermittent" 3 "Slow" 4 "Fast";
+VAL_ 200 rear_wiper 0 "Do Nothing" 1 "Disable" 2 "Enable";
+VAL_ 200 right_signal 0 "Do Nothing" 1 "Disable" 2 "Enable";
+VAL_ 200 left_signal 0 "Do Nothing" 1 "Disable" 2 "Enable";
+VAL_ 200 horn 0 "Do Nothing" 2 "Enabled";
+VAL_ 200 vin 0 "Do Nothing" 2 "Requested";
+VAL_ 200 headlamps 0 "Do Nothing" 1 "Disable" 2 "Low" 3 "High";
+VAL_ 216 front_wipers 0 "Disabled" 1 "Intermittent" 2 "Slow" 3 "Fast";
+VAL_ 216 rear_wiper 0 "Disabled" 1 "Enabled";
+VAL_ 216 right_signal 0 "Disabled" 1 "Enabled";
+VAL_ 216 left_signal 0 "Disabled" 1 "Enabled";
+VAL_ 216 horn 0 "Disabled" 1 "Enabled";
+VAL_ 216 vin_request 0 "Disabled" 1 "Enabled";
+VAL_ 216 headlamps 0 "Disabled" 1 "Low" 2 "High";
+
+SIG_VALTYPE_ 114 brake_pedal_command : 1;
+SIG_VALTYPE_ 130 steering_torque_command : 1;
+SIG_VALTYPE_ 146 throttle_pedal_command : 1;
