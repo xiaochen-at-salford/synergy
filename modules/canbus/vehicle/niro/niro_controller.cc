@@ -31,7 +31,7 @@ ErrorCode NiroController::Init(
 {
   if (is_initialized_) 
   {
-    AINFO << "DevkitController has already been initiated.";
+    AINFO << "NiroController has already been initiated.";
     return ErrorCode::CANBUS_ERROR;
   }
   vehicle_params_.CopyFrom(common::VehicleConfigHelper::Instance()->GetConfig().vehicle_param());
@@ -54,65 +54,48 @@ ErrorCode NiroController::Init(
   }
   message_manager_ = message_manager;
 
-  // sender part
-  brake_command_70_ = dynamic_cast<BrakeCommand70*>(
-      message_manager_->GetMutableProtocolDataById(Brakecommand101::ID) );
-  if (brake_command_101_ == nullptr) 
+  // Sender part
+  brake_enable_0x70_ = dynamic_cast<BrakeEnable_0x70*>(
+      message_manager_->GetMutableProtocolDataById(BrakeEnable_0x70::ID) );
+  if (brake_enable_0x70_ == nullptr) 
+  {
+    AERROR << "BrakeCommand_0x70 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
+
+  brake_disable_0x71_ = dynamic_cast<BrakeDisable_0x71*>(
+      message_manager_->GetMutableProtocolDataById(BrakeDisable_0x71::ID) );
+  if (brake_disable_0x71_ == nullptr) 
   {
     AERROR << "BrakeCommand70 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  // gear_command_103_ = dynamic_cast<Gearcommand103*>(
-  //     message_manager_->GetMutableProtocolDataById(Gearcommand103::ID) );
-  // if (gear_command_103_ == nullptr) 
-  // {
-  //   AERROR << "Gearcommand103 does not exist in the DevkitMessageManager!";
-  //   return ErrorCode::CANBUS_ERROR;
-  // }
+  brake_command_0x72_ = dynamic_cast<BrakeCommand_0x72*>(
+      message_manager_->GetMutableProtocolDataById(BrakeCommand_0x72::ID) );
+  if (brake_command_0x72_ == nullptr) 
+  {
+    AERROR << "BrakeCommand70 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
 
-  // park_command_104_ = dynamic_cast<Parkcommand104*>(
-  //     message_manager_->GetMutableProtocolDataById(Parkcommand104::ID) );
-  // if (park_command_104_ == nullptr) 
-  // {
-  //   AERROR << "Parkcommand104 does not exist in the DevkitMessageManager!";
-  //   return ErrorCode::CANBUS_ERROR;
-  // }
-
-  // steering_command_102_ = dynamic_cast<Steeringcommand102*>(
-  //     message_manager_->GetMutableProtocolDataById(Steeringcommand102::ID) );
-  // if (steering_command_102_ == nullptr) 
-  // {
-  //   AERROR << "Steeringcommand102 does not exist in the DevkitMessageManager!";
-  //   return ErrorCode::CANBUS_ERROR;
-  // }
-
-  // throttle_command_100_ = dynamic_cast<Throttlecommand100*>(
-  //     message_manager_->GetMutableProtocolDataById(Throttlecommand100::ID));
-  // if (throttle_command_100_ == nullptr) 
-  // {
-  //   AERROR << "Throttlecommand100 does not exist in the DevkitMessageManager!";
-  //   return ErrorCode::CANBUS_ERROR;
-  // }
-
-  can_sender_->AddMessage(BrakeCommand101::ID, brake_command_70_, false);
-  // can_sender_->AddMessage(Gearcommand103::ID, gear_command_103_, false);
-  // can_sender_->AddMessage(Parkcommand104::ID, park_command_104_, false);
-  // can_sender_->AddMessage(Steeringcommand102::ID, steering_command_102_, false);
-  // can_sender_->AddMessage(Throttlecommand100::ID, throttle_command_100_, false);
+  bool &&init_with_one = false;
+  can_sender_->AddMessage(BrakeEnable_0x70::ID, brake_enable_0x70_, init_with_one);
+  can_sender_->AddMessage(BrakeDisable_0x71::ID, brake_disable_0x71_, init_with_one);
+  can_sender_->AddMessage(BrakeCommand_0x72::ID, brake_command_0x72_, init_with_one);
 
   // need sleep to ensure all messages received
-  AINFO << "DevkitController is initialized.";
+  AINFO << "NiroController is initialized.";
 
   is_initialized_ = true;
   return ErrorCode::OK;
 }
 
-bool DevkitController::Start() 
+bool NiroController::Start() 
 {
   if (!is_initialized_) 
   {
-    AERROR << "DevkitController has NOT been initiated.";
+    AERROR << "NiroController has NOT been initiated.";
     return false;
   }
   const auto& update_func = [this] { SecurityDogThreadFunc(); };
@@ -319,18 +302,11 @@ ErrorCode NiroController::EnableAutoMode()
     return ErrorCode::OK;
   }
   // set enable
-  brake_command_101_->set_brake_en_ctrl(Brake_command_101::BRAKE_EN_CTRL_ENABLE);
-  throttle_command_100_->set_throttle_en_ctrl(Throttle_command_100::THROTTLE_EN_CTRL_ENABLE);
-  steering_command_102_->set_steer_en_ctrl(Steering_command_102::STEER_EN_CTRL_ENABLE);
-  gear_command_103_->set_gear_en_ctrl(Gear_command_103::GEAR_EN_CTRL_ENABLE);
-  park_command_104_->set_park_en_ctrl(Park_command_104::PARK_EN_CTRL_ENABLE);
+  brake_enable_0x70_->set_brake_enable();
 
-  // set AEB enable
-  if (FLAGS_enable_aeb) 
-  {
-    brake_command_101_->set_aeb_en_ctrl(
-        Brake_command_101::AEB_EN_CTRL_ENABLE_AEB);
-  }
+  //TODO(xiaochen): 
+  throttle_command_0x_->set_throttle_enable();
+  steering_command_0x_->set_steer_enable();
 
   can_sender_->Update();
   const int32_t flag = CHECK_RESPONSE_STEER_UNIT_FLAG | CHECK_RESPONSE_SPEED_UNIT_FLAG;
@@ -381,7 +357,7 @@ void NiroController::Brake(double pedal)
     AINFO << "The current drive mode does not need to set brake pedal.";
     return;
   }
-  brake_command_70_->set_brake_pedal_target(pedal);
+  brake_command_0x72_->set_brake_pedal_percent(pedal);
 }
 
 // drive with pedal
@@ -394,6 +370,7 @@ void NiroController::Throttle(double pedal)
     AINFO << "The current drive mode does not need to set throttle pedal.";
     return;
   }
+  //TODO(xiaochen): wip...
   throttle_command_100_->set_throttle_pedal_target(pedal);
 }
 
@@ -413,30 +390,31 @@ void NiroController::Acceleration(double acc) {
 // steering with default angle speed, 25-250 (default:250)
 // angle:-99.99~0.00~99.99, unit:, left:-, right:+
 void NiroController::Steer(double angle) {
-  if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
-      driving_mode() != Chassis::AUTO_STEER_ONLY) {
+  if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
+      && driving_mode() != Chassis::AUTO_STEER_ONLY ) 
+  {
     AINFO << "The current driving mode does not need to set steer.";
     return;
   }
-  const double real_angle =
-      vehicle_params_.max_steer_angle() / M_PI * 180 * angle / 100.0;
-  steering_command_102_->set_steer_angle_target(real_angle)
-      ->set_steer_angle_spd(250);
+  const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
+  //TODO(xiaochen): wip...
+  steering_command_102_->set_steer_angle_target(real_angle)->set_steer_angle_spd(250);
 }
 
 // steering with new angle speed
 // angle:-99.99~0.00~99.99, unit:, left:-, right:+
 // angle_spd:25~250, unit:deg/s
-void NiroController::Steer(double angle, double angle_spd) {
+void NiroController::Steer(double angle, double angle_spd) 
+{
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
-      driving_mode() != Chassis::AUTO_STEER_ONLY) {
+      driving_mode() != Chassis::AUTO_STEER_ONLY) 
+  {
     AINFO << "The current driving mode does not need to set steer.";
     return;
   }
-  const double real_angle = 
-      vehicle_params_.max_steer_angle() / M_PI * 180 * angle / 100.0 ;
-  steering_command_102_->set_steer_angle_target(real_angle)
-      ->set_steer_angle_spd(250) ;
+  const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
+  //TODO(xiaochen): wip...
+  // steering_command_102_->set_steer_angle_target(real_angle)->set_steer_angle_spd(250) ;
 }
 
 void NiroController::SetEpbBreak(const ControlCommand& command) 
@@ -479,26 +457,27 @@ void NiroController::ResetProtocol()
   message_manager_->ResetSendMessages();
 }
 
-bool DevkitController::CheckChassisError() 
+bool NiroController::CheckChassisError() 
 {
   ChassisDetail chassis_detail;
   message_manager_->GetSensorData(&chassis_detail);
-  if (!chassis_detail.has_devkit()) 
+  if (!chassis_detail.has_niro()) 
   {
-    AERROR_EVERY(100) << "ChassisDetail has no devkit vehicle info."
+    AERROR_EVERY(100) << "ChassisDetail has no niro vehicle info."
                       << chassis_detail.DebugString() ;
     return false;
   }
 
-  Devkit devkit = chassis_detail.devkit();
+  // Devkit devkit = chassis_detail.devkit();
+  Niro niro = chassis_detail.niro();
 
   // steer fault
-  if (devkit.has_steering_report_502()) 
+  //TODO(xiaochen): wip...
+  if (niro.has_steering_report_0x()) 
   {
     if (Steering_report_502::STEER_FLT1_STEER_SYSTEM_HARDWARE_FAULT ==
-        devkit.steering_report_502().steer_flt1()) {
-      return true;
-    }
+        devkit.steering_report_0x().steer_flt1()) 
+    { return true; }
   }
   // drive fault
   if (devkit.has_throttle_report_500()) {
@@ -518,7 +497,7 @@ bool DevkitController::CheckChassisError()
   return false;
 }
 
-void DevkitController::SecurityDogThreadFunc() 
+void NiroController::SecurityDogThreadFunc() 
 {
   int32_t vertical_ctrl_fail = 0;
   int32_t horizontal_ctrl_fail = 0;
@@ -617,7 +596,8 @@ bool NiroController::CheckResponse(const int32_t flags, bool need_wait)
       check_ok = check_ok && is_eps_online;
     }
 
-    if (flags & CHECK_RESPONSE_SPEED_UNIT_FLAG) {
+    if (flags & CHECK_RESPONSE_SPEED_UNIT_FLAG) 
+    {
       is_vcu_online = chassis_detail.has_check_response() &&
                       chassis_detail.check_response().has_is_vcu_online() &&
                       chassis_detail.check_response().is_vcu_online();
@@ -645,25 +625,25 @@ bool NiroController::CheckResponse(const int32_t flags, bool need_wait)
   return false;
 }
 
-void DevkitController::set_chassis_error_mask(const int32_t mask) 
+void NiroController::set_chassis_error_mask(const int32_t mask) 
 {
   std::lock_guard<std::mutex> lock(chassis_mask_mutex_);
   chassis_error_mask_ = mask;
 }
 
-int32_t DevkitController::chassis_error_mask() 
+int32_t NiroController::chassis_error_mask() 
 {
   std::lock_guard<std::mutex> lock(chassis_mask_mutex_);
   return chassis_error_mask_;
 }
 
-Chassis::ErrorCode DevkitController::chassis_error_code() 
+Chassis::ErrorCode NiroController::chassis_error_code() 
 {
   std::lock_guard<std::mutex> lock(chassis_error_code_mutex_);
   return chassis_error_code_;
 }
 
-void DevkitController::set_chassis_error_code(const Chassis::ErrorCode& error_code) 
+void NiroController::set_chassis_error_code(const Chassis::ErrorCode& error_code) 
 {
   std::lock_guard<std::mutex> lock(chassis_error_code_mutex_);
   chassis_error_code_ = error_code;

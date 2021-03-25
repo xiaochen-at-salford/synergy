@@ -6,11 +6,11 @@
 #include "modules/canbus/proto/canbus_conf.pb.h"
 #include "modules/canbus/proto/chassis.pb.h"
 #include "modules/canbus/proto/vehicle_parameter.pb.h"
-#include "modules/canbus/vehicle/niro/protocol/brake_command_101.h"
-#include "modules/canbus/vehicle/niro/protocol/gear_command_103.h"
-#include "modules/canbus/vehicle/niro/protocol/park_command_104.h"
-#include "modules/canbus/vehicle/niro/protocol/steering_command_102.h"
-#include "modules/canbus/vehicle/niro/protocol/throttle_command_100.h"
+#include "modules/canbus/vehicle/niro/protocol/dec112_hex70_brake_enable.h"
+#include "modules/canbus/vehicle/niro/protocol/dec113_hex71_brake_disable.h"
+#include "modules/canbus/vehicle/niro/protocol/dec114_hex72_brake_command.h"
+#include "modules/canbus/vehicle/niro/protocol/dec115_hex73_brake_report.h"
+#include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
 #include "modules/canbus/vehicle/vehicle_controller.h"
 #include "modules/common/proto/error_code.pb.h"
 #include "modules/control/proto/control_cmd.pb.h"
@@ -36,10 +36,11 @@ class NiroController final : public VehicleController {
   void Stop() override;
 
   Chassis chassis() override;
-
-  FRIEND_TEST(DevkitControllerTest, SetDrivingMode);
-  FRIEND_TEST(DevkitControllerTest, Status);
-  FRIEND_TEST(DevkitControllerTest, UpdateDrivingMode);
+  
+  //TODO(xiaochen):
+  FRIEND_TEST(NiroControllerTest, SetDrivingMode);
+  FRIEND_TEST(NiroControllerTest, Status);
+  FRIEND_TEST(NiroControllerTest, UpdateDrivingMode);
 
  private:
   // main logical function for operation the car enter or exit the auto driving
@@ -92,12 +93,12 @@ class NiroController final : public VehicleController {
   void set_chassis_error_code(const Chassis::ErrorCode& error_code);
 
  private:
-  // control protocol
-  BrakeCommand70* brake_command_70_ = nullptr;
-  // Gearcommand103* gear_command_103_ = nullptr;
-  // Parkcommand104* park_command_104_ = nullptr;
-  // Steeringcommand102* steering_command_102_ = nullptr;
-  // Throttlecommand100* throttle_command_100_ = nullptr;
+  BrakeEnable_0x70 *brake_enable_0x70_ = nullptr;
+  BrakeDisable_0x71 *brake_disable_0x71_ = nullptr;
+  BrakeCommand_0x72 *brake_command_0x72_ = nullptr;
+  BrakeReport_0x73 *brake_report_0x73_ = nullptr;
+
+  BrakePressure_0x220 *brake_pressure_0x220_ = nullptr;
 
   Chassis chassis_;
   std::unique_ptr<std::thread> thread_;

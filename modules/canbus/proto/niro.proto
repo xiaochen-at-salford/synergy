@@ -3,16 +3,18 @@ syntax = "proto2";
 package apollo.canbus;
 
 message Brake_Enable_0x70 {
+  // Dummy
   optional bool brake_enable = 1;
 }
 
 message Brake_Disable_0x71 {
+  // Dummy
   optional bool brake_disable = 1;
 }
 
 message Brake_Command_0x72 {
   // [%] [0, 100] 
-  optional double brake_pedal_percent = 1;
+  optional double brake_pedal_command = 1;
 }
 
 message Brake_Report_0x73 {
@@ -22,9 +24,115 @@ message Brake_Report_0x73 {
   }
 
   optional bool brake_report_enabled = 1;
-
   optional bool brake_operator_override = 2;
- 
-  optional Brake_Report_Dtc_Type brake_report_dtc = 3;
+  optional Brake_Report_Dtc_Type brake_dtcs = 3;
 }
+
+message Steering_Enable_0x80 {
+  // Dummy
+  optional bool steering_enable = 1;
+};
+
+message Steering_Disable_0x81 {
+  optional bool steering_disable = 1;
+}
+
+message Steering_Torque_Command_0x82 {
+  // [%] [0, 100]
+  optional double steering_torque_percent = 1;
+}
+
+message Steering_Report_0x83 {
+  enum Steering_Report_Dtc_Type {
+    NO_COMMUNICATION = 0;
+    OPERATOR_OVERRIDE = 1;
+  }
+
+  optional bool steering_report_enabled = 1;
+  optional bool steering_operator_override = 2;
+  optional Steering_Report_Dtc_Type steering_dtcs = 3;
+}
+
+message Throttle_Enable_0x90 {
+  // Dummy
+  optional bool throttle_enable = 1; 
+}
+
+message Throttle_Disable_0x91 {
+  // Dummy
+  optional bool throttle_disable = 1;
+}
+
+message Throttle_Command_0x92 {
+  optional double throttle_pedal_command = 1;
+}
+
+message Throttle_Report_0x93 {
+  enum Throttle_Report_Dtc_Type {
+    NO_COMMUNICATION = 0;
+    OPERATOR_OVERRIDE = 1;
+  }
+  
+  optional bool throttle_report_enabled = 1;
+  optional bool throttle_operator_override = 2;
+  optional Throttle_Report_Dtc_Type throttle_dtcs = 3;
+}
+
+message Cld_Report_0x {
+  enum State {
+    UNKNOWN = 0;
+    INITIALIZATION = 1;
+    RECOVERING = 2;
+    IDLE = 3;
+    ACTIVE = 4;
+    INTERAL_FAILURE = 5; 
+    TRANSPARENT = 6;
+  }
+
+  enum Last_Disable_Reason {
+    UNKOWN = 0;
+    RESET = 1;
+    CONTROLLER_TIMEOUT = 2;
+    IMPLAUSIBLE_REPORT_INTERVAL = 3;
+  }
+
+  optional State state = 1;
+  optional Last_Disable_Reason Last_disable_reason = 2;
+  optional double last_transition_ago = 3;
+  optional double bus_frame_rate = 4;
+  optional double bus_error_count = 5;
+  optional int32 frame_rate_steering = 6;
+  optional int32 frame_rate_throttle = 7;
+  optional int32 frame_rate_brake = 8;
+}
+
+message Cld_Configuration_Report_0x {
+  enum Operational_Mode {
+    NORNAML = 0;
+    DISABLED = 170;  
+  }
+  
+  optional Operational_Mode operational_mode = 1;
+  optional double min_update_interval = 2;
+}
+
+message Cld_Configure_Command_0x {
+  enum Operational_Mode {
+    NORNAML = 0;
+    DISABLED = 170;  
+  }
+
+  optional Operational_Mode operational_mode = 1;
+  optional double min_update_interval = 2;
+}
+
+message Fault_Report_0x {
+  
+}
+
+
+
+
+
+
 

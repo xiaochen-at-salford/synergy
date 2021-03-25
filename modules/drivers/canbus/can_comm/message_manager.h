@@ -93,8 +93,7 @@ class MessageManager {
    * @param message_id the id of the message
    * @return a pointer to the protocol data
    */
-  ProtocolData<SensorType> *GetMutableProtocolDataById(
-      const uint32_t message_id);
+  ProtocolData<SensorType> *GetMutableProtocolDataById(const uint32_t message_id);
 
   /**
    * @brief get chassis detail. used lock_guard in this function to avoid
@@ -178,8 +177,7 @@ MessageManager<SensorType>::GetMutableProtocolDataById(const uint32_t message_id
 }
 
 template <typename SensorType>
-void MessageManager<SensorType>::Parse(const uint32_t message_id,
-                                       const uint8_t *data, int32_t length ) 
+void MessageManager<SensorType>::Parse(const uint32_t message_id, const uint8_t *data, int32_t length) 
 {
   ProtocolData<SensorType> *protocol_data = GetMutableProtocolDataById(message_id);
   if (protocol_data == nullptr) 
@@ -197,8 +195,7 @@ void MessageManager<SensorType>::Parse(const uint32_t message_id,
     it->second.real_period = time - it->second.last_time;
     // if period 1.5 large than base period, inc error_count
     const double period_multiplier = 1.5;
-    if (static_cast<double>(it->second.real_period) >
-          (static_cast<double>(it->second.period)*period_multiplier) ) 
+    if (static_cast<double>(it->second.real_period) > (static_cast<double>(it->second.period)*period_multiplier)) 
     { it->second.error_count += 1; } 
     else 
     { it->second.error_count = 0; }
@@ -230,13 +227,14 @@ ErrorCode MessageManager<SensorType>::GetSensorData(
 }
 
 template <typename SensorType>
-void MessageManager<SensorType>::ResetSendMessages() {
-  for (auto &protocol_data : send_protocol_data_) {
-    if (protocol_data == nullptr) {
-      AERROR << "Invalid protocol data.";
-    } else {
-      protocol_data->Reset();
-    }
+void MessageManager<SensorType>::ResetSendMessages() 
+{
+  for (auto &protocol_data : send_protocol_data_) 
+  {
+    if (protocol_data == nullptr) 
+    { AERROR << "Invalid protocol data."; } 
+    else 
+    { protocol_data->Reset(); }
   }
 }
 
