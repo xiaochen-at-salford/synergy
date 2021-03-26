@@ -44,7 +44,7 @@ class BrakeReport_0x73
     public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
 
  public:
-  static const int32_t ID;
+  static const int32_t ID = 0x73;
 
   BrakeReport_0x73();
 
@@ -56,7 +56,7 @@ class BrakeReport_0x73
   bool brake_operator_override(const std::uint8_t *bytes, int32_t length) const;
 
   //TODO(xiaochen):
-  Brake_Report_0x73::Brake_Dtc_Type brake_dtc(const std::uint8_t *bytes, int32_t length) const;
+  Brake_Report_0x73::BrakeDtcs::Enum brake_dtcs(const std::uint8_t *bytes, int32_t length) const;
 };
 
 }  // namespace niro

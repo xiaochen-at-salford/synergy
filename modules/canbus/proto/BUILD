@@ -285,6 +285,7 @@ proto_library(
 py_proto_library(
     name = "chassis_detail_py_pb2",
     deps = [
+        ":niro_py_pb2",
         ":ch_py_pb2",
         ":chassis_detail_proto",
         ":chassis_py_pb2",

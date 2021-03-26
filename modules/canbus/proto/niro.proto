@@ -18,7 +18,7 @@ message Brake_Command_0x72 {
 }
 
 message Brake_Report_0x73 {
-  message BrakeDtc {
+  message BrakeDtcs {
     enum Enum {
       NO_COMMUNICATION = 0;
       OPERATOR_OVERRIDE = 1;
@@ -27,7 +27,7 @@ message Brake_Report_0x73 {
 
   optional bool brake_report_enabled = 1;
   optional bool brake_operator_override = 2;
-  optional BrakeDtc.Enum brake_dtcs = 3;
+  optional BrakeDtcs.Enum brake_dtcs = 3;
 }
 
 message Steering_Enable_0x80 {

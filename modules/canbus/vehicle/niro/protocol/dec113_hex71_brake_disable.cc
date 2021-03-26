@@ -8,7 +8,7 @@ namespace niro {
 
 using ::apollo::drivers::canbus::Byte;
 
-const int32_t BrakeDisable_0x71::ID = 0x71;
+// const int32_t BrakeDisable_0x71::ID = 0x71;
 
 // public
 BrakeDisable_0x71::BrakeDisable_0x71() { Reset(); }
@@ -20,7 +20,7 @@ uint32_t BrakeDisable_0x71::GetPeriod() const
   return PERIOD;
 }
 
-void BrakeDisable_0x71::UpdateData(uint8_t* data) 
+void BrakeDisable_0x71::UpdateData(uint8_t *data) 
 {
   if (brake_disable_)
   { set_p_magic(data); }
@@ -28,12 +28,13 @@ void BrakeDisable_0x71::UpdateData(uint8_t* data)
   { data = nullptr; }
 }
 
-void BrakeDisable_0x71::Reset() {
+void BrakeDisable_0x71::Reset() 
+{
   // TODO(All) :  you should check this manually
   brake_disable_ = false;
 }
 
-BrakeDisable_0x71* BrakeDisable_0x71::set_brake_disable()
+BrakeDisable_0x71 *BrakeDisable_0x71::set_brake_disable()
 {
   brake_disable_ = true;
   return this;

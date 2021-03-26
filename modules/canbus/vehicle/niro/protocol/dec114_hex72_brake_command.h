@@ -22,7 +22,7 @@ class BrakeCommand_0x72
   : public OsccProtocolBase,
     public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
  public:
-  static const int32_t ID;
+  static const int32_t ID = 0x72;
 
   BrakeCommand_0x72();
 
