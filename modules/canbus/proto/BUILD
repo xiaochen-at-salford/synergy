@@ -6,6 +6,25 @@ load("//tools:python_rules.bzl", "py_proto_library")
 package(default_visibility = ["//visibility:public"])
 
 cc_proto_library(
+    name = "niro_cc_proto",
+    deps = [
+        ":niro_proto",
+    ],
+)
+
+proto_library(
+    name = "niro_proto",
+    srcs = ["niro.proto"],
+)
+
+py_proto_library(
+    name = "niro_py_pb2",
+    deps = [
+        ":niro_proto",
+    ],
+)
+
+cc_proto_library(
     name = "devkit_cc_proto",
     deps = [
         ":devkit_proto",
@@ -249,6 +268,7 @@ proto_library(
     name = "chassis_detail_proto",
     srcs = ["chassis_detail.proto"],
     deps = [
+        ":niro_proto",
         ":ch_proto",
         ":chassis_proto",
         ":devkit_proto",

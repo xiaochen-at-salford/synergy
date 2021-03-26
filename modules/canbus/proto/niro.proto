@@ -18,14 +18,16 @@ message Brake_Command_0x72 {
 }
 
 message Brake_Report_0x73 {
-  enum Brake_Report_Dtc_Type {
-    NO_COMMUNICATION = 0;
-    OPERATOR_OVERRIDE = 1;
+  message BrakeDtc {
+    enum Enum {
+      NO_COMMUNICATION = 0;
+      OPERATOR_OVERRIDE = 1;
+    }
   }
 
   optional bool brake_report_enabled = 1;
   optional bool brake_operator_override = 2;
-  optional Brake_Report_Dtc_Type brake_dtcs = 3;
+  optional BrakeDtc.Enum brake_dtcs = 3;
 }
 
 message Steering_Enable_0x80 {
@@ -43,14 +45,16 @@ message Steering_Torque_Command_0x82 {
 }
 
 message Steering_Report_0x83 {
-  enum Steering_Report_Dtc_Type {
-    NO_COMMUNICATION = 0;
-    OPERATOR_OVERRIDE = 1;
+  message SteeringDtc {
+    enum Enum {
+      NO_COMMUNICATION = 0;
+      OPERATOR_OVERRIDE = 1;
+    }
   }
-
+  
   optional bool steering_report_enabled = 1;
   optional bool steering_operator_override = 2;
-  optional Steering_Report_Dtc_Type steering_dtcs = 3;
+  optional SteeringDtc.Enum steering_dtcs = 3;
 }
 
 message Throttle_Enable_0x90 {
@@ -64,40 +68,47 @@ message Throttle_Disable_0x91 {
 }
 
 message Throttle_Command_0x92 {
+  // [%] [0, 100]
   optional double throttle_pedal_command = 1;
 }
 
 message Throttle_Report_0x93 {
-  enum Throttle_Report_Dtc_Type {
-    NO_COMMUNICATION = 0;
-    OPERATOR_OVERRIDE = 1;
+  message ThrottleDtc {
+    enum Enum {
+      NO_COMMUNICATION = 0;
+      OPERATOR_OVERRIDE = 1;
+    }
   }
-  
+
   optional bool throttle_report_enabled = 1;
   optional bool throttle_operator_override = 2;
-  optional Throttle_Report_Dtc_Type throttle_dtcs = 3;
+  optional ThrottleDtc.Enum throttle_dtcs = 3;
 }
 
-message Cld_Report_0x {
-  enum State {
-    UNKNOWN = 0;
-    INITIALIZATION = 1;
-    RECOVERING = 2;
-    IDLE = 3;
-    ACTIVE = 4;
-    INTERAL_FAILURE = 5; 
-    TRANSPARENT = 6;
+message Cld_Report_0xA0 {
+  message State {
+    enum Enum {
+      UNKNOWN = 0;
+      INITIALIZATION = 1;
+      RECOVERING = 2;
+      IDLE = 3;
+      ACTIVE = 4;
+      INTERAL_FAILURE = 5; 
+      TRANSPARENT = 6;
+    }
   }
 
-  enum Last_Disable_Reason {
-    UNKOWN = 0;
-    RESET = 1;
-    CONTROLLER_TIMEOUT = 2;
-    IMPLAUSIBLE_REPORT_INTERVAL = 3;
+  message LastDisableReason {
+    enum Enum {
+      UNKOWN = 0;
+      RESET = 1;
+      CONTROLLER_TIMEOUT = 2;
+      IMPLAUSIBLE_REPORT_INTERVAL = 3;
+    }
   }
 
-  optional State state = 1;
-  optional Last_Disable_Reason Last_disable_reason = 2;
+  optional State.Enum state = 1;
+  optional LastDisableReason.Enum Last_disable_reason = 2;
   optional double last_transition_ago = 3;
   optional double bus_frame_rate = 4;
   optional double bus_error_count = 5;
@@ -106,33 +117,251 @@ message Cld_Report_0x {
   optional int32 frame_rate_brake = 8;
 }
 
-message Cld_Configuration_Report_0x {
-  enum Operational_Mode {
-    NORNAML = 0;
-    DISABLED = 170;  
+message Cld_Configuration_Report_0xA1 {
+  message OperationalMode {
+    enum Enum {
+      NORNAML = 0;
+      DISABLED = 170;  
+    }
   }
-  
-  optional Operational_Mode operational_mode = 1;
+
+  optional OperationalMode.Enum operational_mode = 1;
   optional double min_update_interval = 2;
 }
 
-message Cld_Configure_Command_0x {
-  enum Operational_Mode {
-    NORNAML = 0;
-    DISABLED = 170;  
+message Cld_Configure_Command_0xA2 {
+  message OperationMode {
+    enum Enum {
+      NORNAML = 0;
+      DISABLED = 170;  
+    }
   }
 
-  optional Operational_Mode operational_mode = 1;
+  optional OperationMode.Enum operational_mode = 1;
   optional double min_update_interval = 2;
 }
 
-message Fault_Report_0x {
-  
+message Fault_Report_0xAF {
+  message FaultOriginId {
+    enum Enum {
+      BRAKE_CONTROL_CHANNEL = 0;
+      STEERING_CONTROL_CHANNEL = 1;
+      THROTTLE_CONTROL_CHANNEL = 2;
+    }
+  }
+
+  message ReportDtcType {
+    enum Enum {
+      NO_COMMUNICATION = 0;
+      OPERATOR_OVERRIDE = 1;
+    }
+  }
+
+  optional FaultOriginId.Enum fault_origin_id = 1;
+  optional ReportDtcType.Enum fault_dtcs = 2;
 }
 
+message Steering_Angle_Command_0xB8 {
+  message SteeringAngleCmdFlags {
+    enum Enum {
+      DISABLED = 0;
+      ENABLED = 1;
+    }
+  }
 
+  optional SteeringAngleCmdFlags steering_angle_cmd_flags = 1;
 
+  // [%], [-100, 100] := [Degrees], [-600, 699] 
+  optional double steering_angle_cmd_angle = 2;
 
+  // [%], [0, 100] := [degrees/second], [0,800]
+  optional double steering_angle_cmd_max_velocity = 3;
+}
 
+message Steering_Angle_Report_0xB9 {
+  message SteeringAngleReportFlags {
+    enum Enum {
+      DISABLED = 0;
+      ENABLED = 1;
+    }
+  } 
 
+  message SteeringAngleReportErrors {
+    enum Enum {
+      NONE = 0;
+      ANGLE_MISSING = 1;
+      ANGLE_IRRATIONAL = 2;
+      MODULE_DISABLED = 4;
+      COMMAND_REJECTED = 6;
+    }
+  }
 
+  optional SteeringAngleReportFlags.Enum steering_angle_report_flags = 1;
+  optional SteeringAngleReportErrors.Enum steering_angle_report_errors = 2;
+}
+
+message Chassis_Control_Command_0xC8 {
+  message FrontWiper {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      INTERMITTENT = 2;
+      SLOW = 3;
+      FAST = 4;
+    }
+  }
+
+  message RearWiper {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISSABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Signal {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Horn {
+    enum Enum {
+      DO_NOTHING = 0;
+      ENABLED = 2;
+    }
+  }
+
+  message Vin {
+    enum Enum {
+      DO_NOTHYING = 0;
+      REQUESTED = 2;
+    }
+  }
+
+  message Headlamps {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      LOW = 2;
+      HIGH = 3;
+    }
+  }
+
+  optional FrontWiper.Enum front_wipers = 1;
+  optional RearWiper.Enum rear_wiper = 2;
+  optional Signal.Enum right_signal = 3;
+  optional Signal.Enum left_signal = 4;
+  optional Horn.Enum horn = 5;
+  optional Vin.Enum vin = 6;
+  optional Headlamps.Enum headlamps = 7;
+}
+
+message Chassis_Control_Report_0xD8 {
+  message FrontWiper {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      INTERMITTENT = 2;
+      SLOW = 3;
+      FAST = 4;
+    }
+  }
+
+  message RearWiper {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISSABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Signal {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Horn {
+    enum Enum {
+      DO_NOTHING = 0;
+      ENABLED = 2;
+    }
+  }
+
+  message VinRequest {
+    enum Enum {
+      DO_NOTHYING = 0;
+      REQUESTED = 2;
+    }
+  }
+
+  message Headlamps {
+    enum Enum {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      LOW = 2;
+      HIGH = 3;
+    }
+  }
+
+  optional FrontWiper.Enum front_wipers = 1;
+  optional RearWiper.Enum  rear_wiper = 2;
+  optional Signal.Enum right_signal = 3;
+  optional Signal.Enum left_signal = 4;
+  optional Horn.Enum horn = 5;
+  optional VinRequest.Enum vin = 6;
+  optional Headlamps.Enum headlamps = 7;
+}
+
+message Brake_Pressure_0x220 {
+  optional double brake_pressure = 1;
+}
+
+message Steering_Angle_0x2B0 {
+  optional double steering_wheel_angle = 1;
+}
+
+message Wheel_Speed_0x386 {
+  optional double left_front = 1;
+  optional double right_front = 2;
+  optional double left_rear = 3;
+  optional double right_rear = 4;
+}
+
+message Niro {
+  optional Brake_Enable_0x70 brake_enable_0x70 = 1; // Control message
+  optional Brake_Disable_0x71 brake_disable_0x71 = 2; // Control message
+  optional Brake_Command_0x72 brake_command_0x72 = 3; // Control message
+  optional Brake_Report_0x73 brake_report_0x73 = 4; // Report message
+  
+  optional Steering_Enable_0x80 steering_enable_0x80 = 5; // Control message
+  optional Steering_Disable_0x81 steering_disable_0x81 = 6; // Control message
+  optional Steering_Torque_Command_0x82 steering_command_0x82 = 7; // Control message
+  optional Steering_Report_0x83 steering_report_0x83 = 8; // Report message
+
+  optional Throttle_Enable_0x90 throttle_enable_0x90 = 9; // Control message
+  optional Throttle_Disable_0x91 throttle_disable_0x91 = 10; // Control message
+  optional Throttle_Command_0x92 throttle_command_0x92 = 11; // Control message
+  optional Throttle_Report_0x93 throotle_report_0x93 = 12; // Report message
+  
+  optional Cld_Report_0xA0 cld_report_0xa0 = 13; // Report message
+  optional Cld_Configuration_Report_0xA1 cld_configuration_report_0xa1 = 14; // Report message
+  optional Cld_Configure_Command_0xA2 cld_configure_command_0xa2 = 15; // Control message
+
+  optional Fault_Report_0xAF fault_report_0xaf = 16; // Report message
+
+  optional Steering_Angle_Command_0xB8 steering_angle_command_0xb8 = 17; // Control message
+  optional Steering_Angle_Report_0xB9 steering_angle_report_0xb0 = 18; // Report message
+
+  optional Chassis_Control_Command_0xC8 chassis_control_command_0xc8 = 19; // Control message
+  optional Chassis_Control_Report_0xD8 chassis_control_report_0xd8 = 20; // Report message
+
+  optional Brake_Pressure_0x220 brake_pressure_0x220 = 21; // Report message
+  optional Steering_Angle_0x2B0 steering_angle_0x220 = 22; // Report message
+  optional Wheel_Speed_0x386 wheel_speed_0x220 = 23; // Report message
+}
