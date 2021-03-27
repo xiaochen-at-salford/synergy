@@ -1,7 +1,9 @@
 
-#include "modules/drivers/canbus/can_client/socket/oscc_can_client_raw.h"
+#include "modules/drivers/canbus/can_client/oscc/oscc_can_client.h"
 
 #include "absl/strings/str_cat.h"
+
+// #include <sys/socket.h>
 
 namespace apollo {
 namespace drivers {
@@ -35,20 +37,20 @@ bool OsccCanClient::Init(const CANCardParameter &parameter)
 
 OsccCanClient::~OsccCanClient() 
 {
-  if (dev_handler_) 
+  if (dev_send_ || dev_recv_) 
   { Stop(); }
 }
 
 
 ErrorCode OsccCanClient::Start() 
 {
-  if (init_can_channel(dev_send_, can_channel_send_, tv_send_) != ErrorCode::OK)
+  if (init_can_channel(dev_send_, can_channel_send_, &tv_send_) != ErrorCode::OK)
   { 
     AERROR << "Failed to initialise OSCC CAN Sender";
     return ErrorCode::CAN_CLIENT_ERROR_BASE;
   }
 
-  if (init_can_channel(dev_recv_, can_channel_recev_, tv_recv_) != ErrorCode::OK)
+  if (init_can_channel(dev_recv_, can_channel_recv_, &tv_recv_) != ErrorCode::OK)
   {
     AERROR << "Failed to initialise OSCC CAN Receiver";
     return ErrorCode::CAN_CLIENT_ERROR_BASE;
@@ -67,13 +69,13 @@ void OsccCanClient::Stop()
     if (result < 0)
     { AERROR << "OSCC CAN Sender error code: " << result << ", " << GetErrorString(result); }
     else
-    { AINFO << "Close OSCC CAN sender socket ok"};
+    { AINFO << "Close OSCC CAN sender socket ok"; }
 
     result = close(dev_recv_);
     if (result < 0)
     { AERROR << "OSCC CAN receiver error code: " << result << ", " << GetErrorString(result); }
     else
-    { AINFO << "Close OSCC CAN receiver socket ok"};
+    { AINFO << "Close OSCC CAN receiver socket ok"; }
   }
 }
 
@@ -103,10 +105,10 @@ ErrorCode OsccCanClient::Send(const std::vector<CanFrame> &frames, int32_t *cons
     std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
 
     // Synchronous transmission of CAN messages
-    int result = static_cast<int>(write(dev_handler_, &send_frames_[i], sizeof(send_frames_[i])));
+    int result = static_cast<int>(write(dev_send_, &send_frames_[i], sizeof(send_frames_[i])));
     if (result <= 0) 
     {
-      AERROR << "send message failed, error code: " << ret;
+      AERROR << "send message failed, error code: " << result;
       return ErrorCode::CAN_CLIENT_ERROR_BASE;
     }
  }
@@ -133,11 +135,11 @@ ErrorCode OsccCanClient::Receive(std::vector<CanFrame> *const frames, int32_t *c
   for (int32_t i = 0; i<*frame_num && i<MAX_CAN_RECV_FRAME_LEN; ++i) 
   {
     CanFrame cf;
-    auto result = read(dev_handler_, &recv_frames_[i], sizeof(recv_frames_[i]));
+    auto result = read(dev_recv_, &recv_frames_[i], sizeof(recv_frames_[i]));
 
     if (result < 0) 
     {
-      AERROR << "receive message failed, error code: " << ret;
+      AERROR << "receive message failed, error code: " << result;
       return ErrorCode::CAN_CLIENT_ERROR_BASE;
     }
 
@@ -163,35 +165,39 @@ std::string OsccCanClient::GetErrorString(const int32_t /*status*/)
 }
 
 //TODO:
-ErrorCode init_can_socket(int &dev_handler, int can_channel, struct timeval *tv)
+// ErrorCode init_can_channel(int &dev_handler, int can_channel, struct timeval *tv)
+ErrorCode OsccCanClient::init_can_channel(int &dev_handler, int port, struct timeval *tv)
 {
-  result = Uninitialized_Socket; 
-  struct sockaddr_can addr;
+  int result = Uninitialized_Socket; 
+  // struct sockaddr_can addr;
   struct ifreq ifr;
   memset(&ifr, 0, sizeof(ifr));
 
   // Sender CAN
   dev_handler = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-  if (dev_handle < 0)
+  if (dev_handler < 0)
   {
     AERROR << "open device error code [" << dev_handler << "]: ";
     return ErrorCode::CAN_CLIENT_ERROR_BASE;
   }
 
-  strncpy(ifr.ifr_name, can_channel, IFNAMSIZ);
+  std::string interface_prefix = "can";
+  const std::string can_name = absl::StrCat(interface_prefix, port);
+
+  strncpy(ifr.ifr_name, can_name.c_str(), IFNAMSIZ);
   result = ioctl(dev_handler, SIOCGIFINDEX, &ifr); 
-  if (res < 0)
+  if (result < 0)
   { perror( "Finding CAN index failed:" ); }   
 
-  if (&tv!=nullptr)
+  if (tv != nullptr)
   {
-    AERROR << "Time-out parameter not set."
+    AERROR << "Time-out parameter not set.";
     return ErrorCode::CAN_CLIENT_ERROR_BASE;
   }
 
-  result = setsockopt(dev_handler, SOL_SOCKET, S0_RCVTIME0, tv, sizeof(struct timeval));
+  result = setsockopt(dev_handler, SOL_SOCKET, SO_RCVTIMEO, tv, sizeof(struct timeval));
   if (result < 0)
-  { perror('Setting timeout failed:')};
+  { perror("Setting timeout failed:"); };
 
   struct sockaddr_can can_address;
 
@@ -204,7 +210,7 @@ ErrorCode init_can_socket(int &dev_handler, int can_channel, struct timeval *tv)
   {
     AERROR << "Failed to bind socket";
     close(dev_handler);
-    dev_handler = Uninitalised_Socket;
+    dev_handler = Uninitialized_Socket;
     return ErrorCode::CAN_CLIENT_ERROR_BASE;
   }
   

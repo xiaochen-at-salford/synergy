@@ -46,6 +46,7 @@ cc_library(
         ":abstract_vehicle_factory",
         "//modules/canbus/vehicle/ch:ch_vehicle_factory",
         "//modules/canbus/vehicle/devkit:devkit_vehicle_factory",
+        "//modules/canbus/vehicle/niro:niro_vehicle_factory",
         "//modules/canbus/vehicle/ge3:ge3_vehicle_factory",
         "//modules/canbus/vehicle/gem:gem_vehicle_factory",
         "//modules/canbus/vehicle/lexus:lexus_vehicle_factory",

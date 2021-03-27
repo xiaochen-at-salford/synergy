@@ -30,26 +30,24 @@ namespace can {
 
 const int Uninitialized_Socket = -1;
 
-class OsccCanClientRaw : public CanClient {
+class OsccCanClient : public CanClient {
  public:
   bool Init(const CANCardParameter &parameter) override;
 
-  virtual ~OsccCanClientRaw();
+  virtual ~OsccCanClient();
 
   apollo::common::ErrorCode Start() override;
 
   void Stop() override;
 
-  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                 int32_t *const frame_num ) override;
+  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames, int32_t *const frame_num ) override;
 
-  apollo::common::ErrorCode Receive(std::vector<CanFrame> *const frames,
-                                    int32_t *const frame_num ) override;
+  apollo::common::ErrorCode Receive(std::vector<CanFrame> *const frames, int32_t *const frame_num ) override;
 
   std::string GetErrorString(const int32_t status) override;
 
+  apollo::common::ErrorCode init_can_channel(int &dev_handler, int port, struct timeval *tv);
  private:
-  apollo::common::ErrorCode init_can_socket(int &dev_handler, int can_channel, struct timeval &tv);
 
   struct timeval tv_send_;
   struct timeval tv_recv_;

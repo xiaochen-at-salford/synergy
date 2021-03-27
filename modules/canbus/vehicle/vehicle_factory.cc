@@ -26,45 +26,24 @@
 #include "modules/canbus/vehicle/transit/transit_vehicle_factory.h"
 #include "modules/canbus/vehicle/wey/wey_vehicle_factory.h"
 #include "modules/canbus/vehicle/zhongyun/zhongyun_vehicle_factory.h"
+#include "modules/canbus/vehicle/niro/niro_vehicle_factory.h"
 
 namespace apollo {
 namespace canbus {
 
 void VehicleFactory::RegisterVehicleFactory() 
 {
-  Register(apollo::common::LINCOLN_MKZ, []() -> AbstractVehicleFactory * {
-    return new LincolnVehicleFactory();
-  });
-  Register(apollo::common::GEM, []() -> AbstractVehicleFactory * {
-    return new GemVehicleFactory();
-  });
-  Register(apollo::common::LEXUS, []() -> AbstractVehicleFactory * {
-    return new LexusVehicleFactory();
-  });
-  Register(apollo::common::TRANSIT, []() -> AbstractVehicleFactory * {
-    return new TransitVehicleFactory();
-  });
-  Register(apollo::common::GE3, []() -> AbstractVehicleFactory * {
-    return new Ge3VehicleFactory();
-  });
-  Register(apollo::common::WEY, []() -> AbstractVehicleFactory * {
-    return new WeyVehicleFactory();
-  });
-  Register(apollo::common::ZHONGYUN, []() -> AbstractVehicleFactory * {
-    return new ZhongyunVehicleFactory();
-  });
-  Register(apollo::common::CH, []() -> AbstractVehicleFactory * {
-    return new ChVehicleFactory();
-  });
-  Register(apollo::common::DKIT, []() -> AbstractVehicleFactory * {
-    return new DevkitVehicleFactory();
-  });
-  Register(apollo::common::NEOLIX, []() -> AbstractVehicleFactory * {
-    return new Neolix_eduVehicleFactory();
-  });
-  Register(apollo::common::NIRO, []() -> AbstractVehicleFactory * {
-    return new NiroVehicleFactory();
-  });
+  Register(apollo::common::LINCOLN_MKZ, []()->AbstractVehicleFactory *{ return new LincolnVehicleFactory(); });
+  Register(apollo::common::GEM, []()->AbstractVehicleFactory *{ return new GemVehicleFactory(); });
+  Register(apollo::common::LEXUS, []()->AbstractVehicleFactory *{ return new LexusVehicleFactory(); });
+  Register(apollo::common::TRANSIT, []()->AbstractVehicleFactory *{ return new TransitVehicleFactory(); });
+  Register(apollo::common::GE3, []()->AbstractVehicleFactory *{ return new Ge3VehicleFactory(); });
+  Register(apollo::common::WEY, []()->AbstractVehicleFactory * { return new WeyVehicleFactory(); });
+  Register(apollo::common::ZHONGYUN, []()->AbstractVehicleFactory *{ return new ZhongyunVehicleFactory(); });
+  Register(apollo::common::CH, []()->AbstractVehicleFactory *{ return new ChVehicleFactory(); });
+  Register(apollo::common::DKIT, []() -> AbstractVehicleFactory *{ return new DevkitVehicleFactory(); });
+  Register(apollo::common::NEOLIX, []() -> AbstractVehicleFactory * { return new Neolix_eduVehicleFactory(); });
+  Register(apollo::common::NIRO, []() -> AbstractVehicleFactory * { return new NiroVehicleFactory(); });
 }
 
 std::unique_ptr<AbstractVehicleFactory> 
