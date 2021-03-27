@@ -91,19 +91,6 @@ ErrorCode NiroController::Init(
   return ErrorCode::OK;
 }
 
-bool NiroController::Start() 
-{
-  if (!is_initialized_) 
-  {
-    AERROR << "NiroController has NOT been initiated.";
-    return false;
-  }
-  const auto& update_func = [this] { SecurityDogThreadFunc(); };
-  thread_.reset(new std::thread(update_func));
-
-  return true;
-}
-
 NiroController::~NiroController() {}
 
 bool NiroController::Start() 
@@ -157,36 +144,37 @@ Chassis NiroController::chassis()
   // chassis_.set_engine_rpm(0);
 
   // 5 wheel spd
-  if (chassis_detail.niro().has_wheelspeed_report_506()) 
-  {
-    if (chassis_detail.niro().wheelspeed_report_506().has_rr()) 
-    {
-      chassis_.mutable_wheel_speed()->set_wheel_spd_rr(
-          chassis_detail.niro().wheelspeed_report_506().rr());
-    }
-    if (chassis_detail.niro().wheelspeed_report_506().has_rl()) 
-    {
-      chassis_.mutable_wheel_speed()->set_wheel_spd_rl(
-          chassis_detail.niro().wheelspeed_report_506().rl());
-    }
-    if (chassis_detail.niro().wheelspeed_report_506().has_fr()) 
-    {
-      chassis_.mutable_wheel_speed()->set_wheel_spd_fr(
-          chassis_detail.devkit().wheelspeed_report_506().fr());
-    }
-    if (chassis_detail.devkit().wheelspeed_report_506().has_fl()) {
-      chassis_.mutable_wheel_speed()->set_wheel_spd_fl(
-          chassis_detail.devkit().wheelspeed_report_506().fl());
-    }
-  }
+  // if (chassis_detail.niro().has_wheelspeed_report_506()) 
+  // {
+  //   if (chassis_detail.niro().wheelspeed_report_506().has_rr()) 
+  //   {
+  //     chassis_.mutable_wheel_speed()->set_wheel_spd_rr(
+  //         chassis_detail.niro().wheelspeed_report_506().rr());
+  //   }
+  //   if (chassis_detail.niro().wheelspeed_report_506().has_rl()) 
+  //   {
+  //     chassis_.mutable_wheel_speed()->set_wheel_spd_rl(
+  //         chassis_detail.niro().wheelspeed_report_506().rl());
+  //   }
+  //   if (chassis_detail.niro().wheelspeed_report_506().has_fr()) 
+  //   {
+  //     chassis_.mutable_wheel_speed()->set_wheel_spd_fr(
+  //         chassis_detail.devkit().wheelspeed_report_506().fr());
+  //   }
+  //   if (chassis_detail.devkit().wheelspeed_report_506().has_fl()) {
+  //     chassis_.mutable_wheel_speed()->set_wheel_spd_fl(
+  //         chassis_detail.devkit().wheelspeed_report_506().fl());
+  //   }
+  // }
+
   // 6 speed_mps
-  if (chassis_detail.devkit().has_vcu_report_505() 
-      && chassis_detail.devkit().vcu_report_505().has_speed() ) 
-  {
-    chassis_.set_speed_mps(static_cast<float>(chassis_detail.devkit().vcu_report_505().speed()));
-  } 
-  else 
-  { chassis_.set_speed_mps(0); }
+  // if (chassis_detail.devkit().has_vcu_report_505() 
+  //     && chassis_detail.devkit().vcu_report_505().has_speed() ) 
+  // {
+  //   chassis_.set_speed_mps(static_cast<float>(chassis_detail.devkit().vcu_report_505().speed()));
+  // } 
+  // else 
+  // { chassis_.set_speed_mps(0); }
 
   // 7 no odometer
   // chassis_.set_odometer_m(0);
@@ -195,95 +183,97 @@ Chassis NiroController::chassis()
   // chassis_.set_fuel_range_m(0);
 
   // 9 throttle
-  if (chassis_detail.devkit().has_throttle_report_500() 
-      && chassis_detail.devkit().throttle_report_500().has_throttle_pedal_actual() ) 
- {
-    chassis_.set_throttle_percentage(static_cast<float>(
-        chassis_detail.devkit().throttle_report_500().throttle_pedal_actual()));
-  } 
-  else 
-  {
-    chassis_.set_throttle_percentage(0);
-  }
+//   if (chassis_detail.devkit().has_throttle_report_500() 
+//       && chassis_detail.devkit().throttle_report_500().has_throttle_pedal_actual() ) 
+//  {
+//     chassis_.set_throttle_percentage(static_cast<float>(
+//         chassis_detail.devkit().throttle_report_500().throttle_pedal_actual()));
+//   } 
+//   else 
+//   {
+//     chassis_.set_throttle_percentage(0);
+//   }
 
   // 10 brake
-  if (chassis_detail.devkit().has_brake_report_501() 
-      && chassis_detail.devkit().brake_report_501().has_brake_pedal_actual()) 
-  {
-    chassis_.set_brake_percentage(static_cast<float>(
-        chassis_detail.devkit().brake_report_501().brake_pedal_actual()));
-  } 
-  else 
-  { chassis_.set_brake_percentage(0); }
+  // if (chassis_detail.niro().has_brake_report_() 
+  //     && chassis_detail.niro().brake_report_0x73().has_brake_pedal_actual()) 
+  // {
+  //   chassis_.set_brake_percentage(static_cast<float>(
+  //       chassis_detail.niro().brake_report_0x73().brake_pedal_actual()));
+  // } 
+  // else 
+  // { chassis_.set_brake_percentage(0); }
+  chassis_.set_brake_percentage(0);
 
   // 23, previously 11 gear
-  if (chassis_detail.devkit().has_gear_report_503() 
-      && chassis_detail.devkit().gear_report_503().has_gear_actual() ) 
-  {
-    Chassis::GearPosition gear_pos = Chassis::GEAR_INVALID;
+  // if (chassis_detail.devkit().has_gear_report_503() 
+  //     && chassis_detail.devkit().gear_report_503().has_gear_actual() ) 
+  // {
+  //   Chassis::GearPosition gear_pos = Chassis::GEAR_INVALID;
 
-    if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-        Gear_report_503::GEAR_ACTUAL_INVALID) 
-    {
-      gear_pos = Chassis::GEAR_INVALID;
-    }
-    if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-        Gear_report_503::GEAR_ACTUAL_NEUTRAL) {
-      gear_pos = Chassis::GEAR_NEUTRAL;
-    }
-    if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-        Gear_report_503::GEAR_ACTUAL_REVERSE) 
-    {
-      gear_pos = Chassis::GEAR_REVERSE;
-    }
-    if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-        Gear_report_503::GEAR_ACTUAL_DRIVE) {
-      gear_pos = Chassis::GEAR_DRIVE;
-    }
-    if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-        Gear_report_503::GEAR_ACTUAL_PARK) {
-      gear_pos = Chassis::GEAR_PARKING;
-    }
-    chassis_.set_gear_location(gear_pos);
-  } 
-  else 
-  { chassis_.set_gear_location(Chassis::GEAR_NONE); }
+  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
+  //       Gear_report_503::GEAR_ACTUAL_INVALID) 
+  //   {
+  //     gear_pos = Chassis::GEAR_INVALID;
+  //   }
+  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
+  //       Gear_report_503::GEAR_ACTUAL_NEUTRAL) {
+  //     gear_pos = Chassis::GEAR_NEUTRAL;
+  //   }
+  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
+  //       Gear_report_503::GEAR_ACTUAL_REVERSE) 
+  //   {
+  //     gear_pos = Chassis::GEAR_REVERSE;
+  //   }
+  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
+  //       Gear_report_503::GEAR_ACTUAL_DRIVE) {
+  //     gear_pos = Chassis::GEAR_DRIVE;
+  //   }
+  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
+  //       Gear_report_503::GEAR_ACTUAL_PARK) {
+  //     gear_pos = Chassis::GEAR_PARKING;
+  //   }
+  //   chassis_.set_gear_location(gear_pos);
+  // } 
+  // else 
+  // { chassis_.set_gear_location(Chassis::GEAR_NONE); }
 
   // 12 steering
-  if (chassis_detail.devkit().has_steering_report_502() 
-      && chassis_detail.devkit().steering_report_502().has_steer_angle_actual() ) 
-  {
-    chassis_.set_steering_percentage(static_cast<float>(
-        chassis_detail.devkit().steering_report_502().steer_angle_actual() *
-        100.0 / vehicle_params_.max_steer_angle() * M_PI / 180 ) );
-  } 
-  else 
-  { chassis_.set_steering_percentage(0); }
+  // if (chassis_detail.devkit().has_steering_report_502() 
+  //     && chassis_detail.devkit().steering_report_502().has_steer_angle_actual() ) 
+  // {
+  //   chassis_.set_steering_percentage(static_cast<float>(
+  //       chassis_detail.devkit().steering_report_502().steer_angle_actual() *
+  //       100.0 / vehicle_params_.max_steer_angle() * M_PI / 180 ) );
+  // } 
+  // else 
+  // { chassis_.set_steering_percentage(0); }
+  chassis_.set_steering_percentage(0); 
 
   // 13 parking brake
-  if (chassis_detail.devkit().has_park_report_504() 
-      && chassis_detail.devkit().park_report_504().has_parking_actual()) 
-  {
-    if (chassis_detail.devkit().park_report_504().parking_actual() == 
-            Park_report_504::PARKING_ACTUAL_PARKING_TRIGGER ) 
-    {
-      chassis_.set_parking_brake(true);
-    } 
-    else 
-    { chassis_.set_parking_brake(false); }
-  } 
-  else 
-  { chassis_.set_parking_brake(false); }
+  // if (chassis_detail.devkit().has_park_report_504() 
+  //     && chassis_detail.devkit().park_report_504().has_parking_actual()) 
+  // {
+  //   if (chassis_detail.devkit().park_report_504().parking_actual() == 
+  //           Park_report_504::PARKING_ACTUAL_PARKING_TRIGGER ) 
+  //   {
+  //     chassis_.set_parking_brake(true);
+  //   } 
+  //   else 
+  //   { chassis_.set_parking_brake(false); }
+  // } 
+  // else 
+  // { chassis_.set_parking_brake(false); }
 
   // 14 battery soc
-  if (chassis_detail.devkit().has_bms_report_512() 
-      && chassis_detail.devkit().bms_report_512().has_battery_soc() ) 
-  {
-    chassis_.set_battery_soc_percentage(
-        chassis_detail.devkit().bms_report_512().battery_soc() );
-  } 
-  else 
-  { chassis_.set_battery_soc_percentage(0); }
+  // if (chassis_detail.devkit().has_bms_report_512() 
+  //     && chassis_detail.devkit().bms_report_512().has_battery_soc() ) 
+  // {
+  //   chassis_.set_battery_soc_percentage(
+  //       chassis_detail.devkit().bms_report_512().battery_soc() );
+  // } 
+  // else 
+  // { chassis_.set_battery_soc_percentage(0); }
 
   return chassis_;
 }
@@ -305,8 +295,8 @@ ErrorCode NiroController::EnableAutoMode()
   brake_enable_0x70_->set_brake_enable();
 
   //TODO(xiaochen): 
-  throttle_command_0x_->set_throttle_enable();
-  steering_command_0x_->set_steer_enable();
+  // throttle_command_0x_->set_throttle_enable();
+  // steering_command_0x_->set_steer_enable();
 
   can_sender_->Update();
   const int32_t flag = CHECK_RESPONSE_STEER_UNIT_FLAG | CHECK_RESPONSE_SPEED_UNIT_FLAG;
@@ -322,7 +312,7 @@ ErrorCode NiroController::EnableAutoMode()
   return ErrorCode::OK;
 }
 
-ErrorCode NrioController::DisableAutoMode() 
+ErrorCode NiroController::DisableAutoMode() 
 {
   ResetProtocol();
   can_sender_->Update();
@@ -357,7 +347,7 @@ void NiroController::Brake(double pedal)
     AINFO << "The current drive mode does not need to set brake pedal.";
     return;
   }
-  brake_command_0x72_->set_brake_pedal_percent(pedal);
+  brake_command_0x72_->set_brake_pedal_command(pedal);
 }
 
 // drive with pedal
@@ -371,14 +361,16 @@ void NiroController::Throttle(double pedal)
     return;
   }
   //TODO(xiaochen): wip...
-  throttle_command_100_->set_throttle_pedal_target(pedal);
+  // throttle_command_0x92_->set_throttle_pedal_target(pedal);
 }
 
 // confirm the car is driven by acceleration command instead of throttle/brake
 // pedal drive with acceleration/deceleration acc:-7.0 ~ 5.0, unit:m/s^2
-void NiroController::Acceleration(double acc) {
-  if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE ||
-      driving_mode() != Chassis::AUTO_SPEED_ONLY) {
+void NiroController::Acceleration(double acc) 
+{
+  if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
+      || driving_mode() != Chassis::AUTO_SPEED_ONLY ) 
+  {
     AINFO << "The current drive mode does not need to set acceleration.";
     return;
   }
@@ -389,16 +381,17 @@ void NiroController::Acceleration(double acc) {
 // need to be compatible with control module, so reverse
 // steering with default angle speed, 25-250 (default:250)
 // angle:-99.99~0.00~99.99, unit:, left:-, right:+
-void NiroController::Steer(double angle) {
-  if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
-      && driving_mode() != Chassis::AUTO_STEER_ONLY ) 
-  {
-    AINFO << "The current driving mode does not need to set steer.";
-    return;
-  }
-  const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
-  //TODO(xiaochen): wip...
-  steering_command_102_->set_steer_angle_target(real_angle)->set_steer_angle_spd(250);
+void NiroController::Steer(double angle) 
+{
+  // if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
+  //     && driving_mode() != Chassis::AUTO_STEER_ONLY ) 
+  // {
+  //   AINFO << "The current driving mode does not need to set steer.";
+  //   return;
+  // }
+  // const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
+  // //TODO(xiaochen): wip...
+  // steering_command_102_->set_steer_angle_target(real_angle)->set_steer_angle_spd(250);
 }
 
 // steering with new angle speed
@@ -406,45 +399,48 @@ void NiroController::Steer(double angle) {
 // angle_spd:25~250, unit:deg/s
 void NiroController::Steer(double angle, double angle_spd) 
 {
-  if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
-      driving_mode() != Chassis::AUTO_STEER_ONLY) 
-  {
-    AINFO << "The current driving mode does not need to set steer.";
-    return;
-  }
-  const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
+  // if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
+  //     driving_mode() != Chassis::AUTO_STEER_ONLY) 
+  // {
+  //   AINFO << "The current driving mode does not need to set steer.";
+  //   return;
+  // }
+  // const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
   //TODO(xiaochen): wip...
   // steering_command_102_->set_steer_angle_target(real_angle)->set_steer_angle_spd(250) ;
 }
 
 void NiroController::SetEpbBreak(const ControlCommand& command) 
 {
-  if (command.parking_brake()) 
-  {
-    // None
-  } else {
-    // None
-  }
+  return;
+  // if (command.parking_brake()) 
+  // {
+  //   // None
+  // } else {
+  //   // None
+  // }
 }
 
 void NiroController::SetBeam(const ControlCommand& command) 
 {
-  if (command.signal().high_beam()) {
-    // None
-  } else if (command.signal().low_beam()) {
-    // None
-  } else {
-    // None
-  }
+  return;
+  // if (command.signal().high_beam()) {
+  //   // None
+  // } else if (command.signal().low_beam()) {
+  //   // None
+  // } else {
+  //   // None
+  // }
 }
 
 void NiroController::SetHorn(const ControlCommand& command) 
 {
-  if (command.signal().horn()) {
-    // None
-  } else {
-    // None
-  }
+  return;
+  // if (command.signal().horn()) {
+  //   // None
+  // } else {
+  //   // None
+  // }
 }
 
 void NiroController::SetTurningSignal(const ControlCommand& command) 
@@ -473,25 +469,24 @@ bool NiroController::CheckChassisError()
 
   // steer fault
   //TODO(xiaochen): wip...
-  if (niro.has_steering_report_0x()) 
-  {
-    if (Steering_report_502::STEER_FLT1_STEER_SYSTEM_HARDWARE_FAULT ==
-        devkit.steering_report_0x().steer_flt1()) 
-    { return true; }
-  }
-  // drive fault
-  if (devkit.has_throttle_report_500()) {
-    if (Throttle_report_500::THROTTLE_FLT1_DRIVE_SYSTEM_HARDWARE_FAULT ==
-        devkit.throttle_report_500().throttle_flt1()) {
-      return true;
-    }
-  }
+  // if (niro.has_steering_report_0x83()) 
+  // {
+  //   if (Steering_report_502::STEER_FLT1_STEER_SYSTEM_HARDWARE_FAULT ==
+  //       niro.steering_report_0x().steer_flt1() ) 
+  //   { return true; }
+  // }
+  // // drive fault
+  // if (devkit.has_throttle_report_500()) {
+  //   if (Throttle_report_500::THROTTLE_FLT1_DRIVE_SYSTEM_HARDWARE_FAULT ==
+  //       devkit.throttle_report_500().throttle_flt1()) {
+  //     return true;
+  //   }
+  // }
   // brake fault
-  if (devkit.has_brake_report_501()) {
-    if (Brake_report_501::BRAKE_FLT1_BRAKE_SYSTEM_HARDWARE_FAULT ==
-        devkit.brake_report_501().brake_flt1()) {
-      return true;
-    }
+  if (niro.has_brake_report_0x73()) {
+    return true;
+    // if (Brake_Report_0x73::BRAKE_FLT1_BRAKE_SYSTEM_HARDWARE_FAULT == niro.brake_report_0x73().brake_flt1()) 
+    // { return true; }
   }
 
   return false;
@@ -538,7 +533,7 @@ void NiroController::SecurityDogThreadFunc()
 
     // 2. vertical control check
     if ((mode == Chassis::COMPLETE_AUTO_DRIVE || mode == Chassis::AUTO_SPEED_ONLY) 
-        && !CheckResponse(CHECK_RESPONSE_SPEED_UNIT_FLAG, false )) 
+        && !CheckResponse(CHECK_RESPONSE_SPEED_UNIT_FLAG, false ) ) 
     {
       ++vertical_ctrl_fail;
       if (vertical_ctrl_fail >= kMaxFailAttempt) 
@@ -590,20 +585,20 @@ bool NiroController::CheckResponse(const int32_t flags, bool need_wait)
     bool check_ok = true;
     if (flags & CHECK_RESPONSE_STEER_UNIT_FLAG) 
     {
-      is_eps_online = chassis_detail.has_check_response() &&
-                      chassis_detail.check_response().has_is_eps_online() &&
-                      chassis_detail.check_response().is_eps_online();
+      is_eps_online = chassis_detail.has_check_response() 
+                      && chassis_detail.check_response().has_is_eps_online() 
+                      && chassis_detail.check_response().is_eps_online();
       check_ok = check_ok && is_eps_online;
     }
 
     if (flags & CHECK_RESPONSE_SPEED_UNIT_FLAG) 
     {
-      is_vcu_online = chassis_detail.has_check_response() &&
-                      chassis_detail.check_response().has_is_vcu_online() &&
-                      chassis_detail.check_response().is_vcu_online();
-      is_esp_online = chassis_detail.has_check_response() &&
-                      chassis_detail.check_response().has_is_esp_online() &&
-                      chassis_detail.check_response().is_esp_online();
+      is_vcu_online = chassis_detail.has_check_response() 
+                      && chassis_detail.check_response().has_is_vcu_online() 
+                      && chassis_detail.check_response().is_vcu_online();
+      is_esp_online = chassis_detail.has_check_response() 
+                      && chassis_detail.check_response().has_is_esp_online() 
+                      && chassis_detail.check_response().is_esp_online();
       check_ok = check_ok && is_vcu_online && is_esp_online;
     }
     if (check_ok) 

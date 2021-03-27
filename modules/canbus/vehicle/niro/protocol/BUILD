@@ -5,11 +5,16 @@ package(default_visibility = ["//visibility:public"])
 
 CANBUS_COPTS = ["-DMODULE_NAME=\\\"canbus\\\""]
 
-# cc_library(
-#     name = "canbus_niro_protocol",
-#     deps = [
-#     ],
-# )
+cc_library(
+    name = "canbus_niro_protocol",
+    deps = [
+        ":oscc_protocol_base",
+        ":dec112_hex70_brake_enable",
+        ":dec113_hex71_brake_disable",
+        ":dec114_hex72_brake_command",
+        ":dec115_hex73_brake_report",
+    ],
+)
 
 cc_library(
     name = "oscc_protocol_base",

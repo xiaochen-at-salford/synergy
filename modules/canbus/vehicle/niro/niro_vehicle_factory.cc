@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/devkit/niro_vehicle_factory.h"
+#include "modules/canbus/vehicle/niro/niro_vehicle_factory.h"
 
 #include "cyber/common/log.h"
 #include "modules/common/util/util.h"

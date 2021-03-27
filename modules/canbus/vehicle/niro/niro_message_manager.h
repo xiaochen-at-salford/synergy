@@ -9,7 +9,7 @@ namespace niro {
 
 using ::apollo::drivers::canbus::MessageManager;
 
-class NMiroMessageManager 
+class NiroMessageManager 
   : public MessageManager<::apollo::canbus::ChassisDetail> 
 {
  public:

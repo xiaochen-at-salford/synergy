@@ -5,7 +5,7 @@
 #include "modules/canbus/vehicle/niro/protocol/dec114_hex72_brake_command.h"
 #include "modules/canbus/vehicle/niro/protocol/dec115_hex73_brake_report.h"
 
-#include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
+// #include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
 
 namespace apollo {
 namespace canbus {
@@ -13,16 +13,14 @@ namespace niro {
 
 NiroMessageManager::NiroMessageManager() 
 {
-  bool&& need_check = true;
-
   // Control Messages
-  AddSendProtocolData<BrakeEnable_0x70, need_check>();
-  AddSendProtocolData<BrakeDisable_0x71, need_check>();
-  AddSendProtocolData<BrakeCommand_0x72, need_check>();
+  AddSendProtocolData<BrakeEnable_0x70, true>();
+  AddSendProtocolData<BrakeDisable_0x71, true>();
+  AddSendProtocolData<BrakeCommand_0x72, true>();
 
   // Report Messages
-  AddRecvProtocolData<BrakeReport_0x73, need_check>();
-  AddRecvProtocolData<BrakeReport_0x220, need_check>();
+  AddRecvProtocolData<BrakeReport_0x73, true>();
+  // AddRecvProtocolData<BrakeReport_0x220, need_check>();
 }
 
 NiroMessageManager::~NiroMessageManager() {}

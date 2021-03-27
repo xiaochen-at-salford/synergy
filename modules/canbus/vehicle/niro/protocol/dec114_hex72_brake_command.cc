@@ -32,7 +32,7 @@ void BrakeCommand_0x72::Reset()
   brake_pedal_percent_ = 0.0;
 }
 
-BrakeCommand_0x72* BrakeCommand_0x72::set_brake_pedal_command(double brake_pedal_percent) 
+BrakeCommand_0x72 *BrakeCommand_0x72::set_brake_pedal_command(double brake_pedal_percent) 
 {
   brake_pedal_percent_ = brake_pedal_percent;
   return this;

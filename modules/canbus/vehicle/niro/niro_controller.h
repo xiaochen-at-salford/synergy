@@ -10,7 +10,9 @@
 #include "modules/canbus/vehicle/niro/protocol/dec113_hex71_brake_disable.h"
 #include "modules/canbus/vehicle/niro/protocol/dec114_hex72_brake_command.h"
 #include "modules/canbus/vehicle/niro/protocol/dec115_hex73_brake_report.h"
-#include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
+
+// #include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
+
 #include "modules/canbus/vehicle/vehicle_controller.h"
 #include "modules/common/proto/error_code.pb.h"
 #include "modules/control/proto/control_cmd.pb.h"
@@ -98,7 +100,7 @@ class NiroController final : public VehicleController {
   BrakeCommand_0x72 *brake_command_0x72_ = nullptr;
   BrakeReport_0x73 *brake_report_0x73_ = nullptr;
 
-  BrakePressure_0x220 *brake_pressure_0x220_ = nullptr;
+  // BrakePressure_0x220 *brake_pressure_0x220_ = nullptr;
 
   Chassis chassis_;
   std::unique_ptr<std::thread> thread_;
