@@ -19,6 +19,10 @@ cc_library(
         ":dec131_hex83_steering_report",
         ":dec184_hexB8_steering_angle_command",
         ":dec185_hexB9_steering_angle_report",
+        ":dec144_hex90_throttle_enable",
+        ":dec145_hex91_throttle_disable",
+        ":dec146_hex92_throttle_command",
+        ":dec147_hex93_throttle_report",
     ],
 )
 

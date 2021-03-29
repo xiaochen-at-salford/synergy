@@ -16,6 +16,10 @@
 #include "modules/canbus/vehicle/niro/protocol/dec130_hex82_steering_torque_command.h"
 #include "modules/canbus/vehicle/niro/protocol/dec184_hexB8_steering_angle_command.h"
 // Throttle command protocols 
+#include "modules/canbus/vehicle/niro/protocol/dec144_hex90_throttle_enable.h"
+#include "modules/canbus/vehicle/niro/protocol/dec145_hex91_throttle_disable.h"
+#include "modules/canbus/vehicle/niro/protocol/dec146_hex92_throttle_command.h"
+
 // #include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
 
 #include "modules/canbus/vehicle/vehicle_controller.h"
@@ -60,7 +64,6 @@ class NiroController final : public VehicleController {
   // NEUTRAL, REVERSE, DRIVE
   void Gear(Chassis::GearPosition state) override;
 
-  // brake with new acceleration
   // acceleration:0.00~99.99, unit:
   // acceleration_spd: 60 ~ 100, suggest: 90
   void Brake(double acceleration) override;
@@ -111,7 +114,10 @@ class NiroController final : public VehicleController {
   SteeringTorqueCommand_0x82 *steering_torque_command_0x82_ = nullptr;
   SteeringAngleCommand_0xB8  *steering_angle_command_0xB8_ = nullptr;
 
-  // BrakePressure_0x220 *brake_pressure_0x220_ = nullptr;
+  // Throttle command protocols
+  ThrottleEnable_0x90 *throttle_enable_0x90_ = nullptr;
+  ThrottleDisable_0x91 *throttle_disable_0x91_ = nullptr;
+  ThrottleCommand_0x92 *throttle_command_0x92_ = nullptr; // Throttle command protocols
 
   Chassis chassis_;
   std::unique_ptr<std::thread> thread_;

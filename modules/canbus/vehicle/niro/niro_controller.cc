@@ -111,6 +111,29 @@ ErrorCode NiroController::Init(
     return ErrorCode::CANBUS_ERROR;
   }
 
+  throttle_enable_0x90_ = dynamic_cast<ThrottleEnable_0x90*>(
+      message_manager_->GetMutableProtocolDataById(ThrottleEnable_0x90::ID) );
+  if (throttle_enable_0x90_ == nullptr) 
+  {
+    AERROR << "ThrottleEnable_0x90 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
+
+  throttle_disable_0x91_ = dynamic_cast<ThrottleDisable_0x91*>(
+      message_manager_->GetMutableProtocolDataById(ThrottleDisable_0x91::ID) );
+  if (throttle_disable_0x91_ == nullptr) 
+  {
+    AERROR << "ThrottleDisable_0x92 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
+
+  throttle_command_0x92_ = dynamic_cast<ThrottleCommand_0x92*>(
+      message_manager_->GetMutableProtocolDataById(ThrottleCommand_0x92::ID) );
+  if (throttle_command_0x92_ == nullptr) 
+  {
+    AERROR << "ThrottleCommand_0x92 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
   bool &&init_with_one = false;
   // Brake command messages
   can_sender_->AddMessage(BrakeEnable_0x70::ID, brake_enable_0x70_, init_with_one);
@@ -121,6 +144,10 @@ ErrorCode NiroController::Init(
   can_sender_->AddMessage(SteeringDisable_0x81::ID, steering_disable_0x81_, init_with_one);
   can_sender_->AddMessage(SteeringTorqueCommand_0x82::ID, steering_torque_command_0x82_, init_with_one);
   can_sender_->AddMessage(SteeringAngleCommand_0xB8::ID, steering_angle_command_0xB8_, init_with_one);
+  // Throttle command messages
+  can_sender_->AddMessage(ThrottleEnable_0x90::ID, throttle_enable_0x90_, init_with_one);
+  can_sender_->AddMessage(ThrottleDisable_0x91::ID, throttle_disable_0x91_, init_with_one);
+  can_sender_->AddMessage(ThrottleCommand_0x92::ID, throttle_command_0x92_, init_with_one);
 
   // need sleep to ensure all messages received
   AINFO << "NiroController is initialized.";
