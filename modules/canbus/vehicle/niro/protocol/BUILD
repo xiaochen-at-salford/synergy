@@ -158,4 +158,59 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "dec144_hex90_throttle_enable",
+    srcs = ["dec144_hex90_throttle_enable.cc"],
+    hdrs = ["dec144_hex90_throttle_enable.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "dec145_hex91_throttle_disable",
+    srcs = ["dec145_hex91_throttle_disable.cc"],
+    hdrs = ["dec145_hex91_throttle_disable.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "dec146_hex92_throttle_command",
+    srcs = ["dec146_hex92_throttle_command.cc"],
+    hdrs = ["dec146_hex92_throttle_command.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "dec147_hex93_throttle_report",
+    srcs = ["dec147_hex93_throttle_report.cc"],
+    hdrs = ["dec147_hex93_throttle_report.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+
+
+
 cpplint()

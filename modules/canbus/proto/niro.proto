@@ -73,7 +73,7 @@ message Throttle_Command_0x92 {
 }
 
 message Throttle_Report_0x93 {
-  message ThrottleDtc {
+  message ThrottleDtcs {
     enum Enum {
       NO_COMMUNICATION = 0;
       OPERATOR_OVERRIDE = 1;
@@ -82,7 +82,7 @@ message Throttle_Report_0x93 {
 
   optional bool throttle_report_enabled = 1;
   optional bool throttle_operator_override = 2;
-  optional ThrottleDtc.Enum throttle_dtcs = 3;
+  optional ThrottleDtcs.Enum throttle_dtcs = 3;
 }
 
 message Cld_Report_0xA0 {
@@ -347,7 +347,7 @@ message Niro {
   optional Throttle_Enable_0x90 throttle_enable_0x90 = 9; // Control message
   optional Throttle_Disable_0x91 throttle_disable_0x91 = 10; // Control message
   optional Throttle_Command_0x92 throttle_command_0x92 = 11; // Control message
-  optional Throttle_Report_0x93 throotle_report_0x93 = 12; // Report message
+  optional Throttle_Report_0x93 throttle_report_0x93 = 12; // Report message
   
   optional Cld_Report_0xA0 cld_report_0xa0 = 13; // Report message
   optional Cld_Configuration_Report_0xA1 cld_configuration_report_0xa1 = 14; // Report message
