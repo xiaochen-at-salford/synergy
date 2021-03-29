@@ -6,11 +6,16 @@
 #include "modules/canbus/proto/canbus_conf.pb.h"
 #include "modules/canbus/proto/chassis.pb.h"
 #include "modules/canbus/proto/vehicle_parameter.pb.h"
+// Brake command protocols
 #include "modules/canbus/vehicle/niro/protocol/dec112_hex70_brake_enable.h"
 #include "modules/canbus/vehicle/niro/protocol/dec113_hex71_brake_disable.h"
 #include "modules/canbus/vehicle/niro/protocol/dec114_hex72_brake_command.h"
-#include "modules/canbus/vehicle/niro/protocol/dec115_hex73_brake_report.h"
-
+// Steering command protocols
+#include "modules/canbus/vehicle/niro/protocol/dec128_hex80_steering_enable.h"
+#include "modules/canbus/vehicle/niro/protocol/dec129_hex81_steering_disable.h"
+#include "modules/canbus/vehicle/niro/protocol/dec130_hex82_steering_torque_command.h"
+#include "modules/canbus/vehicle/niro/protocol/dec184_hexB8_steering_angle_command.h"
+// Throttle command protocols 
 // #include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
 
 #include "modules/canbus/vehicle/vehicle_controller.h"
@@ -95,10 +100,16 @@ class NiroController final : public VehicleController {
   void set_chassis_error_code(const Chassis::ErrorCode& error_code);
 
  private:
+  // Brake command protocols
   BrakeEnable_0x70 *brake_enable_0x70_ = nullptr;
   BrakeDisable_0x71 *brake_disable_0x71_ = nullptr;
   BrakeCommand_0x72 *brake_command_0x72_ = nullptr;
-  BrakeReport_0x73 *brake_report_0x73_ = nullptr;
+
+  // Steeringc command protocols
+  SteeringEnable_0x80 *steering_enable_0x80_ = nullptr;
+  SteeringDisable_0x81 *steering_disable_0x81_ = nullptr;
+  SteeringTorqueCommand_0x82 *steering_torque_command_0x82_ = nullptr;
+  SteeringAngleCommand_0xB8  *steering_angle_command_0xB8_ = nullptr;
 
   // BrakePressure_0x220 *brake_pressure_0x220_ = nullptr;
 

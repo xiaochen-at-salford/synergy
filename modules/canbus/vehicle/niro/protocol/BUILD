@@ -13,6 +13,12 @@ cc_library(
         ":dec113_hex71_brake_disable",
         ":dec114_hex72_brake_command",
         ":dec115_hex73_brake_report",
+        ":dec128_hex80_steering_enable",
+        ":dec129_hex81_steering_disable",
+        ":dec130_hex82_steering_torque_command",
+        ":dec131_hex83_steering_report",
+        ":dec184_hexB8_steering_angle_command",
+        ":dec185_hexB9_steering_angle_report",
     ],
 )
 

@@ -59,7 +59,7 @@ ErrorCode NiroController::Init(
       message_manager_->GetMutableProtocolDataById(BrakeEnable_0x70::ID) );
   if (brake_enable_0x70_ == nullptr) 
   {
-    AERROR << "BrakeCommand_0x70 does not exist in the OsccMessageManager!";
+    AERROR << "BrakeEnable_0x70 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
@@ -67,7 +67,7 @@ ErrorCode NiroController::Init(
       message_manager_->GetMutableProtocolDataById(BrakeDisable_0x71::ID) );
   if (brake_disable_0x71_ == nullptr) 
   {
-    AERROR << "BrakeCommand70 does not exist in the OsccMessageManager!";
+    AERROR << "BrakeDisable_0x72 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
@@ -75,14 +75,52 @@ ErrorCode NiroController::Init(
       message_manager_->GetMutableProtocolDataById(BrakeCommand_0x72::ID) );
   if (brake_command_0x72_ == nullptr) 
   {
-    AERROR << "BrakeCommand70 does not exist in the OsccMessageManager!";
+    AERROR << "BrakeCommand_0x72 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
+
+  steering_enable_0x80_ = dynamic_cast<SteeringEnable_0x80*>(
+      message_manager_->GetMutableProtocolDataById(SteeringEnable_0x80::ID) );
+  if (steering_enable_0x80_ == nullptr) 
+  {
+    AERROR << "SteeringEnable_0x80 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
+
+  steering_disable_0x81_ = dynamic_cast<SteeringDisable_0x81*>(
+      message_manager_->GetMutableProtocolDataById(SteeringDisable_0x81::ID) );
+  if (steering_disable_0x81_ == nullptr) 
+  {
+    AERROR << "SteeringDisable_0x81 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
+
+  steering_torque_command_0x82_ = dynamic_cast<SteeringTorqueCommand_0x82*>(
+      message_manager_->GetMutableProtocolDataById(SteeringTorqueCommand_0x82::ID) );
+  if (steering_torque_command_0x82_ == nullptr) 
+  {
+    AERROR << "SteeringTorqueCommand_0x82 does not exist in the OsccMessageManager!";
+    return ErrorCode::CANBUS_ERROR;
+  }
+
+  steering_angle_command_0xB8_ = dynamic_cast<SteeringAngleCommand_0xB8*>(
+      message_manager_->GetMutableProtocolDataById(SteeringAngleCommand_0xB8::ID) );
+  if (steering_angle_command_0xB8_ == nullptr) 
+  {
+    AERROR << "SteeringTorqueCommand_0xB8 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
   bool &&init_with_one = false;
+  // Brake command messages
   can_sender_->AddMessage(BrakeEnable_0x70::ID, brake_enable_0x70_, init_with_one);
   can_sender_->AddMessage(BrakeDisable_0x71::ID, brake_disable_0x71_, init_with_one);
   can_sender_->AddMessage(BrakeCommand_0x72::ID, brake_command_0x72_, init_with_one);
+  // Steering command messages
+  can_sender_->AddMessage(SteeringEnable_0x80::ID, steering_enable_0x80_, init_with_one);
+  can_sender_->AddMessage(SteeringDisable_0x81::ID, steering_disable_0x81_, init_with_one);
+  can_sender_->AddMessage(SteeringTorqueCommand_0x82::ID, steering_torque_command_0x82_, init_with_one);
+  can_sender_->AddMessage(SteeringAngleCommand_0xB8::ID, steering_angle_command_0xB8_, init_with_one);
 
   // need sleep to ensure all messages received
   AINFO << "NiroController is initialized.";
