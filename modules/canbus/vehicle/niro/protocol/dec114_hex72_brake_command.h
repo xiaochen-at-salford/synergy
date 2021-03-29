@@ -46,7 +46,7 @@ class BrakeCommand_0x72
   // BO_ 114 BRAKE_COMMAND: 8 BRAKE
   //    SG_ brake_command_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
   //    SG_ brake_pedal_command : 16|32@1+ (1,0) [0|1] "percent" BRAKE
-  void set_p_brake_pedal_command(uint8_t *data, double brake_pedal_target);
+  void set_p_brake_pedal_command(uint8_t *data, double brake_pedal_percent);
 
  private:
   double brake_pedal_percent_;

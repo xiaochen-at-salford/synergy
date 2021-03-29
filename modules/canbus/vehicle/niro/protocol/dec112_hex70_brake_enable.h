@@ -22,7 +22,7 @@ class BrakeEnable_0x70
 
   void Reset() override;
 
-  BrakeEnable_0x70* set_brake_enable();
+  BrakeEnable_0x70 *set_brake_enable();
 
  private:
    bool brake_enable_ = false;

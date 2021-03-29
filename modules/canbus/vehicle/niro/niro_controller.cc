@@ -322,7 +322,7 @@ ErrorCode NiroController::DisableAutoMode()
   return ErrorCode::OK;
 }
 
-ErrorCode NiroController::EnableSteeringOnlyMode() 
+ErrorCode NiroController::EnableSpeedOnlyMode() 
 {
   if (driving_mode() == Chassis::COMPLETE_AUTO_DRIVE 
       || driving_mode() == Chassis::AUTO_STEER_ONLY ) 
@@ -334,6 +334,20 @@ ErrorCode NiroController::EnableSteeringOnlyMode()
   AFATAL << "SpeedOnlyMode is not supported in devkit!";
   return ErrorCode::CANBUS_ERROR;
 }
+
+ErrorCode NiroController::EnableSteeringOnlyMode() 
+{
+  if (driving_mode() == Chassis::COMPLETE_AUTO_DRIVE ||
+      driving_mode() == Chassis::AUTO_STEER_ONLY) {
+    set_driving_mode(Chassis::AUTO_STEER_ONLY);
+    AINFO << "Already in AUTO_STEER_ONLY mode.";
+    return ErrorCode::OK;
+  }
+  AFATAL << "SpeedOnlyMode is not supported in devkit!";
+  return ErrorCode::CANBUS_ERROR;
+}
+
+void NiroController::Gear(Chassis::GearPosition state) {};
 
 // brake with pedal
 // pedal:0.00~99.99, unit:%

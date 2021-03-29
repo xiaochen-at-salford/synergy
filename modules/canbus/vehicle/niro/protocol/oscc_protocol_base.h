@@ -22,6 +22,16 @@ class OsccProtocolBase {
   static const int8_t OSCC_MAGIC_BYTE_1 = 0x05;
 
   void set_p_magic(uint8_t *data);
+
+ protected:
+  void set_use_magic_header(bool use_magic_header) 
+  { use_magic_header_ = use_magic_header; }
+
+  bool has_magic_header()
+  { return use_magic_header_; }
+
+ private:
+  bool use_magic_header_ = false;
 }; 
 
 }  // namespace niro

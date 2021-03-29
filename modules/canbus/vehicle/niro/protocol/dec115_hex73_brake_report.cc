@@ -10,8 +10,6 @@ using ::apollo::drivers::canbus::Byte;
 
 BrakeReport_0x73::BrakeReport_0x73() {};
 
-// const int32_t BrakeReport_0x73::ID = 0x73;
-
 void BrakeReport_0x73::Parse(const std::uint8_t *bytes, int32_t length, ChassisDetail *chassis) 
 const {
   chassis->mutable_niro()->mutable_brake_report_0x73(

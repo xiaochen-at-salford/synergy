@@ -45,7 +45,7 @@ message Steering_Torque_Command_0x82 {
 }
 
 message Steering_Report_0x83 {
-  message SteeringDtc {
+  message SteeringDtcs {
     enum Enum {
       NO_COMMUNICATION = 0;
       OPERATOR_OVERRIDE = 1;
@@ -54,7 +54,7 @@ message Steering_Report_0x83 {
   
   optional bool steering_report_enabled = 1;
   optional bool steering_operator_override = 2;
-  optional SteeringDtc.Enum steering_dtcs = 3;
+  optional SteeringDtcs.Enum steering_dtcs = 3;
 }
 
 message Throttle_Enable_0x90 {
@@ -356,7 +356,7 @@ message Niro {
   optional Fault_Report_0xAF fault_report_0xaf = 16; // Report message
 
   optional Steering_Angle_Command_0xB8 steering_angle_command_0xb8 = 17; // Control message
-  optional Steering_Angle_Report_0xB9 steering_angle_report_0xb0 = 18; // Report message
+  optional Steering_Angle_Report_0xB9 steering_angle_report_0xb9 = 18; // Report message
 
   optional Chassis_Control_Command_0xC8 chassis_control_command_0xc8 = 19; // Control message
   optional Chassis_Control_Report_0xD8 chassis_control_report_0xd8 = 20; // Report message

@@ -26,7 +26,6 @@ cc_library(
         "//modules/drivers/canbus/can_comm:message_manager_base",
         "//modules/drivers/canbus/common:canbus_common",
     ],
-        
 )
 
 cc_library(
@@ -40,7 +39,6 @@ cc_library(
         "//modules/drivers/canbus/can_comm:message_manager_base",
         "//modules/drivers/canbus/common:canbus_common",
     ],
-        
 )
 
 cc_library(
@@ -82,6 +80,82 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "dec128_hex80_steering_enable",
+    srcs = ["dec128_hex80_steering_enable.cc"],
+    hdrs = ["dec128_hex80_steering_enable.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
 
+cc_library(
+    name = "dec129_hex81_steering_disable",
+    srcs = ["dec129_hex81_steering_disable.cc"],
+    hdrs = ["dec129_hex81_steering_disable.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "dec130_hex82_steering_torque_command",
+    srcs = ["dec130_hex82_steering_torque_command.cc"],
+    hdrs = ["dec130_hex82_steering_torque_command.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "dec131_hex83_steering_report",
+    srcs = ["dec131_hex83_steering_report.cc"],
+    hdrs = ["dec131_hex83_steering_report.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "dec184_hexB8_steering_angle_command",
+    srcs = ["dec184_hexB8_steering_angle_command.cc"],
+    hdrs = ["dec184_hexB8_steering_angle_command.h"], 
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "dec185_hexB9_steering_angle_report",
+    srcs = ["dec185_hexB9_steering_angle_report.cc"],
+    hdrs = ["dec185_hexB9_steering_angle_report.h"], 
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
 
 cpplint()
