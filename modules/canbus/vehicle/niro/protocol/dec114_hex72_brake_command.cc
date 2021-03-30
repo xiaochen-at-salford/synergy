@@ -7,7 +7,7 @@ namespace canbus {
 namespace niro {
 
 using ::apollo::drivers::canbus::Byte;
-
+ 
 // const int32_t BrakeCommand_0x72::ID = 0x72;
 
 // public

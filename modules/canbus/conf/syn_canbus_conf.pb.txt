@@ -1,13 +1,13 @@
 vehicle_parameter {
-  brand: LINCOLN_MKZ
+  brand: NIRO
   max_enable_fail_attempt: 5
   driving_mode: COMPLETE_AUTO_DRIVE
 }
 
 can_card_parameter {
   brand: OSCC_CAN
-  type: USB
-  channel_id: { CHANNEL_ID_ZERO, CHANNEL_ID_ONE }
+  type: USB_CARD
+  channel_id: CHANNEL_ID_ZERO
   num_ports: 8
   interface: VIRTUAL
 }

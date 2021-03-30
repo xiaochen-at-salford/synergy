@@ -107,17 +107,15 @@ class NiroController final : public VehicleController {
   BrakeEnable_0x70 *brake_enable_0x70_ = nullptr;
   BrakeDisable_0x71 *brake_disable_0x71_ = nullptr;
   BrakeCommand_0x72 *brake_command_0x72_ = nullptr;
-
   // Steeringc command protocols
   SteeringEnable_0x80 *steering_enable_0x80_ = nullptr;
   SteeringDisable_0x81 *steering_disable_0x81_ = nullptr;
   SteeringTorqueCommand_0x82 *steering_torque_command_0x82_ = nullptr;
   SteeringAngleCommand_0xB8  *steering_angle_command_0xB8_ = nullptr;
-
   // Throttle command protocols
   ThrottleEnable_0x90 *throttle_enable_0x90_ = nullptr;
   ThrottleDisable_0x91 *throttle_disable_0x91_ = nullptr;
-  ThrottleCommand_0x92 *throttle_command_0x92_ = nullptr; // Throttle command protocols
+  ThrottleCommand_0x92 *throttle_command_0x92_ = nullptr; 
 
   Chassis chassis_;
   std::unique_ptr<std::thread> thread_;

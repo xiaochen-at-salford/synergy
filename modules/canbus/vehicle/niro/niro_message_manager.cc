@@ -46,10 +46,10 @@ NiroMessageManager::NiroMessageManager()
   // Brake protocols
   AddRecvProtocolData<BrakeReport_0x73, NEED_CHECK>();
   // Steering protocols
-  AddSendProtocolData<SteeringReport_0x83, NEED_CHECK>();
-  AddSendProtocolData<SteeringAngleReport_0xB9, NEED_CHECK>();
+  AddRecvProtocolData<SteeringReport_0x83, NEED_CHECK>();
+  AddRecvProtocolData<SteeringAngleReport_0xB9, NEED_CHECK>();
   // Throttle protocols
-  AddSendProtocolData<ThrottleReport_0x93, NEED_CHECK>();
+  AddRecvProtocolData<ThrottleReport_0x93, NEED_CHECK>();
 
   // AddRecvProtocolData<BrakeReport_0x220, need_check>();
 }

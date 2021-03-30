@@ -67,7 +67,7 @@ ErrorCode NiroController::Init(
       message_manager_->GetMutableProtocolDataById(BrakeDisable_0x71::ID) );
   if (brake_disable_0x71_ == nullptr) 
   {
-    AERROR << "BrakeDisable_0x72 does not exist in the OsccMessageManager!";
+    AERROR << "BrakeDisable_0x71 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
