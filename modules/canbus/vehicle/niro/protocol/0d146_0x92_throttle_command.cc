@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec146_hex92_throttle_command.h"
+#include "modules/canbus/vehicle/niro/protocol/0d146_0x92_throttle_command.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec112_hex70_brake_enable.h"
+#include "modules/canbus/vehicle/niro/protocol/0d112_0x70_brake_enable.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

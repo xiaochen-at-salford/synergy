@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec184_hexB8_steering_angle_command.h"
+#include "modules/canbus/vehicle/niro/protocol/0d184_0xb8_steering_angle_command.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

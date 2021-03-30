@@ -18,15 +18,12 @@
 #include "modules/control/proto/control_cmd.pb.h"
 
 // gflags
-DEFINE_double(throttle_inc_delta, 2.0,
-              "throttle pedal command delta percentage.");
+DEFINE_double(throttle_inc_delta, 2.0, "throttle pedal command delta percentage.");
 DEFINE_double(brake_inc_delta, 2.0, "brake pedal delta percentage");
 DEFINE_double(steer_inc_delta, 2.0, "steer delta percentage");
 // TODO(ALL) : switch the acceleration cmd or pedal cmd
 // default : use pedal cmd
-DEFINE_bool(
-    use_acceleration, false,
-    "switch to use acceleration instead of throttle pedal and brake pedal" );
+DEFINE_bool(use_acceleration, false, "switch to use acceleration instead of throttle pedal and brake pedal" );
 
 namespace {
 
@@ -113,14 +110,15 @@ class Teleop {
     printf("===========================================================\n");
   }
 
-  void KeyboardLoopThreadFunc() {
+  void KeyboardLoopThreadFunc() 
+  {
     char c = 0;
     int32_t level = 0;
-    double brake = 0;
-    double throttle = 0;
+    double brake = 0.0; // [0, 100]
+    double throttle = 0.0; // [0, 100]
     double acc = 0;
     double dec = 0;
-    double steering = 0;
+    double steering = 0; // [-100, 100]
     struct termios cooked_;
     struct termios raw_;
     int32_t kfd_ = 0;
@@ -166,59 +164,68 @@ class Teleop {
           {
             brake = GetCommand(brake, -FLAGS_brake_inc_delta);
             if (!FLAGS_use_acceleration) 
-            {
-              control_command_.set_brake(brake);
-            } 
+            { control_command_.set_brake(brake); } 
             else 
             {
               dec = brake / 100 * vehicle_params_.max_deceleration();
               control_command_.set_acceleration(dec);
             }
-          } else {
+          } 
+          else 
+          {
             throttle = GetCommand(throttle, FLAGS_throttle_inc_delta);
-            if (!FLAGS_use_acceleration) {
-              control_command_.set_throttle(throttle);
-            } else {
+            if (!FLAGS_use_acceleration) 
+            { control_command_.set_throttle(throttle); } 
+            else 
+            {
               acc = throttle / 100 * vehicle_params_.max_acceleration();
               control_command_.set_acceleration(acc);
             }
           }
-          if (!FLAGS_use_acceleration) {
+          if (!FLAGS_use_acceleration) 
+          {
             AINFO << "Throttle = " << control_command_.throttle()
                   << ", Brake = " << control_command_.brake();
-          } else {
-            AINFO << "Acceleration = " << control_command_.acceleration();
-          }
+          } 
+          else 
+          { AINFO << "Acceleration = " << control_command_.acceleration(); }
           break;
         case KEYCODE_DN1:  // decelerate
         case KEYCODE_DN2:
-          if (!FLAGS_use_acceleration) {
+          if (!FLAGS_use_acceleration) 
+          {
             brake = control_command_.brake();
             throttle = control_command_.throttle();
           }
-          if (throttle > 1e-6) {
+          if (throttle > 1e-6) 
+          {
             throttle = GetCommand(throttle, -FLAGS_throttle_inc_delta);
-            if (!FLAGS_use_acceleration) {
-              control_command_.set_throttle(throttle);
-            } else {
+            if (!FLAGS_use_acceleration) 
+            { control_command_.set_throttle(throttle); } 
+            else 
+            {
               acc = throttle / 100 * vehicle_params_.max_acceleration();
               control_command_.set_acceleration(acc);
             }
-          } else {
+          } 
+          else 
+          {
             brake = GetCommand(brake, FLAGS_brake_inc_delta);
-            if (!FLAGS_use_acceleration) {
-              control_command_.set_brake(brake);
-            } else {
+            if (!FLAGS_use_acceleration) 
+            { control_command_.set_brake(brake); } 
+            else 
+            {
               dec = brake / 100 * vehicle_params_.max_deceleration();
               control_command_.set_acceleration(dec);
             }
           }
-          if (!FLAGS_use_acceleration) {
+          if (!FLAGS_use_acceleration) 
+          {
             AINFO << "Throttle = " << control_command_.throttle()
                   << ", Brake = " << control_command_.brake();
-          } else {
-            AINFO << "Acceleration = " << control_command_.acceleration();
-          }
+          } 
+          else 
+          { AINFO << "Acceleration = " << control_command_.acceleration(); }
           break;
         case KEYCODE_LF1:  // left
         case KEYCODE_LF2:
@@ -234,88 +241,86 @@ class Teleop {
           control_command_.set_steering_target(steering);
           AINFO << "Steering Target = " << steering;
           break;
+
         case KEYCODE_PKBK:  // hand brake
           parking_brake = !control_command_.parking_brake();
           control_command_.set_parking_brake(parking_brake);
           AINFO << "Parking Brake Toggled: " << parking_brake;
           break;
+
         case KEYCODE_ESTOP:
           control_command_.set_brake(50.0);
           AINFO << "Estop Brake : " << control_command_.brake();
           break;
+
         case KEYCODE_SETT1:  // set throttle
         case KEYCODE_SETT2:
           // read keyboard again
-          if (read(kfd_, &c, 1) < 0) {
-            exit(-1);
-          }
+          if (read(kfd_, &c, 1) < 0) 
+          { exit(-1); }
           level = c - KEYCODE_ZERO;
           control_command_.set_throttle(level * 10.0);
           control_command_.set_brake(0.0);
           AINFO << "Throttle = " << control_command_.throttle()
                 << ", Brake = " << control_command_.brake();
           break;
+
         case KEYCODE_SETG1:
         case KEYCODE_SETG2:
           // read keyboard again
-          if (read(kfd_, &c, 1) < 0) {
-            exit(-1);
-          }
+          if (read(kfd_, &c, 1) < 0) 
+          { exit(-1); }
           level = c - KEYCODE_ZERO;
           gear = GetGear(level);
           control_command_.set_gear_location(gear);
           AINFO << "Gear set to : " << level;
           break;
+
         case KEYCODE_SETB1:
         case KEYCODE_SETB2:
           // read keyboard again
-          if (read(kfd_, &c, 1) < 0) {
-            exit(-1);
-          }
+          if (read(kfd_, &c, 1) < 0) 
+          { exit(-1); }
           level = c - KEYCODE_ZERO;
           control_command_.set_throttle(0.0);
           control_command_.set_brake(level * 10.0);
           AINFO << "Throttle = " << control_command_.throttle()
                 << ", Brake = " << control_command_.brake();
           break;
+
         case KEYCODE_SETQ1:
         case KEYCODE_SETQ2:
-          if (read(kfd_, &c, 1) < 0) {
-            exit(-1);
-          }
+          if (read(kfd_, &c, 1) < 0) 
+          { exit(-1); }
           static int cnt = 0;
           ++cnt;
-          if (cnt > 2) {
-            cnt = 0;
-          }
+          if (cnt > 2) 
+          { cnt = 0; }
 
-          if (cnt == 0) {
-            control_command_.mutable_signal()->set_turn_signal(
-                VehicleSignal::TURN_NONE);
-          } else if (cnt == 1) {
-            control_command_.mutable_signal()->set_turn_signal(
-                VehicleSignal::TURN_LEFT);
-          } else if (cnt == 2) {
-            control_command_.mutable_signal()->set_turn_signal(
-                VehicleSignal::TURN_RIGHT);
-          }
-
+          if (cnt == 0) 
+          { control_command_.mutable_signal()->set_turn_signal(VehicleSignal::TURN_NONE); } 
+          else if (cnt == 1) 
+          { control_command_.mutable_signal()->set_turn_signal(VehicleSignal::TURN_LEFT); } 
+          else if (cnt == 2) 
+          { control_command_.mutable_signal()->set_turn_signal(VehicleSignal::TURN_RIGHT); }
           break;
+
         case KEYCODE_MODE:
           // read keyboard again
-          if (read(kfd_, &c, 1) < 0) {
-            exit(-1);
-          }
+          if (read(kfd_, &c, 1) < 0) 
+          { exit(-1); }
           level = c - KEYCODE_ZERO;
           GetPadMessage(&pad_msg, level);
           control_command_.mutable_pad_msg()->CopyFrom(pad_msg);
           sleep(1);
           control_command_.clear_pad_msg();
           break;
+
         case KEYCODE_HELP:
         case KEYCODE_HELP2:
           PrintKeycode();
           break;
+
         default:
           // printf("%X\n", c);
           break;
@@ -361,10 +366,12 @@ class Teleop {
         action = apollo::control::DrivingAction::RESET;
         AINFO << "SET Action RESET";
         break;
+
       case 1:
         action = apollo::control::DrivingAction::START;
         AINFO << "SET Action START";
         break;
+
       default:
         AINFO << "unknown action: " << int_action << " use default RESET";
         break;
@@ -455,7 +462,7 @@ class Teleop {
   std::shared_ptr<apollo::cyber::Node> node_;
 };
 
-}  // namespace
+} // namespace
 
 int main(int32_t argc, char **argv) 
 {

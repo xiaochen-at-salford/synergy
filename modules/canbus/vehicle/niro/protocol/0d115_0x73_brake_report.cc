@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec115_hex73_brake_report.h"
+#include "modules/canbus/vehicle/niro/protocol/0d115_0x73_brake_report.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

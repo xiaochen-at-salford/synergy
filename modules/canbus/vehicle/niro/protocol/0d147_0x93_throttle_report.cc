@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec147_hex93_throttle_report.h"
+#include "modules/canbus/vehicle/niro/protocol/0d147_0x93_throttle_report.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

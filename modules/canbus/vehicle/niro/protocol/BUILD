@@ -9,20 +9,20 @@ cc_library(
     name = "canbus_niro_protocol",
     deps = [
         ":oscc_protocol_base",
-        ":dec112_hex70_brake_enable",
-        ":dec113_hex71_brake_disable",
-        ":dec114_hex72_brake_command",
-        ":dec115_hex73_brake_report",
-        ":dec128_hex80_steering_enable",
-        ":dec129_hex81_steering_disable",
-        ":dec130_hex82_steering_torque_command",
-        ":dec131_hex83_steering_report",
-        ":dec184_hexB8_steering_angle_command",,
-        ":dec185_hexB9_steering_angle_report",
-        ":dec144_hex90_throttle_enable",
-        ":dec145_hex91_throttle_disable",
-        ":dec146_hex92_throttle_command",
-        ":dec147_hex93_throttle_report",
+        ":0d112_0x70_brake_enable",
+        ":0d113_0x71_brake_disable",
+        ":0d114_0x72_brake_command",
+        ":0d115_0x73_brake_report",
+        ":0d128_0x80_steering_enable",
+        ":0d129_0x81_steering_disable",
+        ":0d130_0x82_steering_torque_command",
+        ":0d131_0x83_steering_report",
+        ":0d184_0xb8_steering_angle_command",
+        ":0d185_0xb9_steering_angle_report",
+        ":0d144_0x90_throttle_enable",
+        ":0d145_0x91_throttle_disable",
+        ":0d146_0x92_throttle_command",
+        ":0d147_0x93_throttle_report",
     ],
 )
 
@@ -39,9 +39,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec112_hex70_brake_enable",
-    srcs = ["dec112_hex70_brake_enable.cc"],
-    hdrs = ["dec112_hex70_brake_enable.h"],
+    name = "0d112_0x70_brake_enable",
+    srcs = ["0d112_0x70_brake_enable.cc"],
+    hdrs = ["0d112_0x70_brake_enable.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -52,9 +52,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec113_hex71_brake_disable",
-    srcs = ["dec113_hex71_brake_disable.cc"],
-    hdrs = ["dec113_hex71_brake_disable.h"],
+    name = "0d113_0x71_brake_disable",
+    srcs = ["0d113_0x71_brake_disable.cc"],
+    hdrs = ["0d113_0x71_brake_disable.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -65,9 +65,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec114_hex72_brake_command",
-    srcs = ["dec114_hex72_brake_command.cc"],
-    hdrs = ["dec114_hex72_brake_command.h"],
+    name = "0d114_0x72_brake_command",
+    srcs = ["0d114_0x72_brake_command.cc"],
+    hdrs = ["0d114_0x72_brake_command.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -78,9 +78,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec115_hex73_brake_report",
-    srcs = ["dec115_hex73_brake_report.cc"],
-    hdrs = ["dec115_hex73_brake_report.h"],
+    name = "0d115_0x73_brake_report",
+    srcs = ["0d115_0x73_brake_report.cc"],
+    hdrs = ["0d115_0x73_brake_report.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -91,9 +91,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec128_hex80_steering_enable",
-    srcs = ["dec128_hex80_steering_enable.cc"],
-    hdrs = ["dec128_hex80_steering_enable.h"],
+    name = "0d128_0x80_steering_enable",
+    srcs = ["0d128_0x80_steering_enable.cc"],
+    hdrs = ["0d128_0x80_steering_enable.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -104,9 +104,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec129_hex81_steering_disable",
-    srcs = ["dec129_hex81_steering_disable.cc"],
-    hdrs = ["dec129_hex81_steering_disable.h"],
+    name = "0d129_0x81_steering_disable",
+    srcs = ["0d129_0x81_steering_disable.cc"],
+    hdrs = ["0d129_0x81_steering_disable.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -117,9 +117,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec130_hex82_steering_torque_command",
-    srcs = ["dec130_hex82_steering_torque_command.cc"],
-    hdrs = ["dec130_hex82_steering_torque_command.h"],
+    name = "0d130_0x82_steering_torque_command",
+    srcs = ["0d130_0x82_steering_torque_command.cc"],
+    hdrs = ["0d130_0x82_steering_torque_command.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -130,9 +130,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec131_hex83_steering_report",
-    srcs = ["dec131_hex83_steering_report.cc"],
-    hdrs = ["dec131_hex83_steering_report.h"],
+    name = "0d131_0x83_steering_report",
+    srcs = ["0d131_0x83_steering_report.cc"],
+    hdrs = ["0d131_0x83_steering_report.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -143,9 +143,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec184_hexB8_steering_angle_command",
-    srcs = ["dec184_hexB8_steering_angle_command.cc"],
-    hdrs = ["dec184_hexB8_steering_angle_command.h"], 
+    name = "0d184_0xb8_steering_angle_command",
+    srcs = ["0d184_0xb8_steering_angle_command.cc"],
+    hdrs = ["0d184_0xb8_steering_angle_command.h"], 
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -156,9 +156,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec185_hexB9_steering_angle_report",
-    srcs = ["dec185_hexB9_steering_angle_report.cc"],
-    hdrs = ["dec185_hexB9_steering_angle_report.h"], 
+    name = "0d185_0xb9_steering_angle_report",
+    srcs = ["0d185_0xb9_steering_angle_report.cc"],
+    hdrs = ["0d185_0xb9_steering_angle_report.h"], 
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -169,9 +169,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec144_hex90_throttle_enable",
-    srcs = ["dec144_hex90_throttle_enable.cc"],
-    hdrs = ["dec144_hex90_throttle_enable.h"],
+    name = "0d144_0x90_throttle_enable",
+    srcs = ["0d144_0x90_throttle_enable.cc"],
+    hdrs = ["0d144_0x90_throttle_enable.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -182,9 +182,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec145_hex91_throttle_disable",
-    srcs = ["dec145_hex91_throttle_disable.cc"],
-    hdrs = ["dec145_hex91_throttle_disable.h"],
+    name = "0d145_0x91_throttle_disable",
+    srcs = ["0d145_0x91_throttle_disable.cc"],
+    hdrs = ["0d145_0x91_throttle_disable.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -195,9 +195,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec146_hex92_throttle_command",
-    srcs = ["dec146_hex92_throttle_command.cc"],
-    hdrs = ["dec146_hex92_throttle_command.h"],
+    name = "0d146_0x92_throttle_command",
+    srcs = ["0d146_0x92_throttle_command.cc"],
+    hdrs = ["0d146_0x92_throttle_command.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -208,9 +208,9 @@ cc_library(
 )
 
 cc_library(
-    name = "dec147_hex93_throttle_report",
-    srcs = ["dec147_hex93_throttle_report.cc"],
-    hdrs = ["dec147_hex93_throttle_report.h"],
+    name = "0d147_0x93_throttle_report",
+    srcs = ["0d147_0x93_throttle_report.cc"],
+    hdrs = ["0d147_0x93_throttle_report.h"],
     copts = CANBUS_COPTS,
     deps = [
         ":oscc_protocol_base",
@@ -219,8 +219,5 @@ cc_library(
         "//modules/drivers/canbus/common:canbus_common",
     ],
 )
-
-
-
 
 cpplint()

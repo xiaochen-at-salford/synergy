@@ -109,12 +109,12 @@ message Cld_Report_0xA0 {
 
   optional State.Enum state = 1;
   optional LastDisableReason.Enum Last_disable_reason = 2;
-  optional double last_transition_ago = 3;
-  optional double bus_frame_rate = 4;
-  optional double bus_error_count = 5;
-  optional int32 frame_rate_steering = 6;
-  optional int32 frame_rate_throttle = 7;
-  optional int32 frame_rate_brake = 8;
+  optional uint32 last_transition_ago = 3;
+  optional uint32 bus_frame_rate = 4;
+  optional uint32 bus_error_count = 5;
+  optional uint32 frame_rate_steering = 6;
+  optional uint32 frame_rate_throttle = 7;
+  optional uint32 frame_rate_brake = 8;
 }
 
 message Cld_Configuration_Report_0xA1 {

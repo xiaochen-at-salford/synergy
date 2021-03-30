@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec130_hex82_steering_torque_command.h"
+#include "modules/canbus/vehicle/niro/protocol/0d130_0x82_steering_torque_command.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

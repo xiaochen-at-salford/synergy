@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec185_hexB9_steering_angle_report.h"
+#include "modules/canbus/vehicle/niro/protocol/0d185_0xb9_steering_angle_report.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

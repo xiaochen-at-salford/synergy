@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec131_hex83_steering_report.h"
+#include "modules/canbus/vehicle/niro/protocol/0d131_0x83_steering_report.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 

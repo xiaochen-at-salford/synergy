@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec128_hex80_steering_enable.h"
+#include "modules/canbus/vehicle/niro/protocol/0d144_0x90_throttle_enable.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 
@@ -11,32 +11,32 @@ using ::apollo::drivers::canbus::Byte;
 // const int32_t BrakeEnable_0x70::ID = 0x70;
 
 // public
-SteeringEnable_0x80::SteeringEnable_0x80() { Reset(); }
+ThrottleEnable_0x90::ThrottleEnable_0x90() { Reset(); }
 
-uint32_t SteeringEnable_0x80::GetPeriod() const 
+uint32_t ThrottleEnable_0x90::GetPeriod() const 
 {
   // TODO(All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20*1000;
   return PERIOD;
 }
 
-void SteeringEnable_0x80::UpdateData(uint8_t *data) 
+void ThrottleEnable_0x90::UpdateData(uint8_t *data) 
 {
-  if (steering_enable_)
+  if (throttle_enable_)
   { set_p_magic(data); }
   else
   { data = nullptr; }
 }
 
-void SteeringEnable_0x80::Reset() 
+void ThrottleEnable_0x90::Reset() 
 {
   // TODO(All) :  you should check this manually
-  steering_enable_ = false;
+  throttle_enable_ = false;
 }
 
-SteeringEnable_0x80 *SteeringEnable_0x80::set_brake_enable()
+ThrottleEnable_0x90 *ThrottleEnable_0x90::set_brake_enable()
 {
-  steering_enable_ = true;
+  throttle_enable_ = true;
   return this;
 }
 
