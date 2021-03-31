@@ -12,7 +12,7 @@ namespace can {
 
 using apollo::common::ErrorCode;
 
-//TODO:
+//TODO(xiaochen):
 bool OsccCanClient::Init(const CANCardParameter &parameter)
 {
   if (!parameter.has_channel_id()) 
