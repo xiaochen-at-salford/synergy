@@ -39,11 +39,7 @@ void CanClientFactory::RegisterCanClients()
   AINFO << "CanClientFactory::RegisterCanClients";
   Register(CANCardParameter::FAKE_CAN,
            []() -> CanClient* { return new can::FakeCanClient(); });
-// #if USE_ESD_CAN == true
-//   AINFO << "register can: " << CANCardParameter::ESD_CAN;
-//   Register(CANCardParameter::ESD_CAN,
-//            []() -> CanClient* { return new can::EsdCanClient(); });
-// #endif
+
   Register(CANCardParameter::SOCKET_CAN_RAW,
            []() -> CanClient* { return new can::SocketCanClientRaw(); });
 
