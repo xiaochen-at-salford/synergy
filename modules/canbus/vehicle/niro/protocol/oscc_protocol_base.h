@@ -19,7 +19,7 @@ class OsccProtocolBase {
  * @brief Second magic byte used in commands and reports to distinguish CAN
  *        frame as coming from OSCC (and not OBD).
  */
-  static const int8_t OSCC_MAGIC_BYTE_1 = 0x05;
+  static const int8_t OSCC_MAGIC_BYTE_1 = 0xCC;
 
   void set_p_magic(uint8_t *data);
 
