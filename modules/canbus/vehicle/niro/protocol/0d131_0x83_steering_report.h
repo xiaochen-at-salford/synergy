@@ -13,7 +13,7 @@ namespace niro {
  * typedef struct {
  *   uint8_t magic[2]; // Magic number identifying CAN frame as from OSCC.
  *                     // Byte 0 should be \ref OSCC_MAGIC_BYTE_0.
- *                     // Byte 1 should be \ref OSCC_MAGIC_BYTE_1.
+ *                     /brake_command_0x72_/ Byte 1 should be \ref OSCC_MAGIC_BYTE_1.
  *   uint8_t enabled; // Braking controls enabled state.
  *                    // Zero value means disabled (commands are ignored).
  *                    // Non-zero value means enabled (no timeouts or overrides have occured).
@@ -44,7 +44,7 @@ class SteeringReport_0x83
     public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
 
  public:
-  static const int32_t ID = 0x73;
+  static const int32_t ID = 0x83;
 
   SteeringReport_0x83();
 

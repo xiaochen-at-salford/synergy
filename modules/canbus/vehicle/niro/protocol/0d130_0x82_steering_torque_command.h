@@ -22,7 +22,7 @@ class SteeringTorqueCommand_0x82
   : public OsccProtocolBase,
     public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
  public:
-  static const int32_t ID = 0x72;
+  static const int32_t ID = 0x82;
 
   SteeringTorqueCommand_0x82();
 
