@@ -29,8 +29,9 @@ SUPPORTED_ARCHS=(x86_64 aarch64)
 TARGET_ARCH="$(uname -m)"
 
 # VERSION_X86_64="dev-x86_64-18.04-20210204_2153"
-# Use the latest CUDA 10.2 Docker container
-VERSION_X86_64="apollo-dev-x86_64-18.04-20210108_1105-synergy-niro-v0.1"
+# Use the latest CUDA 10.2 Docker container not CUDA 11.x
+# VERSION_X86_64="apollo-dev-x86_64-18.04-20210108_1105-synergy-niro-v0.1"
+VERSION_X86_64="apollo-dev-x86_64-18.04-20210108_1105-synergy-niro-v0.2"
 TESTING_VERSION_X86_64="dev-x86_64-18.04-testing-20210112_0008"
 
 VERSION_AARCH64="dev-aarch64-18.04-20201218_0030"
