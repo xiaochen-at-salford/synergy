@@ -20,8 +20,8 @@ import math
 import threading
 
 import modules.tools.common.proto_utils as proto_utils
-from modules.localization.proto.localization_pb2 import LocalizationEstimate
-
+from bazelbin.modules.localization.proto.localization_pb2 import LocalizationEstimate
+# from modules.localization.proto.localization_pb2 import LocalizationEstimate
 
 class Localization:
     def __init__(self, localization_pb=None):
