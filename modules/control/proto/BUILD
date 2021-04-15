@@ -98,6 +98,7 @@ proto_library(
         "//modules/common/proto:header_proto",
         "//modules/common/proto:pnc_point_proto",
         "//modules/common/proto:vehicle_signal_proto",
+        "//modules/drivers/canbus/proto:oscc_status_cmd_proto",
     ],
 )
 

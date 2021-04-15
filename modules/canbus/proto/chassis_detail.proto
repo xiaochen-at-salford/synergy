@@ -4,7 +4,7 @@ package apollo.canbus;
 
 import "modules/common/configs/proto/vehicle_config.proto";
 import "modules/canbus/proto/chassis.proto";
-import "modules/canbus/proto/devkit.proto";
+// import "modules/canbus/proto/devkit.proto";
 import "modules/canbus/proto/niro.proto";
 
 message ChassisDetail {
@@ -30,7 +30,7 @@ message ChassisDetail {
   optional License license = 16 [deprecated = true];  // License info
   optional Surround surround = 17;                    // Surround information
   optional Gem gem = 18;
-  optional Devkit devkit = 25;
+  // optional Devkit devkit = 25;
   optional Niro niro = 27;
 
   // Reserve fields for other vehicles
