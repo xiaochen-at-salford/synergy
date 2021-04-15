@@ -9,6 +9,7 @@ py_binary(
         "//modules/tools/mapshow/libs:localization",
         "//modules/tools/mapshow/libs:map",
         "//modules/tools/mapshow/libs:path",
+        "//modules/localization/proto:localization_py_pb2",
     ],
 )
 
