@@ -55,99 +55,100 @@ ErrorCode NiroController::Init(
   message_manager_ = message_manager;
 
   // Sender part
-  brake_enable_0x70_ = dynamic_cast<BrakeEnable_0x70*>(
+  brake_enable_ = dynamic_cast<BrakeEnable_0x70*>(
       message_manager_->GetMutableProtocolDataById(BrakeEnable_0x70::ID) );
-  if (brake_enable_0x70_ == nullptr) 
+  if (brake_enable_ == nullptr) 
   {
     AERROR << "BrakeEnable_0x70 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  brake_disable_0x71_ = dynamic_cast<BrakeDisable_0x71*>(
+  brake_disable_ = dynamic_cast<BrakeDisable_0x71*>(
       message_manager_->GetMutableProtocolDataById(BrakeDisable_0x71::ID) );
-  if (brake_disable_0x71_ == nullptr) 
+  if (brake_disable_ == nullptr) 
   {
     AERROR << "BrakeDisable_0x71 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  brake_command_0x72_ = dynamic_cast<BrakeCommand_0x72*>(
+  brake_command_ = dynamic_cast<BrakeCommand_0x72*>(
       message_manager_->GetMutableProtocolDataById(BrakeCommand_0x72::ID) );
-  if (brake_command_0x72_ == nullptr) 
+  if (brake_command_ == nullptr) 
   {
     AERROR << "BrakeCommand_0x72 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  steering_enable_0x80_ = dynamic_cast<SteeringEnable_0x80*>(
+  steering_enable_ = dynamic_cast<SteeringEnable_0x80*>(
       message_manager_->GetMutableProtocolDataById(SteeringEnable_0x80::ID) );
-  if (steering_enable_0x80_ == nullptr) 
+  if (steering_enable_ == nullptr) 
   {
     AERROR << "SteeringEnable_0x80 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  steering_disable_0x81_ = dynamic_cast<SteeringDisable_0x81*>(
+  steering_disable_ = dynamic_cast<SteeringDisable_0x81*>(
       message_manager_->GetMutableProtocolDataById(SteeringDisable_0x81::ID) );
-  if (steering_disable_0x81_ == nullptr) 
+  if (steering_disable_ == nullptr) 
   {
     AERROR << "SteeringDisable_0x81 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  steering_torque_command_0x82_ = dynamic_cast<SteeringTorqueCommand_0x82*>(
+  steering_torque_command_ = dynamic_cast<SteeringTorqueCommand_0x82*>(
       message_manager_->GetMutableProtocolDataById(SteeringTorqueCommand_0x82::ID) );
-  if (steering_torque_command_0x82_ == nullptr) 
+  if (steering_torque_command_ == nullptr) 
   {
     AERROR << "SteeringTorqueCommand_0x82 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  steering_angle_command_0xB8_ = dynamic_cast<SteeringAngleCommand_0xB8*>(
+  steering_angle_command_ = dynamic_cast<SteeringAngleCommand_0xB8*>(
       message_manager_->GetMutableProtocolDataById(SteeringAngleCommand_0xB8::ID) );
-  if (steering_angle_command_0xB8_ == nullptr) 
+  if (steering_angle_command_ == nullptr) 
   {
     AERROR << "SteeringTorqueCommand_0xB8 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  throttle_enable_0x90_ = dynamic_cast<ThrottleEnable_0x90*>(
+  throttle_enable_ = dynamic_cast<ThrottleEnable_0x90*>(
       message_manager_->GetMutableProtocolDataById(ThrottleEnable_0x90::ID) );
-  if (throttle_enable_0x90_ == nullptr) 
+  if (throttle_enable_ == nullptr) 
   {
     AERROR << "ThrottleEnable_0x90 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  throttle_disable_0x91_ = dynamic_cast<ThrottleDisable_0x91*>(
+  throttle_disable_ = dynamic_cast<ThrottleDisable_0x91*>(
       message_manager_->GetMutableProtocolDataById(ThrottleDisable_0x91::ID) );
-  if (throttle_disable_0x91_ == nullptr) 
+  if (throttle_disable_ == nullptr) 
   {
     AERROR << "ThrottleDisable_0x92 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
 
-  throttle_command_0x92_ = dynamic_cast<ThrottleCommand_0x92*>(
+  throttle_command_ = dynamic_cast<ThrottleCommand_0x92*>(
       message_manager_->GetMutableProtocolDataById(ThrottleCommand_0x92::ID) );
-  if (throttle_command_0x92_ == nullptr) 
+  if (throttle_command_ == nullptr) 
   {
     AERROR << "ThrottleCommand_0x92 does not exist in the OsccMessageManager!";
     return ErrorCode::CANBUS_ERROR;
   }
+
   bool &&init_with_one = false;
   // Brake command messages
-  can_sender_->AddMessage(BrakeEnable_0x70::ID, brake_enable_0x70_, init_with_one);
-  can_sender_->AddMessage(BrakeDisable_0x71::ID, brake_disable_0x71_, init_with_one);
-  can_sender_->AddMessage(BrakeCommand_0x72::ID, brake_command_0x72_, init_with_one);
+  can_sender_->AddMessage(BrakeEnable_0x70::ID, brake_enable_, init_with_one);
+  can_sender_->AddMessage(BrakeDisable_0x71::ID, brake_disable_, init_with_one);
+  can_sender_->AddMessage(BrakeCommand_0x72::ID, brake_command_, init_with_one);
   // Steering command messages
-  can_sender_->AddMessage(SteeringEnable_0x80::ID, steering_enable_0x80_, init_with_one);
-  can_sender_->AddMessage(SteeringDisable_0x81::ID, steering_disable_0x81_, init_with_one);
-  can_sender_->AddMessage(SteeringTorqueCommand_0x82::ID, steering_torque_command_0x82_, init_with_one);
-  can_sender_->AddMessage(SteeringAngleCommand_0xB8::ID, steering_angle_command_0xB8_, init_with_one);
+  can_sender_->AddMessage(SteeringEnable_0x80::ID, steering_enable_, init_with_one);
+  can_sender_->AddMessage(SteeringDisable_0x81::ID, steering_disable_, init_with_one);
+  can_sender_->AddMessage(SteeringTorqueCommand_0x82::ID, steering_torque_command_, init_with_one);
+  can_sender_->AddMessage(SteeringAngleCommand_0xB8::ID, steering_angle_command_, init_with_one);
   // Throttle command messages
-  can_sender_->AddMessage(ThrottleEnable_0x90::ID, throttle_enable_0x90_, init_with_one);
-  can_sender_->AddMessage(ThrottleDisable_0x91::ID, throttle_disable_0x91_, init_with_one);
-  can_sender_->AddMessage(ThrottleCommand_0x92::ID, throttle_command_0x92_, init_with_one);
+  can_sender_->AddMessage(ThrottleEnable_0x90::ID, throttle_enable_, init_with_one);
+  can_sender_->AddMessage(ThrottleDisable_0x91::ID, throttle_disable_, init_with_one);
+  can_sender_->AddMessage(ThrottleCommand_0x92::ID, throttle_command_, init_with_one);
 
   // need sleep to ensure all messages received
   AINFO << "NiroController is initialized.";
@@ -187,7 +188,7 @@ void NiroController::Stop()
   }
 }
 
-//wip... 
+//TODO(xiaochen)
 Chassis NiroController::chassis() 
 {
   chassis_.Clear();
@@ -199,16 +200,45 @@ Chassis NiroController::chassis()
   if (driving_mode() == Chassis::EMERGENCY_MODE) 
   { set_chassis_error_code(Chassis::NO_ERROR); }
 
+  // Driving mode
   chassis_.set_driving_mode(driving_mode());
   chassis_.set_error_code(chassis_error_code());
 
-  // 3
-  chassis_.set_engine_started(true);
+  // Brake
+  // if (chassis_detail.niro().has_brake_report_() 
+  //     && chassis_detail.niro().brake_report_0x73().has_brake_pedal_actual()) 
+  // {
+  //   chassis_.set_brake_percentage(static_cast<float>(
+  //       chassis_detail.niro().brake_report_0x73().brake_pedal_actual()));
+  // } 
+  // else 
+  // { chassis_.set_brake_percentage(0); }
+  // chassis_.set_brake_percentage(0);
 
-  // 4 engine rpm ch has no engine rpm
-  // chassis_.set_engine_rpm(0);
+  // Steering
+  // if (chassis_detail.niro().has_steering_report() 
+  //     && chassis_detail.devkit().steering_report().has_steer_angle_actual() ) 
+  // {
+  //   chassis_.set_steering_percentage(static_cast<float>(
+  //       chassis_detail.devkit().steering_report_502().steer_angle_actual() *
+  //       100.0 / vehicle_params_.max_steer_angle() * M_PI / 180 ) );
+  // } 
+  // else 
+  // { chassis_.set_steering_percentage(0); }
 
-  // 5 wheel spd
+  // Throttle
+  // if (chassis_detail.niro().has_throttle_report_() 
+  //     && chassis_detail.devkit().throttle_report_().has_throttle_pedal_actual() ) 
+  // {
+  //   chassis_.set_throttle_percentage(static_cast<float>(
+  //       chassis_detail.devkit().throttle_report_500().throttle_pedal_actual()));
+  // } 
+  // else 
+  // {
+  //   chassis_.set_throttle_percentage(0);
+  // }
+
+  // Wheel
   // if (chassis_detail.niro().has_wheelspeed_report_506()) 
   // {
   //   if (chassis_detail.niro().wheelspeed_report_506().has_rr()) 
@@ -232,114 +262,6 @@ Chassis NiroController::chassis()
   //   }
   // }
 
-  // 6 speed_mps
-  // if (chassis_detail.devkit().has_vcu_report_505() 
-  //     && chassis_detail.devkit().vcu_report_505().has_speed() ) 
-  // {
-  //   chassis_.set_speed_mps(static_cast<float>(chassis_detail.devkit().vcu_report_505().speed()));
-  // } 
-  // else 
-  // { chassis_.set_speed_mps(0); }
-
-  // 7 no odometer
-  // chassis_.set_odometer_m(0);
-
-  // 8 no fuel. do not set;
-  // chassis_.set_fuel_range_m(0);
-
-  // 9 throttle
-//   if (chassis_detail.devkit().has_throttle_report_500() 
-//       && chassis_detail.devkit().throttle_report_500().has_throttle_pedal_actual() ) 
-//  {
-//     chassis_.set_throttle_percentage(static_cast<float>(
-//         chassis_detail.devkit().throttle_report_500().throttle_pedal_actual()));
-//   } 
-//   else 
-//   {
-//     chassis_.set_throttle_percentage(0);
-//   }
-
-  // 10 brake
-  // if (chassis_detail.niro().has_brake_report_() 
-  //     && chassis_detail.niro().brake_report_0x73().has_brake_pedal_actual()) 
-  // {
-  //   chassis_.set_brake_percentage(static_cast<float>(
-  //       chassis_detail.niro().brake_report_0x73().brake_pedal_actual()));
-  // } 
-  // else 
-  // { chassis_.set_brake_percentage(0); }
-  chassis_.set_brake_percentage(0);
-
-  // 23, previously 11 gear
-  // if (chassis_detail.devkit().has_gear_report_503() 
-  //     && chassis_detail.devkit().gear_report_503().has_gear_actual() ) 
-  // {
-  //   Chassis::GearPosition gear_pos = Chassis::GEAR_INVALID;
-
-  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-  //       Gear_report_503::GEAR_ACTUAL_INVALID) 
-  //   {
-  //     gear_pos = Chassis::GEAR_INVALID;
-  //   }
-  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-  //       Gear_report_503::GEAR_ACTUAL_NEUTRAL) {
-  //     gear_pos = Chassis::GEAR_NEUTRAL;
-  //   }
-  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-  //       Gear_report_503::GEAR_ACTUAL_REVERSE) 
-  //   {
-  //     gear_pos = Chassis::GEAR_REVERSE;
-  //   }
-  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-  //       Gear_report_503::GEAR_ACTUAL_DRIVE) {
-  //     gear_pos = Chassis::GEAR_DRIVE;
-  //   }
-  //   if (chassis_detail.devkit().gear_report_503().gear_actual() ==
-  //       Gear_report_503::GEAR_ACTUAL_PARK) {
-  //     gear_pos = Chassis::GEAR_PARKING;
-  //   }
-  //   chassis_.set_gear_location(gear_pos);
-  // } 
-  // else 
-  // { chassis_.set_gear_location(Chassis::GEAR_NONE); }
-
-  // 12 steering
-  // if (chassis_detail.devkit().has_steering_report_502() 
-  //     && chassis_detail.devkit().steering_report_502().has_steer_angle_actual() ) 
-  // {
-  //   chassis_.set_steering_percentage(static_cast<float>(
-  //       chassis_detail.devkit().steering_report_502().steer_angle_actual() *
-  //       100.0 / vehicle_params_.max_steer_angle() * M_PI / 180 ) );
-  // } 
-  // else 
-  // { chassis_.set_steering_percentage(0); }
-  chassis_.set_steering_percentage(0); 
-
-  // 13 parking brake
-  // if (chassis_detail.devkit().has_park_report_504() 
-  //     && chassis_detail.devkit().park_report_504().has_parking_actual()) 
-  // {
-  //   if (chassis_detail.devkit().park_report_504().parking_actual() == 
-  //           Park_report_504::PARKING_ACTUAL_PARKING_TRIGGER ) 
-  //   {
-  //     chassis_.set_parking_brake(true);
-  //   } 
-  //   else 
-  //   { chassis_.set_parking_brake(false); }
-  // } 
-  // else 
-  // { chassis_.set_parking_brake(false); }
-
-  // 14 battery soc
-  // if (chassis_detail.devkit().has_bms_report_512() 
-  //     && chassis_detail.devkit().bms_report_512().has_battery_soc() ) 
-  // {
-  //   chassis_.set_battery_soc_percentage(
-  //       chassis_detail.devkit().bms_report_512().battery_soc() );
-  // } 
-  // else 
-  // { chassis_.set_battery_soc_percentage(0); }
-
   return chassis_;
 }
 
@@ -356,14 +278,11 @@ ErrorCode NiroController::EnableAutoMode()
     AINFO << "already in COMPLETE_AUTO_DRIVE mode";
     return ErrorCode::OK;
   }
-  // set enable
-  brake_enable_0x70_->set_brake_enable();
 
-  //TODO(xiaochen): 
-  // throttle_command_0x_->set_throttle_enable();
-  // steering_command_0x_->set_steer_enable();
+  EnableOscc();
 
   can_sender_->Update();
+
   const int32_t flag = CHECK_RESPONSE_STEER_UNIT_FLAG | CHECK_RESPONSE_SPEED_UNIT_FLAG;
   if (!CheckResponse(flag, true)) 
   {
@@ -412,26 +331,68 @@ ErrorCode NiroController::EnableSteeringOnlyMode()
   return ErrorCode::CANBUS_ERROR;
 }
 
-void NiroController::Gear(Chassis::GearPosition state) {};
-
-// brake with pedal
-// pedal:0.00~99.99, unit:%
-void NiroController::Brake(double pedal) 
+void NiroController::EnableOscc()
 {
-  // double real_value = params_.max_acc() * acceleration / 100;
-  // TODO(All) :  Update brake value based on mode
+  EnableOsccBrake();
+  EnableOsccSteering();
+  EnableOsccThrottle();
+}
+
+void NiroController::DisableOscc()
+{
+  DisableOsccBrake();
+  DisableOsccSteering();
+  DisableOsccThrottle();
+}
+
+void NiroController::EnableOsccBrake()
+{
+  brake_enable_->activate();
+  brake_disable_->deactivate();
+}
+
+void NiroController::DisableOsccBrake()
+{
+  brake_enable_->deactivate();
+  brake_disable_->activate();
+}
+
+void NiroController::EnableOsccSteering()
+{
+  steering_enable_->activate();
+  steering_disable_->deactivate();
+}
+
+void NiroController::DisableOsccSteering()
+{
+  steering_enable_->deactivate();
+  steering_disable_->activate();
+}
+
+void NiroController::EnableOsccThrottle()
+{
+  throttle_enable_->activate();
+  throttle_disable_->deactivate();
+}
+
+void NiroController::DisableOsccThrottle()
+{
+  throttle_enable_->deactivate();
+  throttle_disable_->activate();
+}
+
+void NiroController::Brake(double brake_percent) 
+{
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
       && driving_mode() != Chassis::AUTO_SPEED_ONLY ) 
   {
     AINFO << "The current drive mode does not need to set brake pedal.";
     return;
   }
-  brake_command_0x72_->set_brake_pedal_command(pedal);
+  brake_command_->set_brake_pedal_command(brake_percent);
 }
 
-// drive with pedal
-// pedal:0.0~99.9 unit:%
-void NiroController::Throttle(double pedal) 
+void NiroController::Throttle(double throttle_percent) 
 {
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
       && driving_mode() != Chassis::AUTO_SPEED_ONLY ) 
@@ -439,98 +400,42 @@ void NiroController::Throttle(double pedal)
     AINFO << "The current drive mode does not need to set throttle pedal.";
     return;
   }
-  //TODO(xiaochen): wip...
-  // throttle_command_0x92_->set_throttle_pedal_target(pedal);
+  throttle_command_->set_throttle_pedal_command(throttle_percent);
 }
 
-// confirm the car is driven by acceleration command instead of throttle/brake
-// pedal drive with acceleration/deceleration acc:-7.0 ~ 5.0, unit:m/s^2
-void NiroController::Acceleration(double acc) 
+void NiroController::Steer(double angle_percent) 
+{ SteerByAngle(angle_percent, 100.0); }
+
+void NiroController::Steer(double angle, double angle_speed) 
+{ SteerByAngle(angle,angle_speed); }
+
+//TODO(xiaochen):
+void NiroController::SteerByAngle(double angle_percent, double max_angular_velocity_percent) 
 {
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
-      || driving_mode() != Chassis::AUTO_SPEED_ONLY ) 
+      && driving_mode() != Chassis::AUTO_STEER_ONLY ) 
   {
-    AINFO << "The current drive mode does not need to set acceleration.";
+    AINFO << "The current driving mode does not need to set steer.";
     return;
   }
-  // None
+
+  steering_angle_command_->set_steering_angle_command_flags(true);
+  steering_angle_command_->set_steering_angle_percent(angle_percent);
+  steering_angle_command_->set_max_steering_velocity_percent(max_angular_velocity_percent);
 }
 
-// devkit default, -30 ~ 00, left:+, right:-
-// need to be compatible with control module, so reverse
-// steering with default angle speed, 25-250 (default:250)
-// angle:-99.99~0.00~99.99, unit:, left:-, right:+
-void NiroController::Steer(double angle) 
+void NiroController::SteerByTorque(double torque_percent) 
 {
-  // if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE 
-  //     && driving_mode() != Chassis::AUTO_STEER_ONLY ) 
-  // {
-  //   AINFO << "The current driving mode does not need to set steer.";
-  //   return;
-  // }
-  // const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
-  // //TODO(xiaochen): wip...
-  // steering_command_102_->set_steer_angle_target(real_angle)->set_steer_angle_spd(250);
-}
-
-// steering with new angle speed
-// angle:-99.99~0.00~99.99, unit:, left:-, right:+
-// angle_spd:25~250, unit:deg/s
-void NiroController::Steer(double angle, double angle_spd) 
-{
-  // if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
-  //     driving_mode() != Chassis::AUTO_STEER_ONLY) 
-  // {
-  //   AINFO << "The current driving mode does not need to set steer.";
-  //   return;
-  // }
-  // const double real_angle = vehicle_params_.max_steer_angle()/M_PI*180*angle/100.0;
-  //TODO(xiaochen): wip...
-  // steering_command_102_->set_steer_angle_target(real_angle)->set_steer_angle_spd(250) ;
-}
-
-void NiroController::SetEpbBreak(const ControlCommand& command) 
-{
-  return;
-  // if (command.parking_brake()) 
-  // {
-  //   // None
-  // } else {
-  //   // None
-  // }
-}
-
-void NiroController::SetBeam(const ControlCommand& command) 
-{
-  return;
-  // if (command.signal().high_beam()) {
-  //   // None
-  // } else if (command.signal().low_beam()) {
-  //   // None
-  // } else {
-  //   // None
-  // }
-}
-
-void NiroController::SetHorn(const ControlCommand& command) 
-{
-  return;
-  // if (command.signal().horn()) {
-  //   // None
-  // } else {
-  //   // None
-  // }
-}
-
-void NiroController::SetTurningSignal(const ControlCommand& command) 
-{
-  // Set Turn Signal do not support on devkit
+  if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE && driving_mode() != Chassis::AUTO_STEER_ONLY) 
+  {
+    AINFO << "The current driving mode does not need to set steer.";
+    return;
+  }
+  steering_torque_command_->set_steering_torque_percent(torque_percent);
 }
 
 void NiroController::ResetProtocol() 
-{
-  message_manager_->ResetSendMessages();
-}
+{ message_manager_->ResetSendMessages(); }
 
 bool NiroController::CheckChassisError() 
 {
@@ -543,7 +448,6 @@ bool NiroController::CheckChassisError()
     return false;
   }
 
-  // Devkit devkit = chassis_detail.devkit();
   Niro niro = chassis_detail.niro();
 
   // steer fault
@@ -562,11 +466,11 @@ bool NiroController::CheckChassisError()
   //   }
   // }
   // brake fault
-  if (niro.has_brake_report_0x73()) {
-    return true;
-    // if (Brake_Report_0x73::BRAKE_FLT1_BRAKE_SYSTEM_HARDWARE_FAULT == niro.brake_report_0x73().brake_flt1()) 
-    // { return true; }
-  }
+  // if (niro.has_brake_report_()) {
+  //   return true;
+  //   // if (Brake_Report_0x73::BRAKE_FLT1_BRAKE_SYSTEM_HARDWARE_FAULT == niro.brake_report_0x73().brake_flt1()) 
+  //   // { return true; }
+  // }
 
   return false;
 }
