@@ -92,24 +92,20 @@ class LocalizationMsgPublisher {
   std::shared_ptr<cyber::Node> node_;
 
   std::string localization_topic_ = "";
-  std::shared_ptr<cyber::Writer<LocalizationEstimate>> localization_talker_ =
-      nullptr;
+  std::shared_ptr<cyber::Writer<LocalizationEstimate>> localization_talker_ = nullptr;
 
   std::string broadcast_tf_frame_id_ = "";
   std::string broadcast_tf_child_frame_id_ = "";
   apollo::transform::TransformBroadcaster tf2_broadcaster_;
 
   std::string lidar_local_topic_ = "";
-  std::shared_ptr<cyber::Writer<LocalizationEstimate>> lidar_local_talker_ =
-      nullptr;
+  std::shared_ptr<cyber::Writer<LocalizationEstimate>> lidar_local_talker_ = nullptr;
 
   std::string gnss_local_topic_ = "";
-  std::shared_ptr<cyber::Writer<LocalizationEstimate>> gnss_local_talker_ =
-      nullptr;
+  std::shared_ptr<cyber::Writer<LocalizationEstimate>> gnss_local_talker_ = nullptr;
 
   std::string localization_status_topic_ = "";
-  std::shared_ptr<cyber::Writer<LocalizationStatus>>
-      localization_status_talker_ = nullptr;
+  std::shared_ptr<cyber::Writer<LocalizationStatus>> localization_status_talker_ = nullptr;
   double pre_system_time_ = 0.0;
 };
 

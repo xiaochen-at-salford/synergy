@@ -62,7 +62,7 @@ class GuardianComponent : public apollo::cyber::TimerComponent {
       control_cmd_reader_;
   std::shared_ptr<apollo::cyber::Reader<apollo::monitor::SystemStatus>>
       system_status_reader_;
-  std::shared_ptr<apollo::cyber::Writer<apollo::guardian::GuardianCommand>>
+  std::shared_ptr<apollo::cyber::Writer<apollo::guardian::GuardianCommand>
       guardian_writer_;
 
   std::mutex mutex_;

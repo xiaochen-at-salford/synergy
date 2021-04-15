@@ -16,6 +16,7 @@
 # limitations under the License.
 ###############################################################################
 
+import os
 import json
 import pyproj
 import argparse
@@ -142,6 +143,9 @@ def run(gmap_key, map_file, utm_zone):
     html = generate(gmap_key, left_boundaries, right_boundaries, center_lat,
                     center_lon)
 
+    print("Writing the gmap...")
+    cwd = os.getcwd()
+    print(cwd)
     with open('gmap.html', 'w') as file:
         file.write(html)
 
