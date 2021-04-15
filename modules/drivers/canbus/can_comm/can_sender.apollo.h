@@ -1,3 +1,24 @@
+/******************************************************************************
+ * Copyright 2017 The Apollo Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *****************************************************************************/
+
+/**
+ * @file
+ * @brief Defines SenderMessage class and CanSender class.
+ */
+
 #pragma once
 
 #include <algorithm>
@@ -28,10 +49,7 @@ namespace canbus {
 
 /**
  * @class SenderMessage
- * @brief This class defines the OSCC message to send.
- * MagicOnly messages are brake_enable, brake_disable, 
- * steering_enable, steering_disable, throttle_enable,
- * and throttle_disable
+ * @brief This class defines the message to send.
  */
 template <typename SensorType>
 class SenderMessage {
@@ -94,11 +112,8 @@ class SenderMessage {
    */
   int32_t curr_period() const;
 
-  // bool is_active() const;
-
  private:
-  uint32_t message_id_ = 0; 
- public:
+  uint32_t message_id_ = 0;
   ProtocolData<SensorType> *protocol_data_ = nullptr;
 
   int32_t period_ = 0;
@@ -110,11 +125,21 @@ class SenderMessage {
   struct CanFrame can_frame_to_update_;
 };
 
+/**
+ * @class CanSender
+ * @brief CAN sender.
+ */
 template <typename SensorType>
 class CanSender {
  public:
+  /**
+   * @brief Constructor.
+   */
   CanSender() = default;
 
+  /**
+   * @brief Destructor.
+   */
   virtual ~CanSender() = default;
 
   /**
@@ -133,9 +158,8 @@ class CanSender {
    * @param init_with_one If it is true, then initialize all bits in
    *        the protocol data as one. By default, it is false.
    */
-  void AddMessage(uint32_t message_id, 
-                  ProtocolData<SensorType> *protocol_data,
-                  bool init_with_one = false );
+  void AddMessage(uint32_t message_id, ProtocolData<SensorType> *protocol_data,
+                  bool init_with_one = false);
 
   /**
    * @brief Start the CAN sender.
@@ -143,7 +167,7 @@ class CanSender {
    */
   apollo::common::ErrorCode Start();
 
-  /**
+  /*
    * @brief Update the protocol data based the types.
    */
   void Update();
@@ -159,7 +183,6 @@ class CanSender {
    * @return If this CAN sender is running.
    */
   bool IsRunning() const;
-
   bool enable_log() const;
 
   FRIEND_TEST(CanSenderTest, OneRunCase);
@@ -187,13 +210,14 @@ std::mutex SenderMessage<SensorType>::mutex_;
 template <typename SensorType>
 SenderMessage<SensorType>::SenderMessage(
     const uint32_t message_id, ProtocolData<SensorType> *protocol_data)
-  : SenderMessage(message_id, protocol_data, false) 
-  {}
+    : SenderMessage(message_id, protocol_data, false) 
+    {}
 
 template <typename SensorType>
 SenderMessage<SensorType>::SenderMessage(
-    const uint32_t message_id, ProtocolData<SensorType> *protocol_data, bool init_with_one )
-  : message_id_(message_id), protocol_data_(protocol_data) 
+    const uint32_t message_id, ProtocolData<SensorType> *protocol_data,
+    bool init_with_one)
+    : message_id_(message_id), protocol_data_(protocol_data) 
 {
   if (init_with_one) 
   {
@@ -212,8 +236,7 @@ SenderMessage<SensorType>::SenderMessage(
 }
 
 template <typename SensorType>
-void SenderMessage<SensorType>::UpdateCurrPeriod(const int32_t period_delta) 
-{
+void SenderMessage<SensorType>::UpdateCurrPeriod(const int32_t period_delta) {
   curr_period_ -= period_delta;
   if (curr_period_ <= 0) 
   { curr_period_ = period_; }
@@ -248,11 +271,6 @@ template <typename SensorType>
 int32_t SenderMessage<SensorType>::curr_period() const 
 { return curr_period_; }
 
-// //TODO(xiaoche)
-// template <typename SensorType>
-// bool SenderMessage<SensorType>::is_active() const 
-// { return is_active_; }
-
 template <typename SensorType>
 void CanSender<SensorType>::PowerSendThreadFunc() 
 {
@@ -269,9 +287,8 @@ void CanSender<SensorType>::PowerSendThreadFunc()
   int64_t tm_end = 0;
   int64_t sleep_interval = 0;
 
-  AINFO << "CAN client sender thread starts.";
+  AINFO << "Can client sender thread starts.";
 
-  //TODO(xiaochen):
   while (is_running_) 
   {
     tm_start = cyber::Time::Now().ToNanosecond() / 1e3;
@@ -279,17 +296,12 @@ void CanSender<SensorType>::PowerSendThreadFunc()
 
     for (auto &message : send_messages_) 
     {
-      // Only send active messages
-      if (!message.protocol_data_->is_active())
-      { continue; } 
-
       bool need_send = NeedSend(message, delta_period);
       message.UpdateCurrPeriod(delta_period);
       new_delta_period = std::min(new_delta_period, message.curr_period());
 
       if (!need_send) 
       { continue; }
-
       std::vector<CanFrame> can_frames;
       CanFrame can_frame = message.CanFrame();
       can_frames.push_back(can_frame);
@@ -298,7 +310,6 @@ void CanSender<SensorType>::PowerSendThreadFunc()
       if (enable_log()) 
       { ADEBUG << "send_can_frame#" << can_frame.CanFrameString(); }
     }
-
     delta_period = new_delta_period;
     tm_end = cyber::Time::Now().ToNanosecond() / 1e3;
     sleep_interval = delta_period - (tm_end - tm_start);
@@ -309,7 +320,7 @@ void CanSender<SensorType>::PowerSendThreadFunc()
     {
       // do not sleep
       AWARN << "Too much time for calculation: " << tm_end - tm_start
-            << "us is more than minimum period: " << delta_period << "us" ;
+            << "us is more than minimum period: " << delta_period << "us";
     }
   }
   AINFO << "Can client sender thread stopped!";
@@ -335,8 +346,9 @@ common::ErrorCode CanSender<SensorType>::Init(CanClient *can_client, bool enable
 }
 
 template <typename SensorType>
-void CanSender<SensorType>::AddMessage(
-    uint32_t message_id, ProtocolData<SensorType> *protocol_data, bool init_with_one ) 
+void CanSender<SensorType>::AddMessage(uint32_t message_id,
+                                       ProtocolData<SensorType> *protocol_data,
+                                       bool init_with_one ) 
 {
   if (protocol_data == nullptr) 
   {
@@ -353,7 +365,7 @@ common::ErrorCode CanSender<SensorType>::Start()
 {
   if (is_running_) 
   {
-    AERROR << "CAN sender has already started.";
+    AERROR << "Cansender has already started.";
     return common::ErrorCode::CANBUS_ERROR;
   }
   is_running_ = true;
@@ -395,8 +407,8 @@ bool CanSender<SensorType>::enable_log() const
 { return enable_log_; }
 
 template <typename SensorType>
-bool CanSender<SensorType>::NeedSend(
-    const SenderMessage<SensorType> &msg, const int32_t delta_period ) 
+bool CanSender<SensorType>::NeedSend(const SenderMessage<SensorType> &msg,
+                                     const int32_t delta_period ) 
 { return msg.curr_period() <= delta_period; }
 
 }  // namespace canbus

@@ -28,8 +28,6 @@ namespace drivers {
 namespace canbus {
 namespace can {
 
-const int Uninitialized_Socket = -1;
-
 class OsccCanClient : public CanClient {
  public:
   bool Init(const CANCardParameter &parameter) override;
@@ -48,11 +46,11 @@ class OsccCanClient : public CanClient {
 
   apollo::common::ErrorCode init_can_channel(int &dev_handler, int port, struct timeval *tv);
  private:
-
+  const int UNINITIALIZED_SOCKET = -1;
   struct timeval tv_send_;
   struct timeval tv_recv_;
-  int dev_send_ = Uninitialized_Socket;
-  int dev_recv_ = Uninitialized_Socket;
+  int dev_send_ = UNINITIALIZED_SOCKET;
+  int dev_recv_ = UNINITIALIZED_SOCKET;
   int can_channel_send_ = 0;
   int can_channel_recv_ = 1;
   CANCardParameter::CANChannelId port_;

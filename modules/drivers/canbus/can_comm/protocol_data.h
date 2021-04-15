@@ -82,12 +82,12 @@ class ProtocolData {
   virtual void Parse(const uint8_t *bytes, int32_t length,
                      SensorType *sensor_data) const;
 
-  /*
+  /**
    * @brief update the data
    */
   virtual void UpdateData(uint8_t *data);
 
-  /*
+  /**
    * @brief reset the protocol data
    */
   virtual void Reset();
@@ -97,6 +97,17 @@ class ProtocolData {
    */
   template <typename T>
   static T BoundedValue(T lower, T upper, T val);
+
+  /**
+   * @brief If the protocal data is a send message, check if it is active
+   */
+  virtual bool is_active() const;
+
+  virtual bool is_active();
+
+ protected:
+  bool is_active_ = false;
+  bool is_auto_active_ = false;
 
  private:
   const int32_t data_length_ = CANBUS_MESSAGE_LENGTH;
@@ -144,6 +155,14 @@ void ProtocolData<SensorType>::UpdateData(uint8_t * /*data*/) {}
 
 template <typename SensorType>
 void ProtocolData<SensorType>::Reset() {}
+
+template <typename SensorType>
+bool ProtocolData<SensorType>::is_active() 
+{ return is_active_; }
+
+template <typename SensorType>
+bool ProtocolData<SensorType>::is_active() 
+const { return is_active_; }
 
 }  // namespace canbus
 }  // namespace drivers

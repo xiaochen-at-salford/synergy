@@ -1,3 +1,24 @@
+/******************************************************************************
+ * Copyright 2017 The Apollo Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *****************************************************************************/
+
+/**
+ * @file
+ * @brief Defines CanReceiver class.
+ */
+
 #pragma once
 
 #include <atomic>
@@ -18,16 +39,29 @@
 #include "modules/drivers/canbus/can_comm/message_manager.h"
 #include "modules/drivers/canbus/common/canbus_consts.h"
 
+/**
+ * @namespace apollo::drivers::canbus
+ * @brief apollo::drivers::canbus
+ */
 namespace apollo {
 namespace drivers {
 namespace canbus {
 
+/**
+ * @class CanReceiver
+ * @brief CAN receiver.
+ */
 template <typename SensorType>
 class CanReceiver {
  public:
-
+  /**
+   * @brief Constructor.
+   */
   CanReceiver() = default;
 
+  /**
+   * @brief Destructor.
+   */
   virtual ~CanReceiver() = default;
 
   /**
@@ -38,8 +72,9 @@ class CanReceiver {
    * @param enable_log If log the essential information during running.
    * @return An error code indicating the status of this initialization.
    */
-  common::ErrorCode Init(
-      CanClient *can_client, MessageManager<SensorType> *pt_manager, bool enable_log );
+  common::ErrorCode Init(CanClient *can_client,
+                         MessageManager<SensorType> *pt_manager,
+                         bool enable_log);
 
   /**
    * @brief Get the working status of this CAN receiver.
@@ -65,7 +100,7 @@ class CanReceiver {
   int32_t Start(bool is_blocked);
 
  private:
-  std::atomic<bool> is_running_ = { false };
+  std::atomic<bool> is_running_ = {false};
   // CanClient, MessageManager pointer life is managed by outer program
   CanClient *can_client_ = nullptr;
   MessageManager<SensorType> *pt_manager_ = nullptr;
@@ -78,8 +113,8 @@ class CanReceiver {
 
 template <typename SensorType>
 ::apollo::common::ErrorCode CanReceiver<SensorType>::Init(
-    CanClient *can_client, MessageManager<SensorType> *pt_manager, bool enable_log ) 
-{
+    CanClient *can_client, MessageManager<SensorType> *pt_manager,
+    bool enable_log) {
   can_client_ = can_client;
   pt_manager_ = pt_manager;
   enable_log_ = enable_log;
@@ -100,7 +135,7 @@ template <typename SensorType>
 template <typename SensorType>
 void CanReceiver<SensorType>::RecvThreadFunc() 
 {
-  AINFO << "Can client receiver thread starts.";
+  AINFO << "CAN client receiver thread starts.";
   CHECK_NOTNULL(can_client_);
   CHECK_NOTNULL(pt_manager_);
 
@@ -115,8 +150,9 @@ void CanReceiver<SensorType>::RecvThreadFunc()
     int32_t frame_num = MAX_CAN_RECV_FRAME_LEN;
     if (can_client_->Receive(&buf, &frame_num) != ::apollo::common::ErrorCode::OK) 
     {
-      LOG_IF_EVERY_N(ERROR, receive_error_count++ > ERROR_COUNT_MAX, ERROR_COUNT_MAX)
-          << "Received " << receive_error_count << " error messages." ;
+      LOG_IF_EVERY_N(ERROR, receive_error_count++ > ERROR_COUNT_MAX,
+                     ERROR_COUNT_MAX)
+          << "Received " << receive_error_count << " error messages.";
       cyber::USleep(default_period);
       continue;
     }
@@ -126,7 +162,7 @@ void CanReceiver<SensorType>::RecvThreadFunc()
     {
       AERROR_EVERY(100) << "Receiver buf size [" << buf.size()
                         << "] does not match can_client returned length["
-                        << frame_num << "]." ;
+                        << frame_num << "].";
     }
 
     if (frame_num == 0) 
@@ -149,7 +185,7 @@ void CanReceiver<SensorType>::RecvThreadFunc()
     }
     cyber::Yield();
   }
-  AINFO << "CAN client receiver thread stopped.";
+  AINFO << "Can client receiver thread stopped.";
 }
 
 template <typename SensorType>
@@ -172,13 +208,13 @@ void CanReceiver<SensorType>::Stop()
 {
   if (IsRunning()) 
   {
-    AINFO << "Stopping CAN client receiver ...";
+    AINFO << "Stopping can client receiver ...";
     is_running_.exchange(false);
     async_result_.wait();
-  } 
-  else 
-  { AINFO << "CAN client receiver is not running."; }
-  AINFO << "CAN client receiver stopped [ok].";
+  } else {
+    AINFO << "Can client receiver is not running.";
+  }
+  AINFO << "Can client receiver stopped [ok].";
 }
 
 }  // namespace canbus

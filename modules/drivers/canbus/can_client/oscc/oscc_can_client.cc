@@ -3,8 +3,6 @@
 
 #include "absl/strings/str_cat.h"
 
-// #include <sys/socket.h>
-
 namespace apollo {
 namespace drivers {
 namespace canbus {
@@ -40,7 +38,6 @@ OsccCanClient::~OsccCanClient()
   if (dev_send_ || dev_recv_) 
   { Stop(); }
 }
-
 
 ErrorCode OsccCanClient::Start() 
 {
@@ -79,7 +76,7 @@ void OsccCanClient::Stop()
   }
 }
 
-ErrorCode OsccCanClient::Send(const std::vector<CanFrame> &frames, int32_t *const frame_num ) 
+ErrorCode OsccCanClient::Send(const std::vector<CanFrame> &frames, int32_t *const frame_num) 
 {
   CHECK_NOTNULL(frame_num);
   CHECK_EQ(frames.size(), static_cast<size_t>(*frame_num));
@@ -148,7 +145,7 @@ ErrorCode OsccCanClient::Receive(std::vector<CanFrame> *const frames, int32_t *c
       AERROR << "recv_frames_[" << i
              << "].can_dlc = " << recv_frames_[i].can_dlc
              << ", which is not equal to can message data length ("
-             << CANBUS_MESSAGE_LENGTH << ").";
+             << CANBUS_MESSAGE_LENGTH << ")." ;
       return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
     }
     cf.id = recv_frames_[i].can_id;
@@ -160,15 +157,13 @@ ErrorCode OsccCanClient::Receive(std::vector<CanFrame> *const frames, int32_t *c
 }
 
 std::string OsccCanClient::GetErrorString(const int32_t /*status*/) 
-{
-  return "";
-}
+{ return ""; }
 
 //TODO:
 // ErrorCode init_can_channel(int &dev_handler, int can_channel, struct timeval *tv)
 ErrorCode OsccCanClient::init_can_channel(int &dev_handler, int port, struct timeval *tv)
 {
-  int result = Uninitialized_Socket; 
+  int result = UNINITIALIZED_SOCKET; 
   // struct sockaddr_can addr;
   struct ifreq ifr;
   memset(&ifr, 0, sizeof(ifr));
@@ -210,7 +205,7 @@ ErrorCode OsccCanClient::init_can_channel(int &dev_handler, int port, struct tim
   {
     AERROR << "Failed to bind socket";
     close(dev_handler);
-    dev_handler = Uninitialized_Socket;
+    dev_handler = UNINITIALIZED_SOCKET;
     return ErrorCode::CAN_CLIENT_ERROR_BASE;
   }
   

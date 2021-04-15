@@ -42,8 +42,7 @@ namespace canbus {
  * @brief CanClientFactory inherites apollo::common::util::Factory.
  */
 class CanClientFactory
-    : public apollo::common::util::Factory<CANCardParameter::CANCardBrand,
-                                           CanClient> {
+    : public apollo::common::util::Factory<CANCardParameter::CANCardBrand, CanClient> {
  public:
   /**
    * @brief Register the CAN clients of all brands. This function call the
