@@ -8,33 +8,43 @@ namespace niro {
 
 using ::apollo::drivers::canbus::Byte;
 
-// public
-ThrottleDisable_0x91::ThrottleDisable_0x91() { Reset(); }
-
-uint32_t ThrottleDisable_0x91::GetPeriod() const 
+ThrottleDisable_0x91::ThrottleDisable_0x91() 
 {
-  // TODO(All) :  modify every protocol's period manually
-  static const uint32_t PERIOD = 20 * 1000;
+  enable_magic_use(); 
+  disable_auto_activation();
+  Reset(); 
+}
+
+uint32_t ThrottleDisable_0x91::GetPeriod() 
+const {
+  static const uint32_t PERIOD = 20*1000;
   return PERIOD;
 }
 
 void ThrottleDisable_0x91::UpdateData(uint8_t *data) 
 {
-  if (throttle_disable_)
+  if (!is_active())
+  { 
+    AERROR << "Attempting to use deactivateed OSCC CAN message"
+           << "CAN ID: Ox" << ThrottleDisable_0x91::ID
+           << "Check CAN message activation status before calling this function." ;  
+  }
+
+  if (use_magic())
   { set_p_magic(data); }
+
+  if (is_auto_active())
+  { activate(); }
   else
-  { data = nullptr; }
+  { deactivate(); }
 }
 
 void ThrottleDisable_0x91::Reset() 
-{
-  // TODO(All) :  you should check this manually
-  throttle_disable_ = false;
-}
+{ deactivate(); }
 
-ThrottleDisable_0x91 *ThrottleDisable_0x91::set_brake_disable()
+ThrottleDisable_0x91 *ThrottleDisable_0x91::set_throttle_disable()
 {
-  throttle_disable_ = true;
+  activate();
   return this;
 }
 

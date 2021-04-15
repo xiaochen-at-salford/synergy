@@ -12,13 +12,13 @@ ThrottleReport_0x93::ThrottleReport_0x93() {};
 
 void ThrottleReport_0x93::Parse(const std::uint8_t *bytes, int32_t length, ChassisDetail *chassis) 
 const {
-  chassis->mutable_niro()->mutable_throttle_report_0x93(
+  chassis->mutable_niro()->mutable_throttle_report(
       )->set_throttle_report_enabled(throttle_report_enabled(bytes, length));
 
-  chassis->mutable_niro()->mutable_throttle_report_0x93(
+  chassis->mutable_niro()->mutable_throttle_report(
       )->set_throttle_operator_override(throttle_operator_override(bytes, length));
 
-  chassis->mutable_niro()->mutable_throttle_report_0x93(
+  chassis->mutable_niro()->mutable_throttle_report(
       )->set_throttle_dtcs(throttle_dtcs(bytes, length));
 }
 
@@ -36,12 +36,11 @@ const {
   return (x == 1);
 }
 
-ThrottleDtcsEnum ThrottleReport_0x93::throttle_dtcs(const std::uint8_t *bytes, int32_t length) 
+ChannelReportEnum ThrottleReport_0x93::throttle_dtcs(const std::uint8_t *bytes, int32_t length) 
 const {
   Byte t(bytes+4);
   int8_t x = t.get_byte(0, 1);
-  //TODO(xiaochen): create this proto enum
-  return static_cast<ThrottleDtcsEnum>(x);
+  return static_cast<ChannelReportEnum>(x);
 }
 
 }  // namespace niro

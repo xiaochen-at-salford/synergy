@@ -8,12 +8,11 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-typedef Steering_Angle_Report_0xB9::SteeringAngleReportFlags::Enum SteeringAngleReportFlagsEnum;
-typedef Steering_Angle_Report_0xB9::SteeringAngleReportErrors::Enum SteeringAngleReportErrorsEnum;
+typedef Steering_Angle_Report_0xB9::SteeringAngleReportFlags::Type SteeringAngleReportFlagsEnum;
+typedef Steering_Angle_Report_0xB9::SteeringAngleReportErrors::Type SteeringAngleReportErrorsEnum;
 
 class SteeringAngleReport_0xB9
-  : public OsccProtocolBase,
-    public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
+  : public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
 
  public:
   static const int32_t ID = 0x73;

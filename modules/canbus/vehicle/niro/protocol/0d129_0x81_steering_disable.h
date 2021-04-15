@@ -8,9 +8,12 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-class SteeringDisable_0x81
-  : public OsccProtocolBase,
-    public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
+/* From the KIA Niro DBC file:
+ * BO_ 129 STEERING_DISABLE: 8 STEERING
+ *    SG_ steering_disable_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+ */
+
+class SteeringDisable_0x81 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0x81;
 
@@ -23,9 +26,6 @@ class SteeringDisable_0x81
   void Reset() override;
 
   SteeringDisable_0x81 *set_steering_disable();
-
- private:
-   bool steering_disable_ = false;
 };
 
 }  // namespace niro

@@ -8,9 +8,12 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-class ThrottleDisable_0x91 
-  : public OsccProtocolBase,
-    public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
+/* From the KIA Niro DBC file:
+ * BO_ 128 STEERING_ENABLE: 8 STEERING
+ *     SG_ steering_enable_magic : 0|16@1+ (1,0) [0|0] "" STEERING
+ */
+
+class ThrottleDisable_0x91 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0x91;
 
@@ -22,10 +25,7 @@ class ThrottleDisable_0x91
 
   void Reset() override;
 
-  ThrottleDisable_0x91 *set_brake_disable();
-
- private:
-   bool throttle_disable_ = false;
+  ThrottleDisable_0x91 *set_throttle_disable();
 };
 
 }  // namespace niro

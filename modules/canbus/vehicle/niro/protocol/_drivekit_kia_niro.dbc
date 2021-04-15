@@ -175,8 +175,7 @@ BO_ 144 THROTTLE_ENABLE: 8 THROTTLE
    SG_ throttle_enable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
 
 BO_ 145 THROTTLE_DISABLE: 8 THROTTLE
-   SG_ throttle_disable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
-
+   SG_ throttle_disable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE 
 BO_ 146 THROTTLE_COMMAND: 8 THROTTLE
    SG_ throttle_command_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
    SG_ throttle_pedal_command : 16|32@1+ (1,0) [0|1] "percent" THROTTLE
@@ -316,18 +315,7 @@ VAL_ 185 steering_angle_report_errors 6 "Command Rejected" 4 "Module Disabled" 2
 VAL_ 200 front_wipers 0 "Do Nothing" 1 "Disable" 2 "Intermittent" 3 "Slow" 4 "Fast";
 VAL_ 200 rear_wiper 0 "Do Nothing" 1 "Disable" 2 "Enable";
 VAL_ 200 right_signal 0 "Do Nothing" 1 "Disable" 2 "Enable";
-VAL_ 200 left_signal 0 "Do Nothing" 1 "Disable" 2 "Enable";
-VAL_ 200 horn 0 "Do Nothing" 2 "Enabled";
-VAL_ 200 vin 0 "Do Nothing" 2 "Requested";
-VAL_ 200 headlamps 0 "Do Nothing" 1 "Disable" 2 "Low" 3 "High";
-VAL_ 216 front_wipers 0 "Disabled" 1 "Intermittent" 2 "Slow" 3 "Fast";
-VAL_ 216 rear_wiper 0 "Disabled" 1 "Enabled";
-VAL_ 216 right_signal 0 "Disabled" 1 "Enabled";
-VAL_ 216 left_signal 0 "Disabled" 1 "Enabled";
-VAL_ 216 horn 0 "Disabled" 1 "Enabled";
-VAL_ 216 vin_request 0 "Disabled" 1 "Enabled";
-VAL_ 216 headlamps 0 "Disabled" 1 "Low" 2 "High";
-
+VAL_ 200 lef}
 SIG_VALTYPE_ 114 brake_pedal_command : 1;
 SIG_VALTYPE_ 130 steering_torque_command : 1;
 SIG_VALTYPE_ 146 throttle_pedal_command : 1;

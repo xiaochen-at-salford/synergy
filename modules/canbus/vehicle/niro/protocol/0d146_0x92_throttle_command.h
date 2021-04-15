@@ -8,19 +8,13 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-/* From OSCC SDK:
- * typedef struct {
- *   uint8_t magic[2]; // Magic number identifying CAN frame as from OSCC.
- *                     // Byte 0 should be \ref OSCC_MAGIC_BYTE_0.
- *                     // Byte 1 should be \ref OSCC_MAGIC_BYTE_1.
- *   float pedal_command; // Brake Request 0.0 to 1.0 where 1.0 is 100% 
- *   uint8_t reserved[2]; // Reserved. 
- * } oscc_brake_command_s;
+/* From the KIA Niro DBC file:
+ * BO_ 146 THROTTLE_COMMAND: 8 THROTTLE
+ *    SG_ throttle_command_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
+ *    SG_ throttle_pedal_command : 16|32@1+ (1,0) [0|1] "percent" THROTTLE
  */
 
-class ThrottleCommand_0x92 
-  : public OsccProtocolBase,
-    public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
+class ThrottleCommand_0x92 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0x92;
 
@@ -36,16 +30,11 @@ class ThrottleCommand_0x92
    * @brief Set the brake pedal command
    * 
    * @param throttle_pedal_position The percentage of pedal position [0~100]
-   * @return BrakeCommand_0x72* 
+   * @return BrakeCommand_0x92* 
    */
-  ThrottleCommand_0x92* set_throttle_pedal_command(double throttle_pedal_position);
+  ThrottleCommand_0x92* set_throttle_pedal_command(double throttle_pedal_percent);
 
  private:
-
-  // Frome OSCC DBC file
-  // BO_ 114 BRAKE_COMMAND: 8 BRAKE
-  //    SG_ brake_command_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
-  //    SG_ brake_pedal_command : 16|32@1+ (1,0) [0|1] "percent" BRAKE
   void set_p_throttle_pedal_command(uint8_t *data, double throttle_pedal_percent);
 
  private:

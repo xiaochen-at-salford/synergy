@@ -8,35 +8,43 @@ namespace niro {
 
 using ::apollo::drivers::canbus::Byte;
 
-// const int32_t BrakeEnable_0x70::ID = 0x70;
-
-// public
-ThrottleEnable_0x90::ThrottleEnable_0x90() { Reset(); }
-
-uint32_t ThrottleEnable_0x90::GetPeriod() const 
+ThrottleEnable_0x90::ThrottleEnable_0x90() 
 {
-  // TODO(All) :  modify every protocol's period manually
+  enable_magic_use();
+  disable_auto_activation();
+  Reset(); 
+}
+
+uint32_t ThrottleEnable_0x90::GetPeriod() 
+const {
   static const uint32_t PERIOD = 20*1000;
   return PERIOD;
 }
 
 void ThrottleEnable_0x90::UpdateData(uint8_t *data) 
 {
-  if (throttle_enable_)
+  if (!is_active())
+  { 
+    AERROR << "Attempting to use deactivateed OSCC CAN message"
+           << "CAN ID: Ox" << ThrottleEnable_0x90::ID
+           << "Check CAN message activation status before calling this function." ;  
+  }
+
+  if (use_magic())
   { set_p_magic(data); }
+
+  if (is_auto_active())
+  { deactivate(); }
   else
-  { data = nullptr; }
+  { activate(); }
 }
 
 void ThrottleEnable_0x90::Reset() 
-{
-  // TODO(All) :  you should check this manually
-  throttle_enable_ = false;
-}
+{ deactivate(); }
 
-ThrottleEnable_0x90 *ThrottleEnable_0x90::set_brake_enable()
+ThrottleEnable_0x90 *ThrottleEnable_0x90::set_throttle_enable()
 {
-  throttle_enable_ = true;
+  activate();
   return this;
 }
 

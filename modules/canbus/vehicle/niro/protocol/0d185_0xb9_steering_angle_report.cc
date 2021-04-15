@@ -14,10 +14,10 @@ SteeringAngleReport_0xB9::SteeringAngleReport_0xB9() {};
 
 void SteeringAngleReport_0xB9::Parse(const std::uint8_t *bytes, int32_t length, ChassisDetail *chassis) 
 const {
-  chassis->mutable_niro()->mutable_steering_angle_report_0xb9(
+  chassis->mutable_niro()->mutable_steering_angle_report(
       )->set_steering_angle_report_flags(steering_angle_report_flags(bytes, length));
 
-  chassis->mutable_niro()->mutable_steering_angle_report_0xb9(
+  chassis->mutable_niro()->mutable_steering_angle_report(
       )->set_steering_angle_report_errors(steering_angle_report_errors(bytes, length));
 }
 

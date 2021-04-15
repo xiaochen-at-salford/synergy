@@ -1,42 +1,50 @@
 #include "modules/canbus/vehicle/niro/protocol/0d129_0x81_steering_disable.h"
 
-#include "modules/drivers/canbus/common/byte.h"
-
 namespace apollo {
 namespace canbus {
 namespace niro {
 
-using ::apollo::drivers::canbus::Byte;
-
-// const int32_t BrakeDisable_0x71::ID = 0x71;
-
-// public
-SteeringDisable_0x81::SteeringDisable_0x81() { Reset(); }
+SteeringDisable_0x81::SteeringDisable_0x81() 
+{ 
+  enable_magic_use();
+  disable_auto_activation();
+  Reset(); 
+}
 
 uint32_t SteeringDisable_0x81::GetPeriod() const 
 {
-  // TODO(All) :  modify every protocol's period manually
-  static const uint32_t PERIOD = 20 * 1000;
+  static const uint32_t PERIOD = 20*1000;
   return PERIOD;
 }
 
 void SteeringDisable_0x81::UpdateData(uint8_t *data) 
 {
-  if (steering_disable_)
+  if (!is_active())
+  { 
+    AERROR << "Attempting to use deactivateed OSCC CAN message"
+           << "CAN ID: Ox" << SteeringDisable_0x81::ID
+           << "Check CAN message activation status before calling this function." ;  
+  }
+
+  if (use_magic())
   { set_p_magic(data); }
-  else
-  { data = nullptr; }
+
+  if (is_auto_active())
+  { activate(); }
+  else 
+  { deactivate(); }
 }
 
 void SteeringDisable_0x81::Reset() 
-{
-  // TODO(All) :  you should check this manually
-  steering_disable_ = false;
+{ 
+  enable_magic_use();
+  disable_auto_activation();
+  deactivate(); 
 }
 
 SteeringDisable_0x81 *SteeringDisable_0x81::SteeringDisable_0x81::set_steering_disable()
 {
-  steering_disable_ = true;
+  activate();
   return this;
 }
 

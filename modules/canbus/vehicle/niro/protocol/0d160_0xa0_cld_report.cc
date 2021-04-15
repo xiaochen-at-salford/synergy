@@ -1,4 +1,4 @@
-#include "modules/canbus/vehicle/niro/protocol/dec160_hexA0_cld_report.h"
+#include "modules/canbus/vehicle/niro/protocol/0d160_0xa0_cld_report.h"
 
 #include "modules/drivers/canbus/common/byte.h"
 
@@ -38,7 +38,6 @@ const {
 
   chassis->mutable_niro()->mutable_cld_report_0xa0(
       )->set_frame_rate_brake(frame_rate_brake(bytes, length)) ;
-  
 }
 
 StateEnum CldReport_0xA0::state(const std::uint8_t *bytes, int32_t length) 
@@ -58,7 +57,7 @@ const {
 uint32_t CldReport_0xA0::last_transition_ago(const std::uint8_t *bytes, int32_t length) 
 const {
   uint16_t x = 0;
-  std:memcpy(&x, bytes, 2); 
+  std::memcpy(&x, bytes, 2); 
   return static_cast<uint16_t>(x);
 }
 

@@ -8,14 +8,15 @@ namespace niro {
 
 using ::apollo::drivers::canbus::Byte;
 
-// const int32_t BrakeCommand_0x72::ID = 0x72;
-
-// public
-ThrottleCommand_0x92::ThrottleCommand_0x92() { Reset(); }
+ThrottleCommand_0x92::ThrottleCommand_0x92() 
+{ 
+  enable_magic_use();
+  enable_auto_activation();
+  Reset(); 
+}
 
 uint32_t ThrottleCommand_0x92::GetPeriod() const 
 {
-  // TODO(All) :  modify every protocol's period manually
   static const uint32_t PERIOD = 20*1000;
   return PERIOD;
 }
@@ -27,10 +28,7 @@ void ThrottleCommand_0x92::UpdateData(uint8_t *data)
 }
 
 void ThrottleCommand_0x92::Reset() 
-{
-  // TODO(All) :  you should check this manually
-  throttle_pedal_percent_ = 0.0;
-}
+{ throttle_pedal_percent_ = 0.0; }
 
 ThrottleCommand_0x92 *ThrottleCommand_0x92::set_throttle_pedal_command(double throttle_pedal_percent) 
 {
@@ -41,13 +39,9 @@ ThrottleCommand_0x92 *ThrottleCommand_0x92::set_throttle_pedal_command(double th
 void ThrottleCommand_0x92::set_p_throttle_pedal_command(uint8_t *data, double throttle_pedal_percent) 
 {
   throttle_pedal_percent = ProtocolData::BoundedValue(0.0, 100.0, throttle_pedal_percent);
-
-  // For OSCC, the range ofpedal command is [0,1]
-  float x = static_cast<float>(throttle_pedal_percent / 100.0);
-
-  //TODO(xiaochen): Check wether Big Endian or Little Endia
-  // The "pedal_command" starts from the 3rd byte of "oscc_brake_command_s"
-  memcpy(data+2, &x, sizeof(x));
+  // For OSCC, the range of pedal command is [0,1]
+  float x = static_cast<float>(throttle_pedal_percent/100.0);
+  std::memcpy(&data[2], &x, sizeof(x));
 }
 
 }  // namespace niro

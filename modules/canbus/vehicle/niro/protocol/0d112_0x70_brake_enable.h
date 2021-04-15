@@ -8,9 +8,12 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-class BrakeEnable_0x70 
-  : public OsccProtocolBase,
-    public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
+/* From the KIA Niro DBC file:
+ * BO_ 112 BRAKE_ENABLE: 8 BRAKE
+ *    BO_SG_ brake_enable_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
+ */
+
+class BrakeEnable_0x70 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0x70;
 
@@ -23,9 +26,6 @@ class BrakeEnable_0x70
   void Reset() override;
 
   BrakeEnable_0x70 *set_brake_enable();
-
- private:
-   bool brake_enable_ = false;
 };
 
 }  // namespace niro

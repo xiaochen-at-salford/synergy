@@ -10,17 +10,15 @@ using ::apollo::drivers::canbus::Byte;
 
 SteeringReport_0x83::SteeringReport_0x83() {};
 
-// const int32_t BrakeReport_0x73::ID = 0x73;
-
 void SteeringReport_0x83::Parse(const std::uint8_t *bytes, int32_t length, ChassisDetail *chassis) 
 const {
-  chassis->mutable_niro()->mutable_steering_report_0x83(
+  chassis->mutable_niro()->mutable_steering_report(
       )->set_steering_report_enabled(steering_report_enabled(bytes, length));
 
-  chassis->mutable_niro()->mutable_steering_report_0x83(
+  chassis->mutable_niro()->mutable_steering_report(
       )->set_steering_operator_override(steering_operator_override(bytes, length));
 
-  chassis->mutable_niro()->mutable_steering_report_0x83(
+  chassis->mutable_niro()->mutable_steering_report(
       )->set_steering_dtcs(steering_dtcs(bytes, length));
 }
 
@@ -38,12 +36,11 @@ const {
   return (x == 1);
 }
 
-Steering_Report_0x83::SteeringDtcs::Enum SteeringReport_0x83::steering_dtcs(const std::uint8_t *bytes, int32_t length) 
+ChannelReportEnum SteeringReport_0x83::steering_dtcs(const std::uint8_t *bytes, int32_t length) 
 const {
   Byte t(bytes+4);
   int8_t x = t.get_byte(0, 1);
-  //TODO(xiaochen): create this proto enum
-  return static_cast<Steering_Report_0x83::SteeringDtcs::Enum>(x);
+  return static_cast<ChannelReportEnum>(x);
 }
 
 }  // namespace niro
