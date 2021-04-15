@@ -23,6 +23,10 @@ cc_library(
         ":0d145_0x91_throttle_disable",
         ":0d146_0x92_throttle_command",
         ":0d147_0x93_throttle_report",
+        # ":0d160_0xa0_cld_report",
+        # ":0d161_0xa1_cld_configuration_report",
+        # ":0d162_0xa2_cld_configure_command",
+        # ":0d175_0xaf_fault_report",
     ],
 )
 
@@ -219,5 +223,57 @@ cc_library(
         "//modules/drivers/canbus/common:canbus_common",
     ],
 )
+
+# cc_library(
+#     name = "0d160_0xa0_cld_report",
+#     srcs = ["0d160_0xa0_cld_report.cc"],
+#     hdrs = ["0d160_0xa0_cld_report.h"],
+#     copts = CANBUS_COPTS,
+#     deps = [
+#         ":oscc_protocol_base",
+#         "//modules/canbus/proto:chassis_detail_cc_proto",
+#         "//modules/drivers/canbus/can_comm:message_manager_base",
+#         "//modules/drivers/canbus/common:canbus_common",
+#     ],
+# )
+
+# cc_library(
+#     name = "0d161_0xa1_cld_configuration_report",
+#     srcs = ["0d161_0xa1_cld_configuration_report.cc"],
+#     hdrs = ["0d161_0xa1_cld_configuration_report.h"],
+#     copts = CANBUS_COPTS,
+#     deps = [
+#         ":oscc_protocol_base",
+#         "//modules/canbus/proto:chassis_detail_cc_proto",
+#         "//modules/drivers/canbus/can_comm:message_manager_base",
+#         "//modules/drivers/canbus/common:canbus_common",
+#     ],
+# )
+
+# cc_library(
+#     name = "0d162_0xa2_cld_configure_command",
+#     srcs = ["0d162_0xa2_cld_configure_command.cc"],
+#     hdrs = ["0d162_0xa2_cld_configure_command.h"],
+#     copts = CANBUS_COPTS,
+#     deps = [
+#         ":oscc_protocol_base",
+#         "//modules/canbus/proto:chassis_detail_cc_proto",
+#         "//modules/drivers/canbus/can_comm:message_manager_base",
+#         "//modules/drivers/canbus/common:canbus_common",
+#     ],
+# )
+
+# cc_library(
+#     name = "0d175_0xaf_fault_report",
+#     srcs = ["0d175_0xaf_fault_report.cc"],
+#     hdrs = ["0d175_0xaf_fault_report.h"],
+#     copts = CANBUS_COPTS,
+#     deps = [
+#         ":oscc_protocol_base",
+#         "//modules/canbus/proto:chassis_detail_cc_proto",
+#         "//modules/drivers/canbus/can_comm:message_manager_base",
+#         "//modules/drivers/canbus/common:canbus_common",
+#     ],
+# )
 
 cpplint()
