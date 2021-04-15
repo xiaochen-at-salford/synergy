@@ -1,3 +1,24 @@
+/******************************************************************************
+ * Copyright 2017 The Apollo Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *****************************************************************************/
+
+/**
+ * @file vehicle_controller.h
+ * @brief The class of VehicleController
+ */
+
 #pragma once
 
 #include <unordered_map>
@@ -13,12 +34,22 @@
 #include "modules/drivers/canbus/can_comm/message_manager.h"
 #include "modules/drivers/canbus/can_comm/protocol_data.h"
 
+/**
+ * @namespace apollo::canbus
+ * @brief apollo::canbus
+ */
 namespace apollo {
 namespace canbus {
 
 using ::apollo::drivers::canbus::CanSender;
 using ::apollo::drivers::canbus::MessageManager;
 
+/**
+ * @class VehicleController
+ *
+ * @brief This is the interface class of vehicle controller. It defines pure
+ * virtual functions, and also some implemented common functions.
+ */
 class VehicleController {
  public:
   virtual ~VehicleController() = default;
@@ -32,7 +63,7 @@ class VehicleController {
   virtual common::ErrorCode Init(
       const VehicleParameter &params,
       CanSender<ChassisDetail> *const can_sender,
-      MessageManager<ChassisDetail> *const message_manager ) = 0;
+      MessageManager<ChassisDetail> *const message_manager) = 0;
 
   /**
    * @brief start the vehicle controller.
@@ -63,10 +94,11 @@ class VehicleController {
    * @param driving mode to be appointed.
    * @return error_code
    */
-  virtual common::ErrorCode SetDrivingMode(const Chassis::DrivingMode &driving_mode);
+  virtual common::ErrorCode SetDrivingMode(
+      const Chassis::DrivingMode &driving_mode);
 
  private:
-  /**
+  /*
    * @brief main logical function for operation the car enter or exit the auto
    * driving
    */
@@ -77,7 +109,7 @@ class VehicleController {
   virtual common::ErrorCode EnableSteeringOnlyMode() = 0;
   virtual common::ErrorCode EnableSpeedOnlyMode() = 0;
 
-  /**
+  /*
    * @brief NEUTRAL, REVERSE, DRIVE
    */
   virtual void Gear(Chassis::GearPosition state) = 0;
@@ -88,12 +120,12 @@ class VehicleController {
    */
   virtual void Brake(double acceleration) = 0;
 
-  /**
+  /*
    * @brief drive with old acceleration gas:0.00~99.99 unit:%
    */
   virtual void Throttle(double throttle) = 0;
 
-  /**
+  /*
    * @brief drive with new acceleration/deceleration:-7.0~7.0, unit:m/s^2,
    * acc:-7.0~7.0, unit:m/s^2
    */
@@ -111,12 +143,12 @@ class VehicleController {
    */
   virtual void Steer(double angle, double angle_spd) = 0;
 
+  /*
+   * @brief set Electrical Park Brake
+   */
   virtual void SetEpbBreak(const control::ControlCommand &command) = 0;
-
   virtual void SetBeam(const control::ControlCommand &command) = 0;
-
   virtual void SetHorn(const control::ControlCommand &command) = 0;
-
   virtual void SetTurningSignal(const control::ControlCommand &command) = 0;
 
   virtual void SetLimits() {}

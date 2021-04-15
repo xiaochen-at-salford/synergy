@@ -44,9 +44,7 @@ cc_library(
     copts = CANBUS_COPTS,
     deps = [
         ":abstract_vehicle_factory",
-        "//modules/canbus/vehicle/devkit:devkit_vehicle_factory",
         "//modules/canbus/vehicle/niro:niro_vehicle_factory",
-        "//modules/canbus/vehicle/lincoln:lincoln_vehicle_factory",
         "//modules/common/util:factory",
     ],
 )

@@ -16,8 +16,8 @@
 
 #include "modules/canbus/vehicle/vehicle_factory.h"
 #include "modules/canbus/proto/vehicle_parameter.pb.h"
-#include "modules/canbus/vehicle/devkit/devkit_vehicle_factory.h"
-#include "modules/canbus/vehicle/lincoln/lincoln_vehicle_factory.h"
+// #include "modules/canbus/vehicle/devkit/devkit_vehicle_factory.h"
+// #include "modules/canbus/vehicle/lincoln/lincoln_vehicle_factory.h"
 #include "modules/canbus/vehicle/niro/niro_vehicle_factory.h"
 
 namespace apollo {
@@ -25,8 +25,8 @@ namespace canbus {
 
 void VehicleFactory::RegisterVehicleFactory() 
 {
-  Register(apollo::common::LINCOLN_MKZ, []()->AbstractVehicleFactory *{ return new LincolnVehicleFactory(); });
-  Register(apollo::common::DKIT, []() -> AbstractVehicleFactory *{ return new DevkitVehicleFactory(); });
+  // Register(apollo::common::LINCOLN_MKZ, []()->AbstractVehicleFactory *{ return new LincolnVehicleFactory(); });
+  // Register(apollo::common::DKIT, []() -> AbstractVehicleFactory *{ return new DevkitVehicleFactory(); });
   Register(apollo::common::NIRO, []() -> AbstractVehicleFactory * { return new NiroVehicleFactory(); });
 }
 
