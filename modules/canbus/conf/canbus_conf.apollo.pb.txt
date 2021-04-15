@@ -1,15 +1,15 @@
 vehicle_parameter {
-  brand: NIRO
+  brand: LINCOLN_MKZ
   max_enable_fail_attempt: 5
   driving_mode: COMPLETE_AUTO_DRIVE
 }
 
 can_card_parameter {
-  brand: OSCC_CAN
-  type: USB_CARD
+  brand: HERMES_CAN
+  type: PCI_CARD
   channel_id: CHANNEL_ID_ZERO
   num_ports: 8
-  interface: VIRTUAL
+  interface: NATIVE
 }
 
 enable_debug_mode: false
