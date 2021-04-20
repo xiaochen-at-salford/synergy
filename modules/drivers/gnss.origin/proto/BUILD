@@ -6,22 +6,6 @@ load("//tools:python_rules.bzl", "py_proto_library")
 package(default_visibility = ["//visibility:public"])
 
 cc_proto_library(
-    name ="an_gnss_cc_proto",
-    deps = [
-        ":an_gnss_proto",
-    ]
-)
-
-proto_library(
-    name ="an_gnss_proto",
-    srcs = ['an_gnss.proto'],
-    deps = [
-        "//modules/common/proto:geometry_proto",
-        "//modules/common/proto:header_proto",
-    ]
-)
-
-cc_proto_library(
     name = "gnss_best_pose_cc_proto",
     deps = [
         ":gnss_best_pose_proto",

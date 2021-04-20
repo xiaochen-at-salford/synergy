@@ -42,7 +42,8 @@ namespace gnss {
 
 // A helper function that returns a pointer to a protobuf message of type T.
 template <class T>
-inline T *As(::google::protobuf::Message *message_ptr) {
+inline T *As(::google::protobuf::Message *message_ptr) 
+{
   return dynamic_cast<T *>(message_ptr);
 }
 
@@ -52,23 +53,31 @@ class Parser {
  public:
   // A general pointer to a protobuf message.
   using MessagePtr = ::google::protobuf::Message *;
+
   // Return a pointer to a NovAtel parser. The caller should take ownership.
   static Parser *CreateNovatel(const config::Config &config);
 
   // Return a pointer to rtcm v3 parser. The caller should take ownership.
   static Parser *CreateRtcmV3(bool is_base_station = false);
 
+  //TODO(xiaochen-at-salford):
+  // Return a pointer to (Advanced Navigation (AN)) 
+  static Parser *CreateAn(const config::Config &config);
+
   virtual ~Parser() {}
 
   // Updates the parser with new data. The caller must keep the data valid until
   // GetMessage()
   // returns NONE.
-  void Update(const uint8_t *data, size_t length) {
+  void Update(const uint8_t *data, size_t length) 
+  {
     data_ = data;
     data_end_ = data + length;
+    data_size_ = length;
   }
 
-  void Update(const std::string &data) {
+  void Update(const std::string &data) 
+  {
     Update(reinterpret_cast<const uint8_t *>(data.data()), data.size());
   }
 
@@ -89,6 +98,8 @@ class Parser {
     GLOEPHEMERIDES,
     BEST_GNSS_POS,
     HEADING,
+    AN_SYSTEM_STATE,
+    AN_QOSD
   };
 
   // Gets a parsed protobuf message. The caller must consume the message before
@@ -102,6 +113,7 @@ class Parser {
   // Point to the beginning and end of data. Do not take ownership.
   const uint8_t *data_ = nullptr;
   const uint8_t *data_end_ = nullptr;
+  size_t data_size_ = 0; 
 
  private:
   DISABLE_COPY_AND_ASSIGN(Parser);

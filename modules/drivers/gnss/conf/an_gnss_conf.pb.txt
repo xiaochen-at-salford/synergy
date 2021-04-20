@@ -1,0 +1,7 @@
+data {
+    format: AN_BINARY
+    serial {
+        device: "/dev/ttyUSB0"
+        baud_rate: 115200
+    }
+}

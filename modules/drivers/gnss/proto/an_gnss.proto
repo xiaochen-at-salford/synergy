@@ -1,0 +1,40 @@
+syntax = "proto2";
+
+package apollo.drivers.gnss;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/geometry.proto";
+
+message AnNavSatFix {
+  optional double Latitude = 1;
+  optional double Longitude = 2;
+  optional double altitude = 3;
+  repeated double position_covariance = 4;
+}
+
+message AnTwist {
+  optional apollo.common.Point3D linear = 1;
+  optional apollo.common.Point3D angular = 2;
+}
+
+message AnImu {
+  optional apollo.common.Quaternion orientation = 1;
+  optional apollo.common.Point3D angular_velocity = 2;
+  optional apollo.common.Point3D linear_acceleration = 3;
+  repeated double orientation_covariance = 4 [packed=true];
+  repeated double angular_velocity_covariance = 5 [packed=true]; 
+  repeated double linear_acceleration_covariance = 6 [packed=true];
+}
+
+message AnGnss {
+  // optional apollo.common.Header header = 1;
+
+  // The time of position measurement, seconds since the GPS epoch (Jan 6, // 1980).
+  // optional double measurement_time = 2;  // In seconds.
+
+  optional AnTwist twist = 1;
+
+  optional AnImu imu = 2;
+
+  optional AnNavSatFix nav_sat_fix = 3;
+}

@@ -1,0 +1,11 @@
+module_config {
+    module_library : "/apollo/bazel-bin/modules/drivers/gnss/liban_gnss_component.so"
+
+    components {
+      class_name : "AnGnssDriverComponent"
+      config {
+        name : "an_gnss"
+        config_file_path : "/apollo/modules/drivers/gnss/conf/an_gnss_conf.pb.txt"
+      }
+    }
+}

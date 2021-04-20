@@ -1,12 +1,24 @@
 # Define all coms in DAG streaming.
+# module_config {
+#    module_library : "/apollo/bazel-bin/modules/drivers/gnss/libgnss_component.so"
+#
+#    components {
+#      class_name : "GnssDriverComponent"
+#      config {
+#        name : "gnss"
+#        config_file_path : "/apollo/modules/drivers/gnss/conf/gnss_conf.pb.txt"
+#      }
+#    }
+E }
+
 module_config {
     module_library : "/apollo/bazel-bin/modules/drivers/gnss/libgnss_component.so"
 
     components {
       class_name : "GnssDriverComponent"
       config {
-        name : "gnss"
-        config_file_path : "/apollo/modules/drivers/gnss/conf/gnss_conf.pb.txt"
+        name : "an_gnss"
+        config_file_path : "/apollo/modules/drivers/gnss/conf/an_gnss_conf.pb.txt"
       }
     }
 }

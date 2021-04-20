@@ -33,8 +33,10 @@
 #include "modules/drivers/gnss/proto/heading.pb.h"
 #include "modules/drivers/gnss/proto/imu.pb.h"
 #include "modules/drivers/gnss/proto/ins.pb.h"
+#include "modules/drivers/gnss/proto/an_gnss.pb.h"
 #include "modules/localization/proto/gps.pb.h"
 #include "modules/localization/proto/imu.pb.h"
+// #include "modules/localization/proto/gnss.pb.h"
 
 #include "modules/drivers/gnss/parser/parser.h"
 
@@ -46,7 +48,7 @@ class DataParser {
  public:
   using MessagePtr = ::google::protobuf::Message *;
   DataParser(const config::Config &config,
-             const std::shared_ptr<apollo::cyber::Node> &node);
+             const std::shared_ptr<apollo::cyber::Node> &node );
   ~DataParser() {}
   bool Init();
   void ParseRawData(const std::string &msg);
@@ -61,11 +63,11 @@ class DataParser {
   void PublishEphemeris(const MessagePtr message);
   void PublishObservation(const MessagePtr message);
   void PublishHeading(const MessagePtr message);
+  void PublishAnSystemState(const MessagePtr message);
   void CheckInsStatus(Ins *ins);
   void CheckGnssStatus(Gnss *gnss);
-  void GpsToTransformStamped(
-      const std::shared_ptr<apollo::localization::Gps> &gps,
-      apollo::transform::TransformStamped *transform);
+  void GpsToTransformStamped(const std::shared_ptr<apollo::localization::Gps> &gps, 
+                             apollo::transform::TransformStamped *transform );
 
   bool init_flag_ = false;
   config::Config config_;
@@ -79,22 +81,17 @@ class DataParser {
   projPJ utm_target_;
 
   std::shared_ptr<apollo::cyber::Node> node_ = nullptr;
-  std::shared_ptr<apollo::cyber::Writer<GnssStatus>> gnssstatus_writer_ =
-      nullptr;
+  std::shared_ptr<apollo::cyber::Writer<GnssStatus>> gnssstatus_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Writer<InsStatus>> insstatus_writer_ = nullptr;
-  std::shared_ptr<apollo::cyber::Writer<GnssBestPose>> gnssbestpose_writer_ =
-      nullptr;
-  std::shared_ptr<apollo::cyber::Writer<apollo::localization::CorrectedImu>>
-      corrimu_writer_ = nullptr;
+  std::shared_ptr<apollo::cyber::Writer<GnssBestPose>> gnssbestpose_writer_ = nullptr;
+  std::shared_ptr<apollo::cyber::Writer<apollo::localization::CorrectedImu>> corrimu_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Writer<Imu>> rawimu_writer_ = nullptr;
-  std::shared_ptr<apollo::cyber::Writer<apollo::localization::Gps>>
-      gps_writer_ = nullptr;
+  std::shared_ptr<apollo::cyber::Writer<apollo::localization::Gps>> gps_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Writer<InsStat>> insstat_writer_ = nullptr;
-  std::shared_ptr<apollo::cyber::Writer<GnssEphemeris>> gnssephemeris_writer_ =
-      nullptr;
-  std::shared_ptr<apollo::cyber::Writer<EpochObservation>>
-      epochobservation_writer_ = nullptr;
+  std::shared_ptr<apollo::cyber::Writer<GnssEphemeris>> gnssephemeris_writer_ = nullptr;
+  std::shared_ptr<apollo::cyber::Writer<EpochObservation>> epochobservation_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Writer<Heading>> heading_writer_ = nullptr;
+  std::shared_ptr<apollo::cyber::Writer<AnGnss>> an_system_state_writer_ = nullptr;
 };
 
 }  // namespace gnss
