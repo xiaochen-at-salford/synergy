@@ -62,26 +62,20 @@ message TaskConfig {
     SpeedBoundsDeciderConfig speed_bounds_decider_config = 14;
     STBoundsDeciderConfig st_bounds_decider_config = 15;
     // optimizers
-    OpenSpaceTrajectoryPartitionConfig open_space_trajectory_partition_config =
-        16;
-    OpenSpaceTrajectoryProviderConfig open_space_trajectory_provider_config =
-        17;
-    PiecewiseJerkNonlinearSpeedOptimizerConfig
-        piecewise_jerk_nonlinear_speed_optimizer_config = 18;
+    OpenSpaceTrajectoryPartitionConfig open_space_trajectory_partition_config = 16;
+    OpenSpaceTrajectoryProviderConfig open_space_trajectory_provider_config = 17;
+    PiecewiseJerkNonlinearSpeedOptimizerConfig piecewise_jerk_nonlinear_speed_optimizer_config = 18;
     PiecewiseJerkPathOptimizerConfig piecewise_jerk_path_optimizer_config = 19;
-    PiecewiseJerkSpeedOptimizerConfig piecewise_jerk_speed_optimizer_config =
-        20;
+    PiecewiseJerkSpeedOptimizerConfig piecewise_jerk_speed_optimizer_config = 20;
     SpeedHeuristicOptimizerConfig speed_heuristic_optimizer_config = 21;
     // other tasks
     LearningModelInferenceTaskConfig learning_model_inference_task_config = 22;
-    LearningModelInferenceTrajectoryTaskConfig
-        learning_model_inference_trajectory_task_config = 23;
+    LearningModelInferenceTrajectoryTaskConfig learning_model_inference_trajectory_task_config = 23;
   }
 }
 
 message ScenarioBareIntersectionUnprotectedConfig {
-  optional double start_bare_intersection_scenario_distance = 1
-      [default = 25.0];  // meter
+  optional double start_bare_intersection_scenario_distance = 1 [default = 25.0];  // meter
   // explicit stop while waiting
   optional bool enable_explicit_stop = 2 [default = false];
   optional double min_pass_s_distance = 3 [default = 3.0];       // meter
@@ -117,8 +111,7 @@ message ScenarioParkAndGoConfig {
 }
 
 message ScenarioPullOverConfig {
-  optional double start_pull_over_scenario_distance = 1
-      [default = 50.0];                                                // meter
+  optional double start_pull_over_scenario_distance = 1 [default = 50.0]; // meter
   optional double pull_over_min_distance_buffer = 2 [default = 10.0];  // meter
   // keep the same value as pull_over_destination_to_adc_buffer in
   // PathBoundsDeciderConfig
@@ -129,15 +122,12 @@ message ScenarioPullOverConfig {
   optional double max_distance_error_to_end_point = 7 [default = 0.2];
   optional double pass_destination_threshold = 8 [default = 10.0];
   optional double max_valid_stop_distance = 9 [default = 1.0];
-  optional double s_distance_to_stop_for_open_space_parking = 10
-      [default = 7.0];
+  optional double s_distance_to_stop_for_open_space_parking = 10 [default = 7.0];
 }
 
 message ScenarioStopSignUnprotectedConfig {
-  optional double start_stop_sign_scenario_distance = 1
-      [default = 5.0];  // meter
-  optional double watch_vehicle_max_valid_stop_distance = 2
-      [default = 5.0];                                          // meter
+  optional double start_stop_sign_scenario_distance = 1 [default = 5.0]; // meter
+  optional double watch_vehicle_max_valid_stop_distance = 2 [default = 5.0]; // meter
   optional double max_valid_stop_distance = 3 [default = 3.5];  // meter
   optional float stop_duration_sec = 4 [default = 1.0];         // sec
   optional double min_pass_s_distance = 5 [default = 3.0];      // meter
@@ -146,8 +136,7 @@ message ScenarioStopSignUnprotectedConfig {
 }
 
 message ScenarioTrafficLightProtectedConfig {
-  optional double start_traffic_light_scenario_distance = 1
-      [default = 5.0];                                          // meter
+  optional double start_traffic_light_scenario_distance = 1 [default = 5.0]; // meter
   optional double max_valid_stop_distance = 2 [default = 2.0];  // meter
   optional double min_pass_s_distance = 3 [default = 3.0];      // meter
 }
