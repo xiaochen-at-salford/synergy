@@ -22,31 +22,24 @@
 #include "modules/common/util/factory.h"
 #include "modules/planning/planner/planner.h"
 
-/**
- * @namespace apollo::planning
- * @brief apollo::planning
- */
 namespace apollo {
 namespace planning {
 
-/**
- * @class planning
- *
- * @brief PlannerDispatcher module main class.
- */
 class PlannerDispatcher {
  public:
   PlannerDispatcher() = default;
+
   virtual ~PlannerDispatcher() = default;
 
-  virtual common::Status Init() {
+  virtual common::Status Init() 
+  {
     RegisterPlanners();
     return common::Status::OK();
   }
 
   virtual std::unique_ptr<Planner> DispatchPlanner(
       const PlanningConfig& planning_config,
-      const std::shared_ptr<DependencyInjector>& injector) = 0;
+      const std::shared_ptr<DependencyInjector>& injector ) = 0;
 
  protected:
   void RegisterPlanners();
