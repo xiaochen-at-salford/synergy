@@ -261,8 +261,7 @@ typedef struct
 	float standard_deviation[3];
 } system_state_packet_t;
 
-typedef struct
-{
+typedef struct {
 	uint32_t unix_time_seconds;
 	uint32_t microseconds;
 } unix_time_packet_t;

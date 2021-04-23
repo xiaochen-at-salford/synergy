@@ -18,6 +18,9 @@ proto_library(
     deps = [
         "//modules/common/proto:geometry_proto",
         "//modules/common/proto:header_proto",
+        "//modules/localization/proto:gps_proto",
+        "//modules/localization/proto:imu_proto",
+        "//modules/drivers/gnss/proto:ins_proto",
     ]
 )
 

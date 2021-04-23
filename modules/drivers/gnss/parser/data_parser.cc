@@ -99,15 +99,19 @@ bool DataParser::Init()
   gnssstatus_writer_ = node_->CreateWriter<GnssStatus>(FLAGS_gnss_status_topic);
   insstatus_writer_ = node_->CreateWriter<InsStatus>(FLAGS_ins_status_topic);
   gnssbestpose_writer_ = node_->CreateWriter<GnssBestPose>(FLAGS_gnss_best_pose_topic);
-  corrimu_writer_ = node_->CreateWriter<CorrectedImu>(FLAGS_imu_topic);
-  insstat_writer_ = node_->CreateWriter<InsStat>(FLAGS_ins_stat_topic);
+  // corrimu_writer_ = node_->CreateWriter<CorrectedImu>(FLAGS_imu_topic);
+  // insstat_writer_ = node_->CreateWriter<InsStat>(FLAGS_ins_stat_topic);
   gnssephemeris_writer_ = node_->CreateWriter<GnssEphemeris>(FLAGS_gnss_rtk_eph_topic);
   epochobservation_writer_ = node_->CreateWriter<EpochObservation>(FLAGS_gnss_rtk_obs_topic);
   heading_writer_ = node_->CreateWriter<Heading>(FLAGS_heading_topic);
   rawimu_writer_ = node_->CreateWriter<Imu>(FLAGS_raw_imu_topic);
-  gps_writer_ = node_->CreateWriter<Gps>(FLAGS_gps_topic);
+
   //TODO(xiaochen-at-salford):
   an_system_state_writer_ = node_->CreateWriter<AnGnss>(FLAGS_an_gnss_topic);
+  gps_writer_ = node_->CreateWriter<Gps>(FLAGS_gps_topic);
+  corrimu_writer_ = node_->CreateWriter<CorrectedImu>(FLAGS_imu_topic);
+  insstat_writer_ = node_->CreateWriter<InsStat>(FLAGS_ins_stat_topic);
+
 
   common::util::FillHeader("gnss", &ins_status_);
   insstatus_writer_->Write(ins_status_);
@@ -183,13 +187,9 @@ void DataParser::CheckGnssStatus(::apollo::drivers::gnss::Gnss *gnss)
   gnss_status_.set_position_type(static_cast<uint32_t>(gnss->position_type()));
 
   if (static_cast<uint32_t>(gnss->solution_status()) == 0) 
-  {
-    gnss_status_.set_solution_completed(true);
-  } 
+  { gnss_status_.set_solution_completed(true); } 
   else 
-  {
-    gnss_status_.set_solution_completed(false);
-  }
+  { gnss_status_.set_solution_completed(false); }
   common::util::FillHeader("gnss", &gnss_status_);
   gnssstatus_writer_->Write(gnss_status_);
 }
@@ -365,10 +365,105 @@ void DataParser::PublishAnSystemState(const MessagePtr message)
 {
   auto msg = std::make_shared<AnGnss>(*As<AnGnss>(message));
   an_system_state_writer_->Write(msg);
+
+  //TODO(xiaochen): which one to use?
+  // double unix_sec = apollo::drivers::util::gps2unix(msg->measurement_time());
+  double unix_sec = msg->measurement_time();
+  /**
+   * "/apollo/sensor/gnss/odometry"
+   */
+  // Ins *ins = As<Ins>(message);
+  auto gps = std::make_shared<Gps>();
+
+  // double unix_sec = apollo::drivers::util::gps2unix(ins->measurement_time());
+  gps->mutable_header()->set_timestamp_sec(unix_sec);
+  auto *gps_msg = gps->mutable_localization();
+
+  // 1. pose xyz
+  double x = msg->nav_sat_fix().longitude();
+  double y = msg->nav_sat_fix().latitude();
+  
+  x *= DEG_TO_RAD_LOCAL;
+  y *= DEG_TO_RAD_LOCAL;
+
+  pj_transform(wgs84pj_source_, utm_target_, 1, 1, &x, &y, NULL);
+
+  gps_msg->mutable_position()->set_x(x);
+  gps_msg->mutable_position()->set_y(y);
+  gps_msg->mutable_position()->set_z(msg->nav_sat_fix().altitude());
+
+  gps_msg->mutable_orientation()->CopyFrom(msg->imu().orientation());
+  
+  gps_writer_->Write(gps);
+  if (config_.tf().enable()) 
+  {
+    TransformStamped transform;
+    GpsToTransformStamped(gps, &transform);
+    tf_broadcaster_.SendTransform(transform);
+  } 
+
+  /**
+   * "apollo//sensor/gnss/corrected_imu."
+   */
+  // Ins *ins = As<Ins>(message);
+  auto imu = std::make_shared<CorrectedImu>();
+  // double unix_sec = apollo::drivers::util::gps2unix(ins->measurement_time());
+  imu->mutable_header()->set_timestamp_sec(unix_sec);
+
+  auto *imu_msg = imu->mutable_imu();
+  imu_msg->mutable_linear_acceleration()->CopyFrom(msg->imu().linear_acceleration());
+  imu_msg->mutable_angular_velocity()->CopyFrom(msg->imu().angular_velocity()); 
+
+  imu_msg->mutable_euler_angles()->set_x(msg->imu().euler_angles().x());
+  imu_msg->mutable_euler_angles()->set_y(msg->imu().euler_angles().y());
+  imu_msg->mutable_euler_angles()->set_z(msg->imu().euler_angles().z());
+
+  corrimu_writer_->Write(imu);
+
+  /**
+   * @brief 
+   * 
+   */
+  // static double last_notify = cyber::Time().Now().ToSecond();
+  // double now = cyber::Time().Now().ToSecond();
+  // if (ins_status_record_ != static_cast<uint32_t>(ins->type()) || (now - last_notify) > 1.0) 
+  // {
+  //   last_notify = now;
+  //   ins_status_record_ = static_cast<uint32_t>(ins->type());
+  //   switch (ins->type()) 
+  //   {
+  //     case apollo::drivers::gnss::Ins::GOOD:
+  //       ins_status_.set_type(apollo::drivers::gnss::InsStatus::GOOD);
+  //       break;
+
+  //     case apollo::drivers::gnss::Ins::CONVERGING:
+  //       ins_status_.set_type(apollo::drivers::gnss::InsStatus::CONVERGING);
+  //       break;
+
+  //     case apollo::drivers::gnss::Ins::INVALID:
+  //     default:
+  //       ins_status_.set_type(apollo::drivers::gnss::InsStatus::INVALID);
+  //       break;
+  //   }
+
+
+  ins_status_.set_type(apollo::drivers::gnss::InsStatus::GOOD);
+  common::util::FillHeader("gnss", &ins_status_);
+  insstatus_writer_->Write(ins_status_);
+
+  // ins_status_.set_type(apollo::drivers::gnss::InsStatus::GOOD);
+  //   common::util::FillHeader("gnss", &ins_status_);
+  // insstatus_writer_->Write(ins_status_);
+  /**
+   * @brief 
+   */
+  auto ins_stat = std::make_shared<InsStat>();
+  common::util::FillHeader("gnss", ins_stat.get());
+  ins_stat->set_ins_status(ins_status_.type());
+  insstat_writer_->Write(ins_stat);
 }
 
-void DataParser::GpsToTransformStamped(const std::shared_ptr<Gps> &gps,
-                                       TransformStamped *transform ) 
+void DataParser::GpsToTransformStamped(const std::shared_ptr<Gps> &gps, TransformStamped *transform ) 
 {
   transform->mutable_header()->set_timestamp_sec(gps->header().timestamp_sec());
   transform->mutable_header()->set_frame_id(config_.tf().frame_id());

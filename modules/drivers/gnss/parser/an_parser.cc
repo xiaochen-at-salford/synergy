@@ -135,9 +135,24 @@ Parser::MessageType AnParser::GetMessage(MessagePtr *message_ptr)
 
 void AnParser::process_system_state_msg()
 {
+  /**
+   * Time
+   */
+  an_system_state_.set_unix_time_seconds(system_state_packet_.unix_time_seconds);
+  an_system_state_.set_microseconds(system_state_packet_.microseconds);
+  double time = static_cast<double>(an_system_state_.unix_time_seconds())
+                + static_cast<double>(an_system_state_.microseconds())/1000000.0; 
+  an_system_state_.set_measurement_time(time);
+
+
   an_system_state_.mutable_nav_sat_fix()->set_latitude(system_state_packet_.latitude*RADIANS_TO_DEGREES);
   an_system_state_.mutable_nav_sat_fix()->set_longitude(system_state_packet_.longitude*RADIANS_TO_DEGREES);
   an_system_state_.mutable_nav_sat_fix()->set_altitude(system_state_packet_.height);
+
+
+  // auto x = system_state_packet_.latitude*RADIANS_TO_DEGREES;
+  // auto y = system_state_packet_.longitude*RADIANS_TO_DEGREES;
+  // auto z = system_state_packet_.height;
 
   // Convert roll, pitch, yaw from radians to quaternion format
   float phi = system_state_packet_.orientation[0] / 2.0f;
@@ -153,8 +168,12 @@ void AnParser::process_system_state_msg()
   auto&& quat_x = -cos_phi * sin_theta * sin_psi + sin_phi * cos_theta * cos_psi;
   auto&& quat_y = cos_phi * sin_theta * cos_psi + sin_phi * cos_theta * sin_psi;
   auto&& quat_z = cos_phi * cos_theta * sin_psi - sin_phi * sin_theta * cos_psi;
-	auto&& quat_w =cos_phi * cos_theta * cos_psi + sin_phi * sin_theta * sin_psi;
-  
+	auto&& quat_w = cos_phi * cos_theta * cos_psi + sin_phi * sin_theta * sin_psi;
+
+  an_system_state_.mutable_imu()->mutable_euler_angles()->set_x(phi);
+  an_system_state_.mutable_imu()->mutable_euler_angles()->set_y(theta);
+  an_system_state_.mutable_imu()->mutable_euler_angles()->set_z(phi);
+
   an_system_state_.mutable_imu()->mutable_orientation()->set_qx(quat_x); 
   an_system_state_.mutable_imu()->mutable_orientation()->set_qy(quat_y); 
   an_system_state_.mutable_imu()->mutable_orientation()->set_qz(quat_z); 

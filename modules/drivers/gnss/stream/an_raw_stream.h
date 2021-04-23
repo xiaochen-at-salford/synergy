@@ -10,6 +10,7 @@
 #include "modules/canbus/proto/chassis.pb.h"
 #include "modules/drivers/gnss/proto/config.pb.h"
 #include "modules/drivers/gnss/proto/gnss_status.pb.h"
+#include "modules/localization/proto/gps.pb.h"
 
 
 #include "modules/drivers/gnss/parser/data_parser.h"
@@ -19,6 +20,8 @@
 namespace apollo {
 namespace drivers {
 namespace gnss {
+
+using apollo::localization::Gps;
 
 class AnRawStream {
  public:
@@ -82,6 +85,7 @@ class AnRawStream {
 
   std::shared_ptr<apollo::cyber::Node> node_ = nullptr;
   std::shared_ptr<apollo::cyber::Writer<StreamStatus>> stream_writer_ = nullptr;
+  // std::shared_ptr<apollo::cyber::Writer<Gps>> gps_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Writer<RawData>> raw_writer_ = nullptr;
   // std::shared_ptr<apollo::cyber::Writer<RawData>> rtcm_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Reader<RawData>> gpsbin_reader_ = nullptr;

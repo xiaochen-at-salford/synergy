@@ -241,6 +241,7 @@ bool AnRawStream::Init()
   // const std::string gpsbin_file = getLocalTimeFileStr(config_.gpsbin_folder()); // Disabled for syn
   // gpsbin_stream_.reset(new std::ofstream(gpsbin_file, std::ios::app | std::ios::out | std::ios::binary)); // Disabled for syn
   stream_writer_ = node_->CreateWriter<StreamStatus>(FLAGS_stream_status_topic);
+  // gps_writer_ = node_->CreateWriter<Gps>(FLAGS_gnss_best_pose_topic);
   raw_writer_ = node_->CreateWriter<RawData>(FLAGS_gnss_raw_data_topic);
   // rtcm_writer_ = node_->CreateWriter<RawData>(FLAGS_rtcm_data_topic);
   cyber::ReaderConfig reader_config;
@@ -454,9 +455,7 @@ void AnRawStream::DataSpin()
 void AnRawStream::GpsbinCallback(const std::shared_ptr<RawData const> &raw_data) 
 {
   if (gpsbin_stream_ == nullptr) 
-  {
-    return;
-  }
+  { return; }
   gpsbin_stream_->write(raw_data->data().c_str(), raw_data->data().size());
 }
 

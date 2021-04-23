@@ -9,7 +9,7 @@
 
 --log_dir=/apollo/data/log
 
---use_navigation_mode=false
+--use_navigation_mode=true
 
 --map_dir=/apollo/modules/map/data/sunnyvale_loop
 
@@ -71,3 +71,7 @@
 --map_dir=/apollo/modules/map/data/wolverhampton_v2
 
 --map_dir=/apollo/modules/map/data/borregas_ave
+
+--local_utm_zone_id=30
+
+--map_dir=/apollo/modules/map/data/wolverhampton_map

@@ -4,10 +4,13 @@ package apollo.drivers.gnss;
 
 import "modules/common/proto/header.proto";
 import "modules/common/proto/geometry.proto";
+import "modules/localization/proto/gps.proto";
+import "modules/localization/proto/imu.proto";
+import "modules/drivers/gnss/proto/ins.proto";
 
 message AnNavSatFix {
-  optional double Latitude = 1;
-  optional double Longitude = 2;
+  optional double latitude = 1;
+  optional double longitude = 2;
   optional double altitude = 3;
   repeated double position_covariance = 4;
 }
@@ -18,23 +21,35 @@ message AnTwist {
 }
 
 message AnImu {
-  optional apollo.common.Quaternion orientation = 1;
-  optional apollo.common.Point3D angular_velocity = 2;
-  optional apollo.common.Point3D linear_acceleration = 3;
-  repeated double orientation_covariance = 4 [packed=true];
-  repeated double angular_velocity_covariance = 5 [packed=true]; 
-  repeated double linear_acceleration_covariance = 6 [packed=true];
+  optional apollo.common.Point3D euler_angles = 1;
+  optional apollo.common.Quaternion orientation = 2;
+  optional apollo.common.Point3D angular_velocity = 3;
+  optional apollo.common.Point3D linear_acceleration = 4;
+  repeated double orientation_covariance = 5 [packed=true];
+  repeated double angular_velocity_covariance = 6 [packed=true]; 
+  repeated double linear_acceleration_covariance = 7 [packed=true];
 }
 
 message AnGnss {
-  // optional apollo.common.Header header = 1;
+  optional apollo.common.Header header = 1;
 
   // The time of position measurement, seconds since the GPS epoch (Jan 6, // 1980).
-  // optional double measurement_time = 2;  // In seconds.
+  optional double measurement_time = 2;  // In seconds.
 
-  optional AnTwist twist = 1;
+  optional AnTwist twist = 3;
 
-  optional AnImu imu = 2;
+  optional AnImu imu = 4;
 
-  optional AnNavSatFix nav_sat_fix = 3;
+  optional AnNavSatFix nav_sat_fix = 5;
+
+  optional apollo.localization.Gps gps = 6;
+
+  optional apollo.localization.CorrectedImu corrected_imu = 7;
+
+  optional InsStat ins_stat = 8;
+
+  optional uint32 unix_time_seconds = 9;
+
+  optional uint32 microseconds = 10;
+
 }

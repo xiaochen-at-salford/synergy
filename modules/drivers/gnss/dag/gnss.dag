@@ -19,6 +19,7 @@ module_config {
       config {
         name : "an_gnss"
         config_file_path : "/apollo/modules/drivers/gnss/conf/an_gnss_conf.pb.txt"
+        interval: 10
       }
     }
 }
