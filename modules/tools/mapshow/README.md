@@ -6,15 +6,22 @@ Mapshow is a tool to display hdmap info on a map.
 
 ## Setup
 
-If you run mapshow inside docker, there is no setup for running the tool.
-Otherwise, you have to run following command to setup python path.
-
+Source the "apollo_base.sh" if needed
 ```bash
 # In apollo root dir:
 source scripts/apollo_base.sh
 ```
 
-## Usage
+Add "/apollo/bazelbin" and "/apollo/modules" to paython path
+
+/apollo/bazelbin" is a soft link of "/apollo/bazel-bin". Doing this is to avoid python import error
+```python
+from bazelbin.modules.localization.proto.localization_pb2 import LocalizationEstimate
+```
+
+Run the tool scripts from the Apollo root directory
+
+## Usage of **mapshow**
 
 > usage: python mapshow.py \[-h] -m MAP \[-sl] [-l LANEID [LANEID ...]]
 >
@@ -37,22 +44,28 @@ source scripts/apollo_base.sh
 >  -junction, --showjunctions    Show all pnc-junctions with ids in map
 >
 
+
 ## Examples
-
-Show basic map layout only
-
+### Using **python**
 ```bash
-python mapshow.py -m /path/to/map/file
+# Load a ".bin" map
+cd /apollo
+source scripts/apollo_base.sh
+python modules/tools/mapview/mapview.py -m /apollo/modules/map/data/borregas_ave/base_map.bin
 ```
 
-Show basic map layout with all lane ids
 
+### Using **python**
 ```bash
-python mapshow.py -m /path/to/map/file -sl
+# Load a ".txt" map 
+cd /apollo
+source scripts/apollo_base.sh
+bazel run //modules/tools/mapshow:mapshow -- -m /apollo/modules/map/data/demo/base_map.txt
 ```
 
-show basic map layout with specific lane ids
-
 ```bash
-python mapshow.py -m /path/to/map/file -l 1474023788152_1_-1
+# Load a ".bin" map
+cd /apollo
+source scripts/apollo_base.sh
+bazel run //modules/tools/mapshow:mapshow -- -m /apollo/modules/map/data/borregas_ave/base_map.bin
 ```

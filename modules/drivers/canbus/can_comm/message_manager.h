@@ -82,8 +82,7 @@ class MessageManager {
    * @param data a pointer to the data array to be parsed
    * @param length the length of data array
    */
-  virtual void Parse(const uint32_t message_id, const uint8_t *data,
-                     int32_t length);
+  virtual void Parse(const uint32_t message_id, const uint8_t *data, int32_t length);
 
   void ClearSensorData();
 
@@ -94,8 +93,7 @@ class MessageManager {
    * @param message_id the id of the message
    * @return a pointer to the protocol data
    */
-  ProtocolData<SensorType> *GetMutableProtocolDataById(
-      const uint32_t message_id);
+  ProtocolData<SensorType> *GetMutableProtocolDataById(const uint32_t message_id);
 
   /**
    * @brief get chassis detail. used lock_guard in this function to avoid
@@ -132,14 +130,15 @@ class MessageManager {
 
 template <typename SensorType>
 template <class T, bool need_check>
-void MessageManager<SensorType>::AddRecvProtocolData() {
+void MessageManager<SensorType>::AddRecvProtocolData() 
+{
   recv_protocol_data_.emplace_back(new T());
   auto *dt = recv_protocol_data_.back().get();
-  if (dt == nullptr) {
-    return;
-  }
+  if (dt == nullptr) 
+  { return; }
   protocol_data_map_[T::ID] = dt;
-  if (need_check) {
+  if (need_check) 
+  {
     check_ids_[T::ID].period = dt->GetPeriod();
     check_ids_[T::ID].real_period = 0;
     check_ids_[T::ID].last_time = 0;
@@ -149,14 +148,15 @@ void MessageManager<SensorType>::AddRecvProtocolData() {
 
 template <typename SensorType>
 template <class T, bool need_check>
-void MessageManager<SensorType>::AddSendProtocolData() {
+void MessageManager<SensorType>::AddSendProtocolData() 
+{
   send_protocol_data_.emplace_back(new T());
   auto *dt = send_protocol_data_.back().get();
-  if (dt == nullptr) {
-    return;
-  }
+  if (dt == nullptr) 
+  { return; }
   protocol_data_map_[T::ID] = dt;
-  if (need_check) {
+  if (need_check) 
+  {
     check_ids_[T::ID].period = dt->GetPeriod();
     check_ids_[T::ID].real_period = 0;
     check_ids_[T::ID].last_time = 0;
@@ -164,26 +164,24 @@ void MessageManager<SensorType>::AddSendProtocolData() {
   }
 }
 
-template <typename SensorType>
-ProtocolData<SensorType>
-    *MessageManager<SensorType>::GetMutableProtocolDataById(
-        const uint32_t message_id) {
-  if (protocol_data_map_.find(message_id) == protocol_data_map_.end()) {
+template <typename SensorType> ProtocolData<SensorType> *
+MessageManager<SensorType>::GetMutableProtocolDataById(const uint32_t message_id) 
+{
+  if (protocol_data_map_.find(message_id) == protocol_data_map_.end()) 
+  {
     ADEBUG << "Unable to get protocol data because of invalid message_id:"
-           << Byte::byte_to_hex(message_id);
+           << Byte::byte_to_hex(message_id) ;
     return nullptr;
   }
   return protocol_data_map_[message_id];
 }
 
 template <typename SensorType>
-void MessageManager<SensorType>::Parse(const uint32_t message_id,
-                                       const uint8_t *data, int32_t length) {
-  ProtocolData<SensorType> *protocol_data =
-      GetMutableProtocolDataById(message_id);
-  if (protocol_data == nullptr) {
-    return;
-  }
+void MessageManager<SensorType>::Parse(const uint32_t message_id, const uint8_t *data, int32_t length) 
+{
+  ProtocolData<SensorType> *protocol_data = GetMutableProtocolDataById(message_id);
+  if (protocol_data == nullptr) 
+  { return; }
   {
     std::lock_guard<std::mutex> lock(sensor_data_mutex_);
     protocol_data->Parse(data, length, &sensor_data_);
@@ -191,31 +189,30 @@ void MessageManager<SensorType>::Parse(const uint32_t message_id,
   received_ids_.insert(message_id);
   // check if need to check period
   const auto it = check_ids_.find(message_id);
-  if (it != check_ids_.end()) {
+  if (it != check_ids_.end()) 
+  {
     const int64_t time = Time::Now().ToNanosecond() / 1e3;
     it->second.real_period = time - it->second.last_time;
     // if period 1.5 large than base period, inc error_count
     const double period_multiplier = 1.5;
-    if (static_cast<double>(it->second.real_period) >
-        (static_cast<double>(it->second.period) * period_multiplier)) {
-      it->second.error_count += 1;
-    } else {
-      it->second.error_count = 0;
-    }
+    if (static_cast<double>(it->second.real_period) > (static_cast<double>(it->second.period)*period_multiplier)) 
+    { it->second.error_count += 1; } 
+    else 
+    { it->second.error_count = 0; }
     it->second.last_time = time;
   }
 }
 
 template <typename SensorType>
-void MessageManager<SensorType>::ClearSensorData() {
+void MessageManager<SensorType>::ClearSensorData() 
+{
   std::lock_guard<std::mutex> lock(sensor_data_mutex_);
   sensor_data_.Clear();
 }
 
 template <typename SensorType>
-std::condition_variable *MessageManager<SensorType>::GetMutableCVar() {
-  return &cvar_;
-}
+std::condition_variable *MessageManager<SensorType>::GetMutableCVar() 
+{ return &cvar_; }
 
 template <typename SensorType>
 ErrorCode MessageManager<SensorType>::GetSensorData(
@@ -230,13 +227,14 @@ ErrorCode MessageManager<SensorType>::GetSensorData(
 }
 
 template <typename SensorType>
-void MessageManager<SensorType>::ResetSendMessages() {
-  for (auto &protocol_data : send_protocol_data_) {
-    if (protocol_data == nullptr) {
-      AERROR << "Invalid protocol data.";
-    } else {
-      protocol_data->Reset();
-    }
+void MessageManager<SensorType>::ResetSendMessages() 
+{
+  for (auto &protocol_data : send_protocol_data_) 
+  {
+    if (protocol_data == nullptr) 
+    { AERROR << "Invalid protocol data."; } 
+    else 
+    { protocol_data->Reset(); }
   }
 }
 

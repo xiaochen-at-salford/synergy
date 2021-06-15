@@ -58,21 +58,20 @@ struct CanFrame {
   /**
    * @brief Constructor
    */
-  CanFrame() : id(0), len(0), timestamp{0} {
-    std::memset(data, 0, sizeof(data));
-  }
+  CanFrame() : id(0), len(0), timestamp{0} 
+  { std::memset(data, 0, sizeof(data)); }
 
   /**
    * @brief CanFrame string including essential information about the message.
    * @return The info string.
    */
-  std::string CanFrameString() const {
+  std::string CanFrameString() const 
+  {
     std::stringstream output_stream("");
     output_stream << "id:0x" << Byte::byte_to_hex(id)
-                  << ",len:" << static_cast<int>(len) << ",data:";
-    for (uint8_t i = 0; i < len; ++i) {
-      output_stream << Byte::byte_to_hex(data[i]);
-    }
+                  << ",len:" << static_cast<int>(len) << ",data:" ;
+    for (uint8_t i = 0; i < len; ++i) 
+    { output_stream << Byte::byte_to_hex(data[i]); }
     output_stream << ",";
     return output_stream.str();
   }
@@ -127,8 +126,8 @@ class CanClient {
    * @return The status of the sending action which is defined by
    *         apollo::common::ErrorCode.
    */
-  virtual apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                         int32_t *const frame_num) = 0;
+  virtual apollo::common::ErrorCode Send(
+      const std::vector<CanFrame> &frames, int32_t *const frame_num ) = 0;
 
   /**
    * @brief Send a single message.
@@ -136,10 +135,10 @@ class CanClient {
    * @return The status of the sending single message action which is defined by
    *         apollo::common::ErrorCode.
    */
-  virtual apollo::common::ErrorCode SendSingleFrame(
-      const std::vector<CanFrame> &frames) {
-    CHECK_EQ(frames.size(), 1U)
-        << "frames size not equal to 1, actual frame size :" << frames.size();
+  virtual apollo::common::ErrorCode SendSingleFrame(const std::vector<CanFrame> &frames) 
+  {
+    CHECK_EQ(frames.size(), 1U) 
+        << "frames size not equal to 1, actual frame size :" << frames.size() ;
     int32_t n = 1;
     return Send(frames, &n);
   }
@@ -151,8 +150,8 @@ class CanClient {
    * @return The status of the receiving action which is defined by
    *         apollo::common::ErrorCode.
    */
-  virtual apollo::common::ErrorCode Receive(std::vector<CanFrame> *const frames,
-                                            int32_t *const frame_num) = 0;
+  virtual apollo::common::ErrorCode Receive(
+      std::vector<CanFrame> *const frames, int32_t *const frame_num ) = 0;
 
   /**
    * @brief Get the error string.

@@ -150,7 +150,8 @@ void SocketCanClientRaw::Stop() {
 
 // Synchronous transmission of CAN messages
 ErrorCode SocketCanClientRaw::Send(const std::vector<CanFrame> &frames,
-                                   int32_t *const frame_num) {
+                                   int32_t *const frame_num) 
+{
   CHECK_NOTNULL(frame_num);
   CHECK_EQ(frames.size(), static_cast<size_t>(*frame_num));
 

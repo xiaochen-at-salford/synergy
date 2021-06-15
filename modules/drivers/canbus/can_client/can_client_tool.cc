@@ -176,7 +176,8 @@ class CanAgent {
 
   void is_sending_finish(bool val) { is_sending_finish_ = val; }
 
-  void RecvThreadFunc() {
+  void RecvThreadFunc() 
+  {
     using common::ErrorCode;
     AINFO << "Receive thread starting...";
     TestCanParam *param = param_ptr();
@@ -185,25 +186,30 @@ class CanAgent {
     std::vector<CanFrame> buf;
 
     bool first = true;
-    while (!other_agent()->is_sending_finish()) {
+    while (!other_agent()->is_sending_finish()) 
+    {
       is_receiving(true);
       int32_t len = MAX_CAN_RECV_FRAME_LEN;
       ErrorCode ret = client->Receive(&buf, &len);
-      if (len == 0) {
+      if (len == 0) 
+      {
         AINFO << "recv frame:0";
         continue;
       }
-      if (first) {
+      if (first) 
+      {
         start = Time::Now().ToMicrosecond();
         first = false;
       }
-      if (ret != ErrorCode::OK || len == 0) {
+      if (ret != ErrorCode::OK || len == 0) 
+      {
         // AINFO << "channel:" << param->conf.channel_id()
         //      << ", recv frame:failed, code:" << ret;
         AINFO << "recv error:" << ret;
         continue;
       }
-      for (int32_t i = 0; i < len; ++i) {
+      for (int32_t i = 0; i < len; ++i) 
+      {
         param->recv_cnt = param->recv_cnt + 1;
         AINFO << "recv_frame#" << buf[i].CanFrameString()
               << " conf:" << param->conf.ShortDebugString()
@@ -216,18 +222,21 @@ class CanAgent {
     return;
   }
 
-  void WaitForFinish() {
-    if (thread_send_ != nullptr && thread_send_->joinable()) {
+  void WaitForFinish() 
+  {
+    if (thread_send_ != nullptr && thread_send_->joinable()) 
+    {
       thread_send_->join();
       thread_send_.reset();
       AINFO << "Send thread stopped. conf:"
-            << param_ptr_->conf.ShortDebugString();
+            << param_ptr_->conf.ShortDebugString() ;
     }
-    if (thread_recv_ != nullptr && thread_recv_->joinable()) {
+    if (thread_recv_ != nullptr && thread_recv_->joinable()) 
+    {
       thread_recv_->join();
       thread_recv_.reset();
       AINFO << "Recv thread stopped. conf:"
-            << param_ptr_->conf.ShortDebugString();
+            << param_ptr_->conf.ShortDebugString() ;
     }
   }
 

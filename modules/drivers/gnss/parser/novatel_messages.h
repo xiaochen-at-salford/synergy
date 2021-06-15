@@ -113,8 +113,7 @@ static_assert(sizeof(LongHeader) == 28, "Incorrect size of LongHeader");
 
 struct ShortHeader {
   SyncByte sync[3];
-  uint8_t
-      message_length;  // Message length (not including the header nor the CRC).
+  uint8_t message_length;  // Message length (not including the header nor the CRC).
   MessageId message_id;
   uint16_t gps_week;       // GPS Week number.
   uint32_t gps_millisecs;  // Milliseconds of week.
@@ -139,8 +138,7 @@ enum class SolutionStatus : uint32_t {
   INVALID_FIX = 19,   // the fixed position entered using the fix position
                       // command is invalid
   UNAUTHORIZED = 20,  // position type is unauthorized
-  INVALID_RATE =
-      22,  // selected logging rate is not supported for this solution type
+  INVALID_RATE = 22,  // selected logging rate is not supported for this solution type
   NONE = std::numeric_limits<uint32_t>::max(),
 };
 

@@ -1,19 +1,3 @@
-/******************************************************************************
- * Copyright 2017 The Apollo Authors. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
 #pragma once
 
 #include <list>
@@ -36,17 +20,21 @@ namespace localization {
 class RTKLocalization {
  public:
   RTKLocalization();
+
   ~RTKLocalization() = default;
 
   void InitConfig(const rtk_config::Config &config);
 
   void GpsCallback(const std::shared_ptr<localization::Gps> &gps_msg);
-  void GpsStatusCallback(
-      const std::shared_ptr<drivers::gnss::InsStat> &status_msg);
+
+  void GpsStatusCallback(const std::shared_ptr<drivers::gnss::InsStat> &status_msg);
+
   void ImuCallback(const std::shared_ptr<localization::CorrectedImu> &imu_msg);
 
   bool IsServiceStarted();
+
   void GetLocalization(LocalizationEstimate *localization);
+
   void GetLocalizationStatus(LocalizationStatus *localization_status);
 
  private:
@@ -54,22 +42,28 @@ class RTKLocalization {
 
   void PrepareLocalizationMsg(const localization::Gps &gps_msg,
                               LocalizationEstimate *localization,
-                              LocalizationStatus *localization_status);
+                              LocalizationStatus *localization_status );
+
   void ComposeLocalizationMsg(const localization::Gps &gps,
                               const localization::CorrectedImu &imu,
-                              LocalizationEstimate *localization);
+                              LocalizationEstimate *localization );
+
   void FillLocalizationMsgHeader(LocalizationEstimate *localization);
-  void FillLocalizationStatusMsg(const drivers::gnss::InsStat &status,
-                                 LocalizationStatus *localization_status);
+
+  void FillLocalizationStatusMsg(const drivers::gnss::InsStat &status, LocalizationStatus *localization_status);
 
   bool FindMatchingIMU(const double gps_timestamp_sec, CorrectedImu *imu_msg);
-  bool InterpolateIMU(const CorrectedImu &imu1, const CorrectedImu &imu2,
-                      const double timestamp_sec, CorrectedImu *imu_msg);
+
+  bool InterpolateIMU(const CorrectedImu &imu1, 
+                      const CorrectedImu &imu2,
+                      const double timestamp_sec, 
+                      CorrectedImu *imu_msg );
+
   template <class T>
   T InterpolateXYZ(const T &p1, const T &p2, const double frac1);
 
   bool FindNearestGpsStatus(const double gps_timestamp_sec,
-                            drivers::gnss::InsStat *status);
+                            drivers::gnss::InsStat *status );
 
  private:
   std::string module_name_ = "localization";

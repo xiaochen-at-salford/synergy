@@ -434,7 +434,8 @@ class Teleop {
   }
 
   void Stop() {
-    if (is_running_) {
+    if (is_running_) 
+    {
       is_running_ = false;
       if (keyboard_thread_ != nullptr && keyboard_thread_->joinable()) {
         keyboard_thread_->join();

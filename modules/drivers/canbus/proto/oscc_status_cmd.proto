@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package apollo.drivers.canbus;
+
+message OsccStatusCommand {
+  enum Type {
+    ENABLE_ALL = 0;
+    DISABLE_ALL = 1;
+    ENABLE_BRAKE = 2;
+    DISABLE_BRAKE = 3;
+    ENABLE_STEERING = 4;
+    DISABLE_STEERING = 5;
+    ENABLE_THROTTLE = 6;
+    DISABLE_THROTTLE = 7;
+  }
+  optional Type cmd = 1;
+}

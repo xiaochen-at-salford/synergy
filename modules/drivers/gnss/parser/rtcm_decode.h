@@ -23,8 +23,10 @@ namespace apollo {
 namespace drivers {
 namespace gnss {
 
-static inline int baud_obs_num(int type) {
-  switch (type) {
+static inline int baud_obs_num(int type) 
+{
+  switch (type) 
+  {
     case 1002:  // gps L1 only
       return 1;
 

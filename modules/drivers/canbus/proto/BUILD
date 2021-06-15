@@ -46,3 +46,17 @@ py_proto_library(
         ":sensor_canbus_conf_proto",
     ],
 )
+
+proto_library(
+    name = "oscc_status_cmd_proto",
+    srcs = [
+        "oscc_status_cmd.proto",
+    ]
+)
+
+cc_proto_library(
+    name = "oscc_status_cmd_cc_proto",
+    deps = [
+        ":oscc_status_cmd_proto",
+    ]
+)

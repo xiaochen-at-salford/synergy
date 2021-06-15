@@ -262,3 +262,7 @@ DEFINE_string(task_topic, "/apollo/task_manager", "task manager topic name");
 DEFINE_string(lidar_model_version, "",
               "It determins which lidar model(16 ,64 or 128) to load, "
               "if not to set, the model will be loaded by the sensor name.");
+
+// Added for Synergy
+DEFINE_string(an_gnss_topic, "/apollo/sensor/gnss/an_gnss_status",
+              "an gnss topic name");

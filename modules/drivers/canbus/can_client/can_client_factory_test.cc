@@ -24,7 +24,8 @@ namespace apollo {
 namespace drivers {
 namespace canbus {
 
-TEST(CanClientFactoryTest, CreateCanClient) {
+TEST(CanClientFactoryTest, CreateCanClient) 
+{
   auto can_factory = CanClientFactory::Instance();
   EXPECT_NE(can_factory, nullptr);
 

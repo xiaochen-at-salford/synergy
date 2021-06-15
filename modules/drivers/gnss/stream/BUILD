@@ -14,17 +14,15 @@ cc_library(
     ],
 )
 
+
 cc_library(
-    name = "ntrip_stream",
-    srcs = ["ntrip_stream.cc"],
-    hdrs = ["tcp_stream.h"],
+    name = "an_gnss_stream",
     deps = [
-        ":stream",
-        "//cyber",
-        "//modules/common/adapters:adapter_gflags",
-        "//modules/common/math",
-        "//modules/common/proto:pnc_point_cc_proto",
-        "//modules/common/util",
+        ":an_raw_stream",
+        ":ntrip_stream",
+        ":serial_stream",
+        ":tcp_stream",
+        ":udp_stream",
     ],
 )
 
@@ -51,6 +49,45 @@ cc_library(
         "@com_google_absl//absl/strings",
     ],
 )
+
+cc_library(
+    name = "an_raw_stream",
+    srcs = ["an_raw_stream.cc"],
+    hdrs = ["an_raw_stream.h"],
+    deps = [
+        ":ntrip_stream",
+        ":serial_stream",
+        ":stream",
+        "//cyber",
+        "//modules/canbus/proto:chassis_cc_proto",
+        "//modules/common/adapters:adapter_gflags",
+        "//modules/common/configs/proto:vehicle_config_cc_proto",
+        "//modules/common/proto:drive_state_cc_proto",
+        "//modules/common/proto:vehicle_signal_cc_proto",
+        "//modules/common/util:message_util",
+        "//modules/drivers/gnss/parser:gnss_parser",
+        "//modules/drivers/gnss/proto:gnss_status_cc_proto",
+        "//modules/drivers/gnss/proto:heading_cc_proto",
+        "//modules/drivers/gnss/proto:imu_cc_proto",
+        "//modules/localization/proto:gps_cc_proto",
+        "//modules/drivers/gnss/util:gnss_util",
+        "@com_google_absl//absl/strings",
+    ],
+)
+cc_library(
+    name = "ntrip_stream",
+    srcs = ["ntrip_stream.cc"],
+    hdrs = ["tcp_stream.h"],
+    deps = [
+        ":stream",
+        "//cyber",
+        "//modules/common/adapters:adapter_gflags",
+        "//modules/common/math",
+        "//modules/common/proto:pnc_point_cc_proto",
+        "//modules/common/util",
+    ],
+)
+
 
 cc_library(
     name = "serial_stream",

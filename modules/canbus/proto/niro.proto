@@ -1,0 +1,346 @@
+syntax = "proto2";
+
+package apollo.canbus;
+
+import "modules/drivers/canbus/proto/oscc_status_cmd.proto";
+
+message ChannelCommand {
+  enum Type {
+    DO_NOTHING = 0;
+    ACTIVATE = 1;
+  }
+}
+
+message ChannelReport {
+  enum Type {
+    NO_COMMUNICATION = 0;
+    OPERATOR_OVERRIDE = 1;
+  }
+}
+
+message FaultOriginId {
+  enum Type {
+    BRAKE_CONTROL_CHANNEL = 0;
+    STEERING_CONTROL_CHANNEL = 1;
+    THROTTLE_CONTROL_CHANNEL = 2;
+  }
+}
+
+message Brake_Enable_0x70 {
+  optional ChannelCommand.Type brake_enable = 1;
+}
+
+message Brake_Disable_0x71 {
+  optional ChannelCommand.Type brake_disable = 1;
+}
+
+message Brake_Command_0x72 {
+  // [%] [0.0, 100.0] 
+  optional double brake_pedal_command = 1;
+}
+
+message Brake_Report_0x73 {
+  optional bool brake_report_enabled = 1;
+  optional bool brake_operator_override = 2;
+  optional ChannelReport.Type brake_dtcs = 3;
+}
+
+message Steering_Enable_0x80 {
+  optional ChannelCommand.Type steering_enable = 1;
+};
+
+message Steering_Disable_0x81 {
+  optional ChannelCommand.Type steering_disable = 1;
+}
+
+message Steering_Torque_Command_0x82 {
+  // [%]: [0.0, 100.0]
+  optional double steering_torque_percent = 1;
+}
+
+message Steering_Report_0x83 {
+  optional bool steering_report_enabled = 1;
+  optional bool steering_operator_override = 2;
+  optional ChannelReport.Type steering_dtcs = 3;
+}
+
+message Throttle_Enable_0x90 {
+  optional ChannelCommand.Type throttle_enable = 1; 
+}
+
+message Throttle_Disable_0x91 {
+  optional ChannelCommand.Type throttle_disable = 1;
+}
+
+message Throttle_Command_0x92 {
+  // [%] [0.0, 100.0]
+  optional double throttle_pedal_command = 1;
+}
+
+message Throttle_Report_0x93 {
+  optional bool throttle_report_enabled = 1;
+  optional bool throttle_operator_override = 2;
+  optional ChannelReport.Type throttle_dtcs = 3;
+}
+
+message Cld_Report_0xA0 {
+  message State {
+    enum Type {
+      UNKNOWN = 0;
+      INITIALIZATION = 1;
+      RECOVERING = 2;
+      IDLE = 3;
+      ACTIVE = 4;
+      INTERAL_FAILURE = 5; 
+      TRANSPARENT = 6;
+    }
+  }
+
+  message LastDisableReason {
+    enum Type {
+      UNKOWN = 0;
+      RESET = 1;
+      CONTROLLER_TIMEOUT = 2;
+      IMPLAUSIBLE_REPORT_INTERVAL = 3;
+    }
+  }
+
+  optional State.Type state = 1;
+  optional LastDisableReason.Type Last_disable_reason = 2;
+  optional uint32 last_transition_ago = 3;
+  optional uint32 bus_frame_rate = 4;
+  optional uint32 bus_error_count = 5;
+  optional uint32 frame_rate_steering = 6;
+  optional uint32 frame_rate_throttle = 7;
+  optional uint32 frame_rate_brake = 8;
+}
+
+message Cld_Configuration_Report_0xA1 {
+  message OperationalMode {
+    enum Type {
+      NORNAML = 0;
+      DISABLED = 170;  
+    }
+  }
+
+  optional OperationalMode.Type operational_mode = 1;
+  optional double min_update_interval = 2;
+}
+
+message Cld_Configure_Command_0xA2 {
+  message OperationalMode {
+    enum Type {
+      NORNAML = 0;
+      DISABLED = 170;  
+    }
+  }
+
+  optional OperationalMode.Type operational_mode = 1;
+  optional double min_update_interval = 2;
+}
+
+message Fault_Report_0xAF {
+
+
+  optional FaultOriginId.Type fault_origin_id = 1;
+  optional ChannelReport.Type fault_dtcs = 2;
+}
+
+message Steering_Angle_Command_0xB8 {
+  optional bool steering_angle_cmd_flags = 1;
+
+  // [%]: [-100, 100] --> [Degrees]: [-600, 699] 
+  optional double steering_angle_cmd_angle = 2;
+
+  // [%]: [0, 100] --> [degrees/second]: [0,800]
+  optional double steering_angle_cmd_max_velocity = 3;
+}
+
+message Steering_Angle_Report_0xB9 {
+  message SteeringAngleReportFlags {
+    enum Type {
+      DISABLED = 0;
+      ENABLED = 1;
+    }
+  } 
+
+  message SteeringAngleReportErrors {
+    enum Type {
+      NONE = 0;
+      ANGLE_MISSING = 1;
+      ANGLE_IRRATIONAL = 2;
+      MODULE_DISABLED = 4;
+      COMMAND_REJECTED = 6;
+    }
+  }
+
+  optional SteeringAngleReportFlags.Type steering_angle_report_flags = 1;
+  optional SteeringAngleReportErrors.Type steering_angle_report_errors = 2;
+}
+
+message Chassis_Control_Command_0xC8 {
+  message FrontWiper {
+    enum Type {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      INTERMITTENT = 2;
+      SLOW = 3;
+      FAST = 4;
+    }
+  }
+
+  message RearWiper {
+    enum Type {
+      DO_NOTHING = 0;
+      DISSABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Signal {
+    enum Type {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Horn {
+    enum Type {
+      DO_NOTHING = 0;
+      ENABLED = 2;
+    }
+  }
+
+  message Vin {
+    enum Type {
+      DO_NOTHYING = 0;
+      REQUESTED = 2;
+    }
+  }
+
+  message Headlamps {
+    enum Type {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      LOW = 2;
+      HIGH = 3;
+    }
+  }
+
+  optional FrontWiper.Type front_wipers = 1;
+  optional RearWiper.Type rear_wiper = 2;
+  optional Signal.Type right_signal = 3;
+  optional Signal.Type left_signal = 4;
+  optional Horn.Type horn = 5;
+  optional Vin.Type vin = 6;
+  optional Headlamps.Type headlamps = 7;
+}
+
+message Chassis_Control_Report_0xD8 {
+  message FrontWiper {
+    enum Type {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      INTERMITTENT = 2;
+      SLOW = 3;
+      FAST = 4;
+    }
+  }
+
+  message RearWiper {
+    enum Type {
+      DO_NOTHING = 0;
+      DISSABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Signal {
+    enum Type {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      ENABLE = 2;
+    }
+  }
+
+  message Horn {
+    enum Type {
+      DO_NOTHING = 0;
+      ENABLED = 2;
+    }
+  }
+
+  message VinRequest {
+    enum Type {
+      DO_NOTHYING = 0;
+      REQUESTED = 2;
+    }
+  }
+
+  message Headlamps {
+    enum Type {
+      DO_NOTHING = 0;
+      DISABLE = 1;
+      LOW = 2;
+      HIGH = 3;
+    }
+  }
+
+  optional FrontWiper.Type front_wipers = 1;
+  optional RearWiper.Type  rear_wiper = 2;
+  optional Signal.Type right_signal = 3;
+  optional Signal.Type left_signal = 4;
+  optional Horn.Type horn = 5;
+  optional VinRequest.Type vin = 6;
+  optional Headlamps.Type headlamps = 7;
+}
+
+message Brake_Pressure_0x220 {
+  optional double brake_pressure = 1;
+}
+
+message Steering_Angle_0x2B0 {
+  optional double steering_wheel_angle = 1;
+}
+
+message Wheel_Speed_0x386 {
+  optional double left_front = 1;
+  optional double right_front = 2;
+  optional double left_rear = 3;
+  optional double right_rear = 4;
+}
+
+message Niro {
+  optional apollo.drivers.canbus.OsccStatusCommand oscc_status_cmd = 1;
+  optional Brake_Enable_0x70 brake_enable = 2; // Control message
+  optional Brake_Disable_0x71 brake_disable = 3; // Control message
+  optional Brake_Command_0x72 brake_command = 4; // Control message
+  optional Brake_Report_0x73 brake_report = 5; // Report message
+  
+  optional Steering_Enable_0x80 steering_enable = 6; // Control message
+  optional Steering_Disable_0x81 steering_disable = 7; // Control message
+  optional Steering_Torque_Command_0x82 steering_command = 8; // Control message
+  optional Steering_Report_0x83 steering_report = 9; // Report message
+
+  optional Throttle_Enable_0x90 throttle_enable = 10; // Control message
+  optional Throttle_Disable_0x91 throttle_disable = 11; // Control message
+  optional Throttle_Command_0x92 throttle_command = 12; // Control message
+  optional Throttle_Report_0x93 throttle_report = 13; // Report message
+  
+  optional Cld_Report_0xA0 cld_report = 14; // Report message
+  optional Cld_Configuration_Report_0xA1 cld_configuration_report = 15; // Report message
+  optional Cld_Configure_Command_0xA2 cld_configure_command = 16; // Control message
+
+  optional Fault_Report_0xAF fault_report = 17; // Report message
+
+  optional Steering_Angle_Command_0xB8 steering_angle_command = 18; // Control message
+  optional Steering_Angle_Report_0xB9 steering_angle_report = 19; // Report message
+
+  optional Chassis_Control_Command_0xC8 chassis_control_command = 20; // Control message
+  optional Chassis_Control_Report_0xD8 chassis_control_report = 21; // Report message
+
+  optional Brake_Pressure_0x220 brake_pressure = 22; // Report message
+  optional Steering_Angle_0x2B0 steering_angle = 23; // Report message
+  optional Wheel_Speed_0x386 wheel_speed = 24; // Report message
+}

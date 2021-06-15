@@ -331,8 +331,8 @@
 		"radiusOfMapRequest": 2000
 	},
 	"navigation": {
-		"map": "BaiduMap",
-		"mapAPiUrl": "https://api.map.baidu.com/api?v=3.0&ak=0kKZnWWhXEPfzIkklmzAa3dZ&callback=initMap"
+		"map": "GoogleMap",
+		"mapAPiUrl": "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhj0VmCKxlvx0qH7WKpNw8c-yJk2QkpNs&callback=initMap"
 	},
 	"debug": {
 		"autoMonitorMessage": false,

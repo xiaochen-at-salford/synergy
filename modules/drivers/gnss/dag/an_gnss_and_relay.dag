@@ -1,0 +1,22 @@
+module_config {
+    module_library : "/apollo/bazel-bin/modules/drivers/gnss/liban_gnss_component.so"
+
+    components {
+      class_name : "AnGnssDriverComponent"
+      config {
+        name : "an_gnss"
+        config_file_path : "/apollo/modules/drivers/gnss/conf/an_gnss_conf.pb.txt"
+      }
+    }
+
+    components {
+      class_name : "AnRelayComponent"
+      config {
+        name : "an_relay"
+        readers {
+          channel:"/apollo/sensor/gnss/an_gnss_status"
+          pending_queue_size: 10
+        }
+      }
+    }
+}

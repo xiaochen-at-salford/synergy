@@ -58,21 +58,21 @@ cc_binary(
     deps = [":msf_localization_component_lib"],
 )
 
-cc_test(
-    name = "msf_localization_test",
-    size = "enormous",
-    srcs = ["msf_localization_test.cc"],
-    copts = [
-        "-fno-access-control",
-    ],
-    data = ["//modules/localization:localization_testdata"],
-    deps = [
-        "//cyber/time:clock",
-        "//modules/common/util",
-        "//modules/localization/msf:msf_localization_component_lib",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
+# cc_test(
+#     name = "msf_localization_test",
+#     size = "enormous",
+#     srcs = ["msf_localization_test.cc"],
+#     copts = [
+#         "-fno-access-control",
+#     ],
+#     data = ["//modules/localization:localization_testdata"],
+#     deps = [
+#         "//cyber/time:clock",
+#         "//modules/common/util",
+#         "//modules/localization/msf:msf_localization_component_lib",
+#         "@com_google_googletest//:gtest_main",
+#     ],
+# )
 
 install(
     name = "install",

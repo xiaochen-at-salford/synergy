@@ -31,7 +31,7 @@ class GraphCreator {
  public:
   GraphCreator(const std::string& base_map_file_path,
                const std::string& dump_topo_file_path,
-               const RoutingConfig& routing_conf);
+               const RoutingConfig& routing_conf );
 
   ~GraphCreator() = default;
 
@@ -39,14 +39,15 @@ class GraphCreator {
 
  private:
   void InitForbiddenLanes();
+
   std::string GetEdgeID(const std::string& from_id, const std::string& to_id);
 
   void AddEdge(
-      const Node& from_node,
-      const ::google::protobuf::RepeatedPtrField<hdmap::Id>& to_node_vec,
-      const Edge::DirectionType& type);
+      const Node &from_node,
+      const ::google::protobuf::RepeatedPtrField<hdmap::Id> &to_node_vec,
+      const Edge::DirectionType &type);
 
-  static bool IsValidUTurn(const hdmap::Lane& lane, const double radius);
+  static bool IsValidUTurn(const hdmap::Lane &lane, const double radius);
 
  private:
   std::string base_map_file_path_;

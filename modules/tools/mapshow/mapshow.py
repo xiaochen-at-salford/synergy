@@ -20,6 +20,8 @@ import argparse
 
 import matplotlib.pyplot as plt
 
+import sys
+sys.path.append('/apollo')
 from modules.tools.mapshow.libs.localization import Localization
 from modules.tools.mapshow.libs.map import Map
 from modules.tools.mapshow.libs.path import Path

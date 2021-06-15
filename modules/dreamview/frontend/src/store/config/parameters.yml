@@ -261,11 +261,15 @@ routingEditor:
 
 navigation:
   # possible options: BaiduMap or GoogleMap
-  map: "BaiduMap"
+  # map: "BaiduMap"
+  map: "GoogleMap"
 
   # Google Map API: "https://maps.google.com/maps/api/js"
   # Baidu Map API: "https://api.map.baidu.com/api?v=3.0&ak=0kKZnWWhXEPfzIkklmzAa3dZ&callback=initMap"
-  mapAPiUrl: "https://api.map.baidu.com/api?v=3.0&ak=0kKZnWWhXEPfzIkklmzAa3dZ&callback=initMap"
+  # mapAPiUrl: "https://api.map.baidu.com/api?v=3.0&ak=0kKZnWWhXEPfzIkklmzAa3dZ&callback=initMap"
+  # mapAPiUrl: "https://api.map.baidu.com/api?v=3.0&ak=0kKZnWWhXEPfzIkklmzAa3dZ&callback=initMap"
+  # mapAPiUrl: "https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+  mapAPiUrl: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhj0VmCKxlvx0qH7WKpNw8c-yJk2QkpNs&callback=initMap"
 
 debug:
   # Turn this on for monitor related debugging

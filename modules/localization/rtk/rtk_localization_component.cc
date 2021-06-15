@@ -1,19 +1,3 @@
-/******************************************************************************
- * Copyright 2017 The Apollo Authors. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *****************************************************************************/
-
 #include "modules/localization/rtk/rtk_localization_component.h"
 #include "cyber/time/clock.h"
 
@@ -21,11 +5,13 @@ namespace apollo {
 namespace localization {
 
 RTKLocalizationComponent::RTKLocalizationComponent()
-    : localization_(new RTKLocalization()) {}
+  : localization_(new RTKLocalization()) {}
 
-bool RTKLocalizationComponent::Init() {
+bool RTKLocalizationComponent::Init() 
+{
   tf2_broadcaster_.reset(new apollo::transform::TransformBroadcaster(node_));
-  if (!InitConfig()) {
+  if (!InitConfig()) 
+  {
     AERROR << "Init Config falseed.";
     return false;
   }
@@ -38,12 +24,11 @@ bool RTKLocalizationComponent::Init() {
   return true;
 }
 
-bool RTKLocalizationComponent::InitConfig() {
+bool RTKLocalizationComponent::InitConfig() 
+{
   rtk_config::Config rtk_config;
-  if (!apollo::cyber::common::GetProtoFromFile(config_file_path_,
-                                               &rtk_config)) {
-    return false;
-  }
+  if (!apollo::cyber::common::GetProtoFromFile(config_file_path_, &rtk_config)) 
+  { return false; }
   AINFO << "Rtk localization config: " << rtk_config.DebugString();
 
   localization_topic_ = rtk_config.localization_topic();
@@ -80,11 +65,12 @@ bool RTKLocalizationComponent::InitIO() {
   return true;
 }
 
-bool RTKLocalizationComponent::Proc(
-    const std::shared_ptr<localization::Gps>& gps_msg) {
+bool RTKLocalizationComponent::Proc(const std::shared_ptr<localization::Gps>& gps_msg) 
+{
   localization_->GpsCallback(gps_msg);
 
-  if (localization_->IsServiceStarted()) {
+  if (localization_->IsServiceStarted()) 
+  {
     LocalizationEstimate localization;
     localization_->GetLocalization(&localization);
     LocalizationStatus localization_status;
@@ -100,8 +86,8 @@ bool RTKLocalizationComponent::Proc(
   return true;
 }
 
-void RTKLocalizationComponent::PublishPoseBroadcastTF(
-    const LocalizationEstimate& localization) {
+void RTKLocalizationComponent::PublishPoseBroadcastTF(const LocalizationEstimate& localization) 
+{
   // broadcast tf message
   apollo::transform::TransformStamped tf2_msg;
 
@@ -124,15 +110,11 @@ void RTKLocalizationComponent::PublishPoseBroadcastTF(
   tf2_broadcaster_->SendTransform(tf2_msg);
 }
 
-void RTKLocalizationComponent::PublishPoseBroadcastTopic(
-    const LocalizationEstimate& localization) {
-  localization_talker_->Write(localization);
-}
+void RTKLocalizationComponent::PublishPoseBroadcastTopic(const LocalizationEstimate& localization) 
+{ localization_talker_->Write(localization); }
 
-void RTKLocalizationComponent::PublishLocalizationStatus(
-    const LocalizationStatus& localization_status) {
-  localization_status_talker_->Write(localization_status);
-}
+void RTKLocalizationComponent::PublishLocalizationStatus(const LocalizationStatus& localization_status) 
+{ localization_status_talker_->Write(localization_status); }
 
 }  // namespace localization
 }  // namespace apollo

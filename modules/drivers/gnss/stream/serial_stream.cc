@@ -36,7 +36,8 @@ namespace apollo {
 namespace drivers {
 namespace gnss {
 
-speed_t get_serial_baudrate(uint32_t rate) {
+speed_t get_serial_baudrate(uint32_t rate) 
+{
   switch (rate) {
     case 9600:
       return B9600;
@@ -59,9 +60,11 @@ speed_t get_serial_baudrate(uint32_t rate) {
   }
 }
 
-class SerialStream : public Stream {
+class SerialStream : public Stream 
+{
  public:
-  SerialStream(const char* device_name, speed_t baud_rate,
+  SerialStream(const char *device_name, 
+               speed_t baud_rate,
                uint32_t timeout_usec);
   ~SerialStream();
 
@@ -286,10 +289,13 @@ size_t SerialStream::read(uint8_t* buffer, size_t max_length) {
 
   wait_readable(10000);  // wait 10ms
 
-  while (max_length > 0) {
+  while (max_length > 0) 
+  {
     bytes_current_read = ::read(fd_, buffer, max_length);
-    if (bytes_current_read < 0) {
-      switch (errno) {
+    if (bytes_current_read < 0) 
+    {
+      switch (errno) 
+      {
         case EAGAIN:
         case EINVAL:
           bytes_current_read = 0;
@@ -300,7 +306,8 @@ size_t SerialStream::read(uint8_t* buffer, size_t max_length) {
           AERROR << "Serial stream read data failed, error: "
                  << strerror(errno);
           Disconnect();
-          if (Connect()) {
+          if (Connect()) 
+          {
             AINFO << "Reconnect " << device_name_ << " success.";
             bytes_current_read = 0;
             break;  // has recoverable
@@ -315,8 +322,10 @@ size_t SerialStream::read(uint8_t* buffer, size_t max_length) {
       }
     }
 
-    if (bytes_current_read == 0) {
-      if (!bytes_read) {
+    if (bytes_current_read == 0) 
+    {
+      if (!bytes_read) 
+      {
         check_remove();
         return 0;
       }
@@ -427,8 +436,10 @@ bool SerialStream::wait_writable(uint32_t timeout_us) {
   return true;
 }
 
-Stream* Stream::create_serial(const char* device_name, uint32_t baud_rate,
-                              uint32_t timeout_usec) {
+Stream* Stream::create_serial(const char* device_name, 
+                              uint32_t baud_rate,
+                              uint32_t timeout_usec ) 
+{
   speed_t baud = get_serial_baudrate(baud_rate);
   return baud == 0 ? nullptr
                    : new SerialStream(device_name, baud, timeout_usec);

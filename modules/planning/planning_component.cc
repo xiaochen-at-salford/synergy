@@ -115,12 +115,12 @@ bool PlanningComponent::Init() {
   return true;
 }
 
+//TODO(xiaochen)
 bool PlanningComponent::Proc(
-    const std::shared_ptr<prediction::PredictionObstacles>&
-        prediction_obstacles,
-    const std::shared_ptr<canbus::Chassis>& chassis,
-    const std::shared_ptr<localization::LocalizationEstimate>&
-        localization_estimate) {
+    const std::shared_ptr<prediction::PredictionObstacles> &prediction_obstacles,
+    const std::shared_ptr<canbus::Chassis> &chassis,
+    const std::shared_ptr<localization::LocalizationEstimate> &localization_estimate ) 
+{
   ACHECK(prediction_obstacles != nullptr);
 
   // check and process possible rerouting request
@@ -132,16 +132,13 @@ bool PlanningComponent::Proc(
   local_view_.localization_estimate = localization_estimate;
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!local_view_.routing ||
-        hdmap::PncMap::IsNewRouting(*local_view_.routing, routing_)) {
-      local_view_.routing =
-          std::make_shared<routing::RoutingResponse>(routing_);
-    }
+    if (!local_view_.routing 
+        || hdmap::PncMap::IsNewRouting(*local_view_.routing, routing_)) 
+   { local_view_.routing = std::make_shared<routing::RoutingResponse>(routing_); }
   }
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    local_view_.traffic_light =
-        std::make_shared<TrafficLightDetection>(traffic_light_);
+    local_view_.traffic_light = std::make_shared<TrafficLightDetection>(traffic_light_);
     local_view_.relative_map = std::make_shared<MapMsg>(relative_map_);
   }
   {
@@ -153,12 +150,14 @@ bool PlanningComponent::Proc(
     local_view_.stories = std::make_shared<Stories>(stories_);
   }
 
-  if (!CheckInput()) {
+  if (!CheckInput()) 
+  {
     AERROR << "Input check failed";
     return false;
   }
 
-  if (config_.learning_mode() != PlanningConfig::NO_LEARNING) {
+  if (config_.learning_mode() != PlanningConfig::NO_LEARNING) 
+  {
     // data process for online training
     message_process_.OnChassis(*local_view_.chassis);
     message_process_.OnPrediction(*local_view_.prediction_obstacles);
@@ -169,16 +168,20 @@ bool PlanningComponent::Proc(
   }
 
   // publish learning data frame for RL test
-  if (config_.learning_mode() == PlanningConfig::RL_TEST) {
+  if (config_.learning_mode() == PlanningConfig::RL_TEST) 
+  {
     PlanningLearningData planning_learning_data;
-    LearningDataFrame* learning_data_frame =
-        injector_->learning_based_data()->GetLatestLearningDataFrame();
-    if (learning_data_frame) {
-      planning_learning_data.mutable_learning_data_frame()
-                            ->CopyFrom(*learning_data_frame);
+    LearningDataFrame* learning_data_frame = 
+        injector_->learning_based_data()->GetLatestLearningDataFrame() ;
+    if (learning_data_frame) 
+    {
+      planning_learning_data.mutable_learning_data_frame(
+          )->CopyFrom(*learning_data_frame) ;
       common::util::FillHeader(node_->Name(), &planning_learning_data);
       planning_learning_data_writer_->Write(planning_learning_data);
-    } else {
+    } 
+    else 
+    {
       AERROR << "fail to generate learning data frame";
       return false;
     }
@@ -192,9 +195,8 @@ bool PlanningComponent::Proc(
   // modify trajectory relative time due to the timestamp change in header
   auto start_time = adc_trajectory_pb.header().timestamp_sec();
   const double dt = start_time - adc_trajectory_pb.header().timestamp_sec();
-  for (auto& p : *adc_trajectory_pb.mutable_trajectory_point()) {
-    p.set_relative_time(p.relative_time() + dt);
-  }
+  for (auto& p : *adc_trajectory_pb.mutable_trajectory_point()) 
+  { p.set_relative_time(p.relative_time() + dt); }
   planning_writer_->Write(adc_trajectory_pb);
 
   // record in history
@@ -204,7 +206,8 @@ bool PlanningComponent::Proc(
   return true;
 }
 
-void PlanningComponent::CheckRerouting() {
+void PlanningComponent::CheckRerouting() 
+{
   auto* rerouting = injector_->planning_context()
                         ->mutable_planning_status()
                         ->mutable_rerouting();

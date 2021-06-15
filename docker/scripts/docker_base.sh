@@ -118,7 +118,24 @@ function stop_all_apollo_containers() {
                 warning "Failed."
             fi
         fi
+
+        if [[ "${container}" =~ synergy_.*_${USER} ]]; then
+            #printf %-*s 70 "Now stop container: ${container} ..."
+            #printf "\033[32m[DONE]\033[0m\n"
+            #printf "\033[31m[FAILED]\033[0m\n"
+            info "Now stop container ${container} ..."
+            if docker stop "${container}" >/dev/null; then
+                if [[ "${force}" == "-f" || "${force}" == "--force" ]]; then
+                    docker rm -f "${container}" 2>/dev/null
+                fi
+                info "Done."
+            else
+                warning "Failed."
+            fi
+        fi
     done
+
+
 }
 
 # Check whether user has agreed license agreement

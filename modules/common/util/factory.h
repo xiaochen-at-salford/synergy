@@ -112,8 +112,8 @@ class Factory {
    * @param args the object construction arguments
    */
   template <typename... Args>
-  std::unique_ptr<AbstractProduct> CreateObject(const IdentifierType &id,
-                                                Args &&... args) {
+  std::unique_ptr<AbstractProduct> CreateObject(const IdentifierType &id, Args &&... args) 
+  {
     auto result = CreateObjectOrNull(id, std::forward<Args>(args)...);
     AERROR_IF(!result) << "Factory could not create Object of type : " << id;
     return result;

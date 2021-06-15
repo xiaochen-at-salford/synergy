@@ -14,13 +14,11 @@ cc_library(
         "//modules/common/util:factory",
         "//modules/drivers/canbus/can_client",
         "//modules/drivers/canbus/can_client/fake:fake_can_client",
-        "//modules/drivers/canbus/can_client/hermes_can:hermes_can_client",
         "//modules/drivers/canbus/can_client/socket:socket_can_client_raw",
+        "//modules/drivers/canbus/can_client/oscc:oscc_can_client",
         "//modules/drivers/canbus/common:canbus_common",
         "//modules/drivers/canbus/proto:can_card_parameter_cc_proto",
-        ] + if_esd_can([
-        "//modules/drivers/canbus/can_client/esd:esd_can_client",
-    ]),
+    ],
 )
 
 cc_library(

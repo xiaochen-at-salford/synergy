@@ -45,8 +45,7 @@ enum SolutionType {
   L1_INT = 48;
   WIDE_INT = 49;
   NARROW_INT = 50;
-  RTK_DIRECT_INS =
-      51;  // RTK filter is directly initialized from the INS filter.
+  RTK_DIRECT_INS = 51;  // RTK filter is directly initialized from the INS filter.
   INS_SBAS = 52;
   INS_PSRSP = 53;
   INS_PSRDIFF = 54;

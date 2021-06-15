@@ -27,17 +27,6 @@ cc_library(
     ],
 )
 
-cc_test(
-    name = "canbus_test",
-    size = "small",
-    srcs = ["canbus_test.cc"],
-    deps = [
-        ":canbus_component_lib",
-        "//modules/common/status",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-
 cc_binary(
     name = "libcanbus_component.so",
     linkshared = True,
@@ -46,6 +35,17 @@ cc_binary(
         ":canbus_component_lib",
     ],
 )
+
+# cc_test(
+#     name = "canbus_test",
+#     size = "small",
+#     srcs = ["canbus_test.cc"],
+#     deps = [
+#         ":canbus_component_lib",
+#         "//modules/common/status",
+#         "@com_google_googletest//:gtest_main",
+#     ],
+# )
 
 install(
     name = "install",

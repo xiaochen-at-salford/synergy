@@ -38,12 +38,12 @@ namespace gnss {
 class RawStream {
  public:
   RawStream(const config::Config& config,
-            const std::shared_ptr<apollo::cyber::Node>& node);
+            const std::shared_ptr<apollo::cyber::Node>& node );
   ~RawStream();
   bool Init();
 
   struct Status {
-    bool filter[Stream::NUM_STATUS] = {false};
+    bool filter[Stream::NUM_STATUS] = { false };
     Stream::Status status;
   };
 
@@ -66,8 +66,8 @@ class RawStream {
   std::unique_ptr<cyber::Timer> wheel_velocity_timer_ = nullptr;
   std::shared_ptr<apollo::canbus::Chassis> chassis_ptr_ = nullptr;
   static constexpr size_t BUFFER_SIZE = 2048;
-  uint8_t buffer_[BUFFER_SIZE] = {0};
-  uint8_t buffer_rtk_[BUFFER_SIZE] = {0};
+  uint8_t buffer_[BUFFER_SIZE] = { 0 };
+  uint8_t buffer_rtk_[BUFFER_SIZE] = { 0 };
 
   std::shared_ptr<Stream> data_stream_;
   std::shared_ptr<Stream> command_stream_;
@@ -100,8 +100,7 @@ class RawStream {
   std::shared_ptr<apollo::cyber::Writer<RawData>> raw_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Writer<RawData>> rtcm_writer_ = nullptr;
   std::shared_ptr<apollo::cyber::Reader<RawData>> gpsbin_reader_ = nullptr;
-  std::shared_ptr<apollo::cyber::Reader<apollo::canbus::Chassis>>
-      chassis_reader_ = nullptr;
+  std::shared_ptr<apollo::cyber::Reader<apollo::canbus::Chassis>> chassis_reader_ = nullptr;
 };
 
 }  // namespace gnss
