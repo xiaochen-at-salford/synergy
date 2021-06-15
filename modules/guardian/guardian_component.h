@@ -56,14 +56,10 @@ class GuardianComponent : public apollo::cyber::TimerComponent {
 
   double last_status_received_s_{};
 
-  std::shared_ptr<apollo::cyber::Reader<apollo::canbus::Chassis>>
-      chassis_reader_;
-  std::shared_ptr<apollo::cyber::Reader<apollo::control::ControlCommand>>
-      control_cmd_reader_;
-  std::shared_ptr<apollo::cyber::Reader<apollo::monitor::SystemStatus>>
-      system_status_reader_;
-  std::shared_ptr<apollo::cyber::Writer<apollo::guardian::GuardianCommand>
-      guardian_writer_;
+  std::shared_ptr<apollo::cyber::Reader<apollo::canbus::Chassis>> chassis_reader_;
+  std::shared_ptr<apollo::cyber::Reader<apollo::control::ControlCommand>> control_cmd_reader_;
+  std::shared_ptr<apollo::cyber::Reader<apollo::monitor::SystemStatus>> system_status_reader_;
+  std::shared_ptr<apollo::cyber::Writer<apollo::guardian::GuardianCommand>> guardian_writer_;
 
   std::mutex mutex_;
 };
