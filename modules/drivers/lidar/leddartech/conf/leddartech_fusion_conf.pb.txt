@@ -1,0 +1,27 @@
+lidar1: {
+  ip: "192.168.1.1"
+  port: 48630
+  scan_channel: "/apollo/sensor/lidar/leddartech/segment1/scan"
+  pointcloud_channel: "/apollo/sensor/lidar/leddartech/segment1/PointCloud"
+}
+
+lidar2: {
+  ip: "192.168.2.2"
+  port: 48630
+  scan_channel: "/apollo/sensor/lidar/leddartech/segment2/scan"
+  pointcloud_channel: "/apollo/sensor/lidar/leddartech/segment2/PointCloud"
+}
+
+lidar3: {
+  ip: "192.168.3.3"
+  port: 48630
+  scan_channel: "/apollo/sensor/lidar/leddartech/segment3/scan"
+  pointcloud_channel: "/apollo/sensor/lidar/leddartech/segment3/PointCloud"
+}
+
+lidar4: {
+  ip: "192.168.4.4"
+  port: 48630
+  scan_channel: "/apollo/sensor/lidar/leddartech/segment4/scan"
+  pointcloud_channel: "/apollo/sensor/lidar/leddartech/segment4/PointCloud"
+}

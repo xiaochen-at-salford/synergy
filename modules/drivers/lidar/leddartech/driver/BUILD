@@ -4,6 +4,32 @@ load("//tools:cpplint.bzl", "cpplint")
 package(default_visibility = ["//visibility:public"])
 
 cc_binary(
+    name = "libleddartech_fusion_driver_component.so",
+    linkshared = True,
+    linkstatic = False,
+    deps = [":leddartech_fusion_driver_component_lib",]
+)
+
+cc_library(
+    name = "leddartech_fusion_driver_component_lib",
+    srcs = ["leddartech_fusion_driver_component.cc"],
+    hdrs = ["leddartech_fusion_driver_component.h"],
+    copts = [
+        '-DMODULE_NAME=\\"leddartech\\"',
+        '-Iexternal/leddarSDK/src/Leddar',
+        '-Iexternal/leddarSDK/src/LeddarTech',
+        '-Iexternal/leddarSDK/src/shared',
+        '-Iexternal/leddarSDK/libs/RapidJson',
+        ],
+    deps = [
+        "//cyber",
+        "//modules/common/util:message_util",
+        ":driver",
+        "@leddarSDK//:lib",
+    ],
+)
+
+cc_binary(
     name = "libleddartech_driver_component.so",
     linkshared = True,
     linkstatic = False,

@@ -37,6 +37,7 @@ class LeddartechDriver {
   virtual ~LeddartechDriver();
   std::shared_ptr<LeddarDevice::LdSensorPixell> GetSensor();
   virtual bool Poll(const std::shared_ptr<LeddartechScan> &scan);
+  virtual bool Poll(LeddartechScan *scan);
   void KeepAlive();
   std::unique_ptr<cyber::Timer> keep_alive_thread_;
 

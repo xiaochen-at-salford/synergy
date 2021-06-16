@@ -89,8 +89,8 @@ bool LeddartechDriver::Poll(LeddartechScan* scan)
       LeddartechPacket* packet = scan->add_detections();
       uint16_t channelIndex = lEchoes[i].mChannelIndex;
       try {
-        LeddarUtils::LtMathUtils::LtPointXYZ xyz =
-            lEchoes[i].ToXYZ(177.5, 16.0, 96, 8, lDistanceScale);
+        LeddarUtils::LtMathUtils::LtPointXYZ xyz = 
+            lEchoes[i].ToXYZ(177.5, 16.0, 96, 8, lDistanceScale) ;
         packet->set_channel(channelIndex);
         packet->set_distance(lEchoes[i].mDistance);
         packet->set_distance_scale(lDistanceScale);
@@ -103,7 +103,9 @@ bool LeddartechDriver::Poll(LeddartechScan* scan)
         packet->set_y(xyz.y);
         packet->set_z(xyz.z);
         packet->set_flag(lEchoes[i].mFlag);
-      } catch (std::out_of_range) {
+      } 
+      catch (std::out_of_range) 
+      {
         std::cout << "LeddarUtils: error" << std::endl;
         continue;
       }
@@ -111,9 +113,6 @@ bool LeddartechDriver::Poll(LeddartechScan* scan)
 
     lResultEchoes->UnLock(LeddarConnection::B_GET);
   }
-
-  return true;
-}
 
 void LeddartechDriver::SetEthernetConnectionInfo(std::string ip,
                                                  uint32_t port) {

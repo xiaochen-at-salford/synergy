@@ -25,4 +25,11 @@ message LeddartechScan {
     optional uint32 model = 2;                 // device model
     optional string sn = 4;
     repeated LeddartechPacket detections = 5;
-} 
+}
+
+message LeddartechScanFusion {
+    optional LeddartechScan segment1 = 1; 
+    optional LeddartechScan segment2 = 2; 
+    optional LeddartechScan segment3 = 3; 
+    optional LeddartechScan segment4 = 4; 
+}

@@ -17,4 +17,11 @@ message Config {
     optional string mac_address = 10;
     optional uint32 sensor_state = 11;
     optional uint32 data_port = 12;
-} 
+}
+
+message FusionConfig {
+    optional Config lidar1 = 1;
+    optional Config lidar2 = 2;
+    optional Config lidar3 = 3;
+    optional Config lidar4 = 4;
+}
