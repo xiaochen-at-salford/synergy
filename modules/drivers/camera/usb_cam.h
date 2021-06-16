@@ -89,8 +89,10 @@ struct CameraImage {
   int tv_usec;
   char* image;
 
-  ~CameraImage() {
-    if (image != nullptr) {
+  ~CameraImage() 
+  {
+    if (image != nullptr) 
+    {
       free(reinterpret_cast<void*>(image));
       image = nullptr;
     }
@@ -172,6 +174,7 @@ class UsbCam {
   uint64_t last_nsec_ = 0;
   float frame_drop_interval_ = 0.0;
 };
+
 }  // namespace camera
 }  // namespace drivers
 }  // namespace apollo

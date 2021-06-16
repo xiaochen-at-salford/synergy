@@ -226,7 +226,8 @@ void UsbCam::mjpeg2rgb(char* mjpeg_buffer, int len, char* rgb_buffer,
   }
 }
 
-bool UsbCam::poll(const CameraImagePtr& raw_image) {
+bool UsbCam::poll(const CameraImagePtr& raw_image) 
+{
   raw_image->is_new = 0;
   // free memory in this struct desturctor
   memset(raw_image->image, 0, raw_image->image_size * sizeof(char));
@@ -244,23 +245,26 @@ bool UsbCam::poll(const CameraImagePtr& raw_image) {
 
   r = select(fd_ + 1, &fds, nullptr, nullptr, &tv);
 
-  if (-1 == r) {
-    if (EINTR == errno) {
-      return false;
+  if (-1 == r) 
+  {
+    if (EINTR == errno) 
+    { return false;
     }
 
     // errno_exit("select");
     reconnect();
   }
 
-  if (0 == r) {
+  if (0 == r) 
+  {
     AERROR << "select timeout";
     reconnect();
   }
 
   int get_new_image = read_frame(raw_image);
 
-  if (!get_new_image) {
+  if (!get_new_image) 
+  {
     return false;
   }
 
@@ -268,24 +272,27 @@ bool UsbCam::poll(const CameraImagePtr& raw_image) {
   return true;
 }
 
-bool UsbCam::open_device(void) {
+bool UsbCam::open_device(void) 
+{
   struct stat st;
 
-  if (-1 == stat(config_->camera_dev().c_str(), &st)) {
+  if (-1 == stat(config_->camera_dev().c_str(), &st)) 
+  {
     AERROR << "Cannot identify '" << config_->camera_dev() << "': " << errno
            << ", " << strerror(errno);
     return false;
   }
 
-  if (!S_ISCHR(st.st_mode)) {
+  if (!S_ISCHR(st.st_mode)) 
+  {
     AERROR << config_->camera_dev() << " is no device";
     return false;
   }
 
-  fd_ = open(config_->camera_dev().c_str(), O_RDWR /* required */ | O_NONBLOCK,
-             0);
+  fd_ = open(config_->camera_dev().c_str(), O_RDWR /* required */ | O_NONBLOCK, 0);
 
-  if (-1 == fd_) {
+  if (-1 == fd_) 
+  {
     AERROR << "Cannot open '" << config_->camera_dev() << "': " << errno << ", "
            << strerror(errno);
     return false;
@@ -294,15 +301,18 @@ bool UsbCam::open_device(void) {
   return true;
 }
 
-bool UsbCam::init_device(void) {
+bool UsbCam::init_device(void) 
+{
   struct v4l2_capability cap;
   struct v4l2_cropcap cropcap;
   struct v4l2_crop crop;
   struct v4l2_format fmt;
   unsigned int min = 0;
 
-  if (-1 == xioctl(fd_, VIDIOC_QUERYCAP, &cap)) {
-    if (EINVAL == errno) {
+  if (-1 == xioctl(fd_, VIDIOC_QUERYCAP, &cap)) 
+  {
+    if (EINVAL == errno) 
+    {
       AERROR << config_->camera_dev() << " is no V4L2 device";
       return false;
     }
@@ -310,14 +320,17 @@ bool UsbCam::init_device(void) {
     return false;
   }
 
-  if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
+  if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) 
+  {
     AERROR << config_->camera_dev() << " is no video capture device";
     return false;
   }
 
-  switch (config_->io_method()) {
+  switch (config_->io_method()) 
+  {
     case IO_METHOD_READ:
-      if (!(cap.capabilities & V4L2_CAP_READWRITE)) {
+      if (!(cap.capabilities & V4L2_CAP_READWRITE)) 
+      {
         AERROR << config_->camera_dev() << " does not support read i/o";
         return false;
       }
@@ -326,7 +339,8 @@ bool UsbCam::init_device(void) {
 
     case IO_METHOD_MMAP:
     case IO_METHOD_USERPTR:
-      if (!(cap.capabilities & V4L2_CAP_STREAMING)) {
+      if (!(cap.capabilities & V4L2_CAP_STREAMING)) 
+      {
         AERROR << config_->camera_dev() << " does not support streaming i/o";
         return false;
       }
@@ -343,12 +357,15 @@ bool UsbCam::init_device(void) {
 
   cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
-  if (0 == xioctl(fd_, VIDIOC_CROPCAP, &cropcap)) {
+  if (0 == xioctl(fd_, VIDIOC_CROPCAP, &cropcap)) 
+  {
     crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     crop.c = cropcap.defrect; /* reset to default */
 
-    if (-1 == xioctl(fd_, VIDIOC_S_CROP, &crop)) {
-      switch (errno) {
+    if (-1 == xioctl(fd_, VIDIOC_S_CROP, &crop)) 
+    {
+      switch (errno) 
+      {
         case EINVAL:
           /* Cropping not supported. */
           break;
@@ -364,7 +381,8 @@ bool UsbCam::init_device(void) {
   fmt.fmt.pix.pixelformat = pixel_format_;
   fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
 
-  if (-1 == xioctl(fd_, VIDIOC_S_FMT, &fmt)) {
+  if (-1 == xioctl(fd_, VIDIOC_S_FMT, &fmt)) 
+  {
     AERROR << "VIDIOC_S_FMT";
     return false;
   }

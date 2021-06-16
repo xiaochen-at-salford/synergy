@@ -45,6 +45,7 @@ class CompressComponent : public Component<Image> {
 };
 
 CYBER_REGISTER_COMPONENT(CompressComponent)
+
 }  // namespace camera
 }  // namespace drivers
 }  // namespace apollo

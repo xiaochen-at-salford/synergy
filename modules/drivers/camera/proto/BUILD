@@ -23,3 +23,4 @@ py_proto_library(
         ":config_proto",
     ],
 )
+

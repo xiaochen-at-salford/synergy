@@ -1,0 +1,39 @@
+# Define all coms in DAG streaming.
+module_config {
+    module_library : "/apollo/bazel-bin/modules/drivers/camera/libsyn_camera_component.so"
+
+
+    components {
+      class_name : "SynCompressComponent"
+      config {
+        name : "camera_front_left_compress"
+        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_left.pb.txt"
+        readers {
+          channel: "/apollo/sensor/camera/front_left/image"
+          #pending_queue_size: 100
+        }
+      }
+    }
+
+    components {
+      class_name : "SynCompressComponent"
+      config {
+        name : "camera_front_right_compress"
+        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_right.pb.txt"
+        readers {
+          channel: "/apollo/sensor/camera/front_right/image"
+          #pending_queue_size: 100
+        }
+      }
+    }
+
+}
+
+
+
+
+
+
+
+
+

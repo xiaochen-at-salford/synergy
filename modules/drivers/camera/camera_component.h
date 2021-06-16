@@ -60,6 +60,7 @@ class CameraComponent : public Component<> {
 };
 
 CYBER_REGISTER_COMPONENT(CameraComponent)
+
 }  // namespace camera
 }  // namespace drivers
 }  // namespace apollo
