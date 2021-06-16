@@ -11,11 +11,11 @@ cc_library(
         ":driver_base",
         "//cyber",
         "//modules/common/util:factory",
-        "//modules/drivers/lidar/hesai/driver",
+        # "//modules/drivers/lidar/hesai/driver",
         "//modules/drivers/lidar/proto:config",
         "//modules/drivers/lidar/proto:lidar_parameter",
-        "//modules/drivers/lidar/robosense/driver",
-        "//modules/drivers/lidar/velodyne/driver",
+        # "//modules/drivers/lidar/robosense/driver",
+        # "//modules/drivers/lidar/velodyne/driver",
     ],
 )
 
