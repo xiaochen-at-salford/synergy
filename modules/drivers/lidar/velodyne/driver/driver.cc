@@ -22,7 +22,8 @@
 #include <thread>
 
 #include "cyber/cyber.h"
-#include "modules/common/util/message_util.h"
+#include "modules/drivers/lidar/velodyne/proto/config.pb.h"
+#include "modules/drivers/lidar/velodyne/proto/velodyne.pb.h"
 
 namespace apollo {
 namespace drivers {

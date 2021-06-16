@@ -22,6 +22,7 @@
 
 #include "cyber/cyber.h"
 #include "modules/common/util/message_util.h"
+#include "modules/drivers/lidar/velodyne/driver/velodyne_driver_component.h"
 
 namespace apollo {
 namespace drivers {

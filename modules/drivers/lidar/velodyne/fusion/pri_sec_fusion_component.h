@@ -30,8 +30,7 @@
 
 #include "modules/drivers/lidar/proto/velodyne_config.pb.h"
 #include "modules/drivers/proto/pointcloud.pb.h"
-
-#include "cyber/cyber.h"
+#include "modules/drivers/lidar/velodyne/proto/config.pb.h"
 #include "modules/transform/buffer.h"
 
 namespace apollo {

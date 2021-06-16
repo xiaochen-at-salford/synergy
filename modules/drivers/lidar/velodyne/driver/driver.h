@@ -19,12 +19,9 @@
 #include <memory>
 #include <string>
 
-#include "modules/drivers/lidar/proto/config.pb.h"
-#include "modules/drivers/lidar/proto/velodyne.pb.h"
-#include "modules/drivers/lidar/proto/velodyne_config.pb.h"
-
-#include "modules/drivers/lidar/common/driver_factory/driver_base.h"
 #include "modules/drivers/lidar/velodyne/driver/socket_input.h"
+#include "modules/drivers/lidar/velodyne/proto/config.pb.h"
+#include "modules/drivers/lidar/velodyne/proto/velodyne.pb.h"
 
 namespace apollo {
 namespace drivers {

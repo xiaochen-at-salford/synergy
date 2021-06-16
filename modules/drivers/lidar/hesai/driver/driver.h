@@ -31,10 +31,8 @@
 #include "modules/drivers/lidar/proto/config.pb.h"
 
 #include "cyber/cyber.h"
-#include "modules/drivers/lidar/common/driver_factory/driver_base.h"
-#include "modules/drivers/lidar/hesai/input/udp_input.h"
 #include "modules/drivers/lidar/hesai/parser/parser.h"
-#include "modules/drivers/lidar/hesai/parser/parser_factory.h"
+#include "modules/drivers/lidar/hesai/input/udp_input.h"
 
 namespace apollo {
 namespace drivers {

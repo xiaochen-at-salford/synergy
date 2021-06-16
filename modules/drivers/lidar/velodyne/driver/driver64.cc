@@ -18,7 +18,6 @@
 #include <ctime>
 #include <string>
 
-#include "modules/common/util/message_util.h"
 #include "modules/drivers/lidar/velodyne/driver/driver.h"
 // #include "ros/ros.h"
 

@@ -38,6 +38,7 @@ USE_LOCAL_IMAGE=0
 CUSTOM_DIST=
 CUSTOM_VERSION=
 GEOLOC=
+GEO_REGISTRY=
 
 function _target_arch_check() {
     local arch="$1"
@@ -197,7 +198,6 @@ function determine_target_version_and_arch() {
     fi
     CUSTOM_VERSION="${version}"
 }
-
 
 function setup_devices_and_mount_volumes() {
     local __retval="$1"
