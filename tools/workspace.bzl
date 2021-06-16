@@ -64,7 +64,7 @@ def initialize_third_party():
     libtorch_cpu()
     libtorch_gpu()
     leddarSDK()
-    lz4()
+    # lz4()
     ncurses5()
     nlohmann_json()
     npp()
