@@ -51,7 +51,6 @@ class MSFLocalization {
   void OnGnssHeading(const std::shared_ptr<drivers::gnss::Heading> &gnss_heading_msg);
 
   void SetPublisher(const std::shared_ptr<LocalizationMsgPublisher> &publisher);
-  void OnLocalizationTimer();
 
   void OnLocalizationTimer();
 
