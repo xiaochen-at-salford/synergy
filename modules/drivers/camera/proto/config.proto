@@ -54,3 +54,64 @@ message Config {
   }
   optional CompressConfig compress_conf = 27;
 }
+
+message HikroConfig {
+  optional string device_ip = 1;
+  optional string frame_id = 2;
+  optional string pixel_format = 3 [default = "yuyv"];
+  optional uint32 width = 4;
+  optional uint32 height = 5;
+  optional uint32 frame_rate = 6;
+  optional bool monochrome = 7 [default = false];
+
+  optional int32 brightness = 8 [default = -1];
+  optional int32 contrast = 10 [default = -1];
+  optional int32 saturation = 11 [default = -1];
+  optional int32 sharpness = 12 [default = -1];
+ 
+  enum GainMode {
+    GAIN_MODE_OFF = 0;
+    GAIN_MODE_ONCE = 1;
+    GAIN_MODE_CONTINUOUS = 2;
+  }
+  optional GainMode gain_mode = 13 [default = GAIN_MODE_OFF];
+  optional float gain = 14 [default = 10.0];
+  
+  enum AquisitionMode {
+    ACQ_MODE_OFF = 0;
+    ACQ_MODE_MULTI = 1;
+    ACQ_MODE_CONTINUOUS = 2;
+  }
+  optional AquisitionMode acquisition_mode = 15 [default = ACQ_MODE_CONTINUOUS];
+  
+  optional bool gamma_enable = 33 [default = true];
+  enum GammaSelector {
+    GAMMA_SELECTOR_USER = 1;
+    GAMMA_SELECTOR_SRGB = 2;
+  }
+  optional GammaSelector gamma_selector = 30 [default = GAMMA_SELECTOR_SRGB];
+  // optional float gamma = 32 [default];
+
+  optional bool auto_focus = 16 [default = false];
+  optional int32 focus = 17 [default = -1];
+  optional bool auto_exposure = 18 [default = true];
+  optional int32 exposure = 19 [default = 100];
+  optional bool auto_white_balance = 20 [default = true];
+  optional int32 white_balance = 21 [default = 4000];
+  optional uint32 bytes_per_pixel = 22 [default = 3];
+  optional uint32 trigger_internal = 23 [default = 0];
+  optional uint32 trigger_fps = 24 [default = 30];
+  optional string channel_name = 25;
+  // wait time when camera select timeout
+  optional uint32 device_wait_ms = 26 [default = 2000];
+  // camera select spin time
+  optional uint32 spin_rate = 27 [default = 200];
+  optional OutputType output_type = 28;
+
+  message CompressConfig {
+    optional string output_channel = 1;
+    optional uint32 image_pool_size = 2 [default = 20];
+  }
+
+  optional CompressConfig compress_conf = 29;
+}
