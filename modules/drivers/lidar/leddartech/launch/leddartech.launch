@@ -1,0 +1,7 @@
+<cyber>
+    <module>
+        <name>leddartech</name>
+        <dag_conf>/apollo/modules/drivers/lidar/leddartech/dag/leddartech.dag</dag_conf>
+        <process_name>leddartech</process_name>
+    </module>
+</cyber>

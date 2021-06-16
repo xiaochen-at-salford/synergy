@@ -1,0 +1,42 @@
+module_config {
+    module_library : "/apollo/bazel-bin/modules/drivers/lidar/leddartech/driver/libleddartech_driver_component.so"
+    components {
+      class_name : "LeddartechDriverComponent"
+      config {
+        name : "leddartech_driver_right"
+        config_file_path : "/apollo/modules/drivers/lidar/leddartech/conf/multi/lt_conf_right.pb.txt"
+      }
+    }
+    components {
+      class_name : "LeddartechDriverComponent"
+      config {
+        name : "leddartech_driver_left"
+        config_file_path : "/apollo/modules/drivers/lidar/leddartech/conf/multi/lt_conf_left.pb.txt"
+      }
+    }
+}
+
+module_config {
+  module_library : "/apollo/bazel-bin/modules/drivers/lidar/leddartech/parser/libleddartech_parser.so"
+  components {
+    class_name : "LeddartechParser"
+    config {
+      name : "LtParser_right"
+      config_file_path : "/apollo/modules/drivers/lidar/leddartech/conf/multi/lt_conf_right.pb.txt"
+      readers {
+        channel: "/apollo/sensor/lidar/leddartech/right/scan"
+      }
+    }
+  }
+  components {
+    class_name : "LeddartechParser"
+    config {
+      name : "LtParser_left"
+      config_file_path : "/apollo/modules/drivers/lidar/leddartech/conf/multi/lt_conf_left.pb.txt"
+      readers{
+        channel: "/apollo/sensor/lidar/leddartech/left/scan"
+      }
+    }
+  }
+}
+
