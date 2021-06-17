@@ -382,6 +382,7 @@ bool RTKLocalization::FindMatchingIMU(const double gps_timestamp_sec, CorrectedI
       return false;
     }
 
+    //TODO(xiaochen): Revise GNSS sampling rate 
     if (std::fabs(imu_msg->header().timestamp_sec() - gps_timestamp_sec) > gps_imu_time_diff_threshold_) 
     {
       // 20ms threshold to report error
