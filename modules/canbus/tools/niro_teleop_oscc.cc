@@ -17,6 +17,8 @@
 #include "modules/common/util/message_util.h"
 #include "modules/control/proto/control_cmd.pb.h"
 #include "modules/drivers/canbus/proto/oscc_status_cmd.pb.h"
+#include "modules/control/proto/oscc_msg.pb.h"
+#include "modules/control/proto/pad_msg.pb.h"
 
 // gflags
 DEFINE_double(throttle_inc_delta, 2.0, "throttle pedal command delta percentage.");
@@ -37,11 +39,21 @@ using apollo::cyber::CreateNode;
 using apollo::cyber::Reader;
 using apollo::cyber::Time;
 using apollo::cyber::Writer;
-typedef apollo::drivers::canbus::OsccStatusCommand_Type OsccStatusCommandType;
+typedef apollo::control::OsccAction OsccAction;
+typedef apollo::control::DrivingAction DrivingAction; 
+typedef apollo::canbus::Chassis_DrivingMode DrivingMode;
 
-const uint32_t KEYCODE_O = 0x4F;  // '0'
+// const uint32_t KEYCODE_O = 0x30;  // '0'
+// Keys for pad messages
+const uint32_t KEYCODE_DRIVE_MODE_MANUL = 0x30;  // '0'
+const uint32_t KEYCODE_DRIVE_MODE_AUTO = 0x31;  // '1'
+const uint32_t KEYCODE_DRIVE_MODE_SPEED_ONLY = 0x32;  // '2'
+const uint32_t KEYCODE_DRIVE_MODE_STEERING_ONLY = 0x33;  // '3'
+const uint32_t KEYCODE_ACTION_START = 0x61;  // 'a'
+const uint32_t KEYCODE_ACTION_STOP = 0x7A;  // 'z'
+const uint32_t KEYCODE_ACTION_RESET = 0x72;  // 'r'
 
-// Keys for OSCC status
+// Keys for OSCC message
 const uint32_t KEYCODE_OSCC_ENABLE = 0x4F;  // 'O'
 const uint32_t KEYCODE_OSCC_DISABLE = 0x6F;  // 'o'
 const uint32_t KEYCODE_BRAKE_ENABLE = 0x42;  // 'B'
@@ -65,18 +77,27 @@ class Teleop {
   static void PrintKeycode() 
   {
     system("clear");
+    printf("KIA NIRO TELEOPERATION                       \n");
     printf("=====================    KEYBOARD MAP   ===================\n");
-    printf("HELP:               [%c]     |\n", KEYCODE_HELP);
-    printf("Set KIA Niro Mode:                       \n");
-    printf("                     0 Manul\n");
-    printf("                     1 Auto\n");
-    printf("                     2 Speed Only\n");
-    printf("                     3 Steering Only\n");
+    printf("HELP:                [%c]           \n", KEYCODE_HELP);
+    printf("Pad Messages:                       \n");
+    printf("                     [0] DrivingMode MANUAL \n");
+    printf("                     [1] DrivingMode AUTO \n");
+    printf("                     [2] DrivingMode SPEED ONLY \n");
+    printf("                     [3] DrivingMode STEERING ONLY \n");
+    printf("                     [a] DrivingMode START \n");
+    printf("                     [z] DrivingMode STOP \n");
+    printf("                     [r] DrivingMode RESET \n");
     printf("\n-----------------------------------------------------------\n");
-    printf("Set OSCC Status: ");
-    printf("                     B/b Enable/Disable Brake\n");
-    printf("                     S/s Enable/Disable Steering\n");
-    printf("                     T/t Enable/Disable Steering\n");
+    printf("OSCC Messages: \n");
+    printf("                     [O] Enable OSCC \n");
+    printf("                     [o] Disable OSCC \n");
+    printf("                     [B] Enable Brake \n");
+    printf("                     [b] Disable Brake \n");
+    printf("                     [S] Enable Steering \n");
+    printf("                     [s] Disable Steering \n");
+    printf("                     [T] Enable Throttle \n");
+    printf("                     [t] Disable Throttle \n");
     printf("\n-----------------------------------------------------------\n");
     printf("Exit: Ctrl + C, then press enter to normal terminal\n");
     printf("===========================================================\n");
@@ -97,8 +118,8 @@ class Teleop {
     // Chassis::GearPosition gear = Chassis::GEAR_INVALID;
     ControlCommand &control_command_ = control_command();
     apollo::common::VehicleParam vehicle_params_ =
-        apollo::common::VehicleConfigHelper::Instance(
-            )->GetConfig().vehicle_param() ;
+        apollo::common::VehicleConfigHelper::Instance()
+            ->GetConfig().vehicle_param() ;
 
     // get the console in raw mode
     tcgetattr(kfd_, &cooked_);
@@ -121,46 +142,71 @@ class Teleop {
       }
       AINFO << "control command : "
             << control_command_.ShortDebugString().c_str();
+
       switch (c) 
       {
+        case KEYCODE_DRIVE_MODE_MANUL:
+          control_command_.mutable_pad_msg()
+              ->set_driving_mode(DrivingMode::Chassis_DrivingMode_COMPLETE_MANUAL) ;
+          break;
+
+        case KEYCODE_DRIVE_MODE_AUTO:
+          control_command_.mutable_pad_msg()
+              ->set_driving_mode(DrivingMode::Chassis_DrivingMode_COMPLETE_AUTO_DRIVE) ;
+          break;
+
+        case KEYCODE_DRIVE_MODE_SPEED_ONLY:
+          control_command_.mutable_pad_msg()
+              ->set_driving_mode(DrivingMode::Chassis_DrivingMode_AUTO_STEER_ONLY) ;
+          break;
+
+        case KEYCODE_DRIVE_MODE_STEERING_ONLY:
+          control_command_.mutable_pad_msg()
+              ->set_driving_mode(DrivingMode::Chassis_DrivingMode_AUTO_SPEED_ONLY) ;
+          break;
+
+        case KEYCODE_ACTION_START: 
+          control_command_.mutable_pad_msg()->set_action(DrivingAction::START);
+          break;
+
+        case KEYCODE_ACTION_STOP: 
+          control_command_.mutable_pad_msg()->set_action(DrivingAction::STOP);
+          break;
+
+        case KEYCODE_ACTION_RESET: 
+          control_command_.mutable_pad_msg()->set_action(DrivingAction::RESET);
+          break;
+
         case KEYCODE_OSCC_ENABLE: 
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_ENABLE_ALL);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::ENABLE_ALL);
           break;
         
         case KEYCODE_OSCC_DISABLE:
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_DISABLE_ALL);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::DISABLE_ALL);
           break;
-        
+
         case KEYCODE_BRAKE_ENABLE:
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_ENABLE_BRAKE);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::ENABLE_BRAKE);
           break;
         
         case KEYCODE_BRAKE_DISABLE:
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_DISABLE_BRAKE);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::DISABLE_BRAKE);
           break;
         
         case KEYCODE_STEERING_ENABLE:
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_ENABLE_STEERING);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::ENABLE_STEERING);
           break;
 
         case KEYCODE_STEERING_DISABLE:
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_DISABLE_STEERING);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::DISABLE_STEERING);
           break;
         
         case KEYCODE_THROTTLE_ENABLE:
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_ENABLE_THROTTLE);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::ENABLE_THROTTLE);
           break;
         
         case KEYCODE_THROTTLE_DISABLE:
-          control_command_.mutable_oscc_status_cmd(
-              )->set_cmd(OsccStatusCommandType::OsccStatusCommand_Type_DISABLE_THROTTLE);
+          control_command_.mutable_oscc_msg()->set_action(OsccAction::DISABLE_THROTTLE);
           break;
 
         case KEYCODE_HELP:
@@ -181,7 +227,8 @@ class Teleop {
     return;
   }  // end of keyboard loop thread
 
-  ControlCommand &control_command() { return control_command_; }
+  ControlCommand &control_command() 
+  { return control_command_; }
 
   double GetCommand(double val, double inc) 
   {
@@ -196,6 +243,7 @@ class Teleop {
   void Send() 
   {
     apollo::common::util::FillHeader("control", &control_command_);
+    // printf("hehe\n");
     control_command_writer_->Write(control_command_);
     ADEBUG << "Control Command send OK:" << control_command_.ShortDebugString();
   }
@@ -203,7 +251,8 @@ class Teleop {
   void ResetControlCommand() 
   { control_command_.Clear(); }
 
-  void OnChassis(const Chassis &chassis) { Send(); }
+  void OnChassis(const Chassis &chassis) 
+  { Send(); }
 
   int32_t Start() 
   {
@@ -213,9 +262,13 @@ class Teleop {
       return -1;
     }
     is_running_ = true;
+
     chassis_reader_ = node_->CreateReader<Chassis>(
-        FLAGS_chassis_topic, [this](const std::shared_ptr<Chassis> &chassis) 
-        { OnChassis(*chassis); });
+        FLAGS_chassis_topic, 
+        [this]
+        (const std::shared_ptr<Chassis> &chassis) 
+        { OnChassis(*chassis); } ) ;
+
     control_command_writer_ = node_->CreateWriter<ControlCommand>(FLAGS_control_command_topic);
     keyboard_thread_.reset(new std::thread([this] { KeyboardLoopThreadFunc(); }));
     if (keyboard_thread_ == nullptr) 
@@ -268,6 +321,7 @@ int main(int32_t argc, char **argv)
     AERROR << "Teleop start failed.";
     return -1;
   }
+
   Teleop::PrintKeycode();
   apollo::cyber::WaitForShutdown();
   teleop.Stop();

@@ -1,0 +1,24 @@
+syntax = "proto2";
+package apollo.control;
+
+import "modules/common/proto/header.proto";
+// import "modules/canbus/proto/chassis.proto";
+
+enum OsccAction {
+  ENABLE_ALL = 0;
+  DISABLE_ALL = 1;
+  ENABLE_BRAKE = 2;
+  DISABLE_BRAKE = 3;
+  ENABLE_STEERING = 4;
+  DISABLE_STEERING = 5;
+  ENABLE_THROTTLE = 6;
+  DISABLE_THROTTLE = 7;
+};
+
+message OsccMessage {
+  // control mode, set mode according to low level definition
+  optional apollo.common.Header header = 1;
+
+  // OSCC control action
+  optional OsccAction action = 3;
+}
