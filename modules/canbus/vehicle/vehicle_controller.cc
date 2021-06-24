@@ -87,6 +87,47 @@ ErrorCode VehicleController::Update(const ControlCommand &control_command)
     AERROR << "Controller is not initialized.";
     return ErrorCode::CANBUS_ERROR;
   }
+  //TODO(xiaochen): Add OSCC control
+  if (control_command.has_oscc_msg())
+  {
+    AINFO << "CAN bus received OSCC messages: "
+          << control_command.oscc_msg().ShortDebugString() ;
+    
+    switch (control_command.oscc_msg().action())
+    {
+      case control::OsccAction::ENABLE_ALL:
+        EnableOscc(); 
+        break;
+
+      case control::OsccAction::DISABLE_ALL:
+        DisableOscc();
+        break;
+      
+      case control::OsccAction::ENABLE_BRAKE:
+        EnableOsccBrake();
+        break;
+
+      case control::OsccAction::DISABLE_BRAKE:
+        EnableOsccBrake();
+        break;
+
+      case control::OsccAction::ENABLE_STEERING:
+        EnableOsccSteering();
+        break;
+
+      case control::OsccAction::DISABLE_STEERING:
+        DisableOsccSteering();
+        break;
+
+      case control::OsccAction::ENABLE_THROTTLE:
+        EnableOsccThrottle();
+        break;
+
+      case control::OsccAction::DISABLE_THROTTLE:
+        DisableOsccThrottle();
+        break;
+    }
+  }
 
   // Execute action to transform driving mode
   if (control_command.has_pad_msg() && control_command.pad_msg().has_action()) 

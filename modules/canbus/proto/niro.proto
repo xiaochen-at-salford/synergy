@@ -140,8 +140,6 @@ message Cld_Configure_Command_0xA2 {
 }
 
 message Fault_Report_0xAF {
-
-
   optional FaultOriginId.Type fault_origin_id = 1;
   optional ChannelReport.Type fault_dtcs = 2;
 }
@@ -301,10 +299,10 @@ message Brake_Pressure_0x220 {
 }
 
 message Steering_Angle_0x2B0 {
-  optional double steering_wheel_angle = 1;
+  optional double steering_angle = 1;
 }
 
-message Wheel_Speed_0x386 {
+message Wheel_Speeds_0x386 {
   optional double left_front = 1;
   optional double right_front = 2;
   optional double left_rear = 3;
@@ -342,5 +340,9 @@ message Niro {
 
   optional Brake_Pressure_0x220 brake_pressure = 22; // Report message
   optional Steering_Angle_0x2B0 steering_angle = 23; // Report message
-  optional Wheel_Speed_0x386 wheel_speed = 24; // Report message
+  optional Wheel_Speeds_0x386 wheel_speeds = 24; // Report message
+  optional bool dummy_variable = 25;
+  optional bool dummy_variable_in_msg = 26;
+  optional bool find_steering_angle_msg = 27;
+  optional bool find_wheel_speed_msg = 28;
 }

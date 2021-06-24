@@ -135,20 +135,19 @@ ErrorCode NiroController::Init(
     return ErrorCode::CANBUS_ERROR;
   }
 
-  bool &&init_with_one = false;
   // Brake command messages
-  can_sender_->AddMessage(BrakeEnable_0x70::ID, brake_enable_, init_with_one);
-  can_sender_->AddMessage(BrakeDisable_0x71::ID, brake_disable_, init_with_one);
-  can_sender_->AddMessage(BrakeCommand_0x72::ID, brake_command_, init_with_one);
+  can_sender_->AddMessage(BrakeEnable_0x70::ID, brake_enable_, false);
+  can_sender_->AddMessage(BrakeDisable_0x71::ID, brake_disable_, false);
+  can_sender_->AddMessage(BrakeCommand_0x72::ID, brake_command_, false);
   // Steering command messages
-  can_sender_->AddMessage(SteeringEnable_0x80::ID, steering_enable_, init_with_one);
-  can_sender_->AddMessage(SteeringDisable_0x81::ID, steering_disable_, init_with_one);
-  can_sender_->AddMessage(SteeringTorqueCommand_0x82::ID, steering_torque_command_, init_with_one);
-  can_sender_->AddMessage(SteeringAngleCommand_0xB8::ID, steering_angle_command_, init_with_one);
+  can_sender_->AddMessage(SteeringEnable_0x80::ID, steering_enable_, false);
+  can_sender_->AddMessage(SteeringDisable_0x81::ID, steering_disable_, false);
+  can_sender_->AddMessage(SteeringTorqueCommand_0x82::ID, steering_torque_command_, false);
+  can_sender_->AddMessage(SteeringAngleCommand_0xB8::ID, steering_angle_command_, false);
   // Throttle command messages
-  can_sender_->AddMessage(ThrottleEnable_0x90::ID, throttle_enable_, init_with_one);
-  can_sender_->AddMessage(ThrottleDisable_0x91::ID, throttle_disable_, init_with_one);
-  can_sender_->AddMessage(ThrottleCommand_0x92::ID, throttle_command_, init_with_one);
+  can_sender_->AddMessage(ThrottleEnable_0x90::ID, throttle_enable_, false);
+  can_sender_->AddMessage(ThrottleDisable_0x91::ID, throttle_disable_, false);
+  can_sender_->AddMessage(ThrottleCommand_0x92::ID, throttle_command_, false);
 
   // need sleep to ensure all messages received
   AINFO << "NiroController is initialized.";
@@ -347,8 +346,8 @@ void NiroController::DisableOscc()
 
 void NiroController::EnableOsccBrake()
 {
-  brake_enable_->activate();
   brake_disable_->deactivate();
+  brake_enable_->activate();
 }
 
 void NiroController::DisableOsccBrake()
@@ -359,8 +358,8 @@ void NiroController::DisableOsccBrake()
 
 void NiroController::EnableOsccSteering()
 {
-  steering_enable_->activate();
   steering_disable_->deactivate();
+  steering_enable_->activate();
 }
 
 void NiroController::DisableOsccSteering()
@@ -371,8 +370,8 @@ void NiroController::DisableOsccSteering()
 
 void NiroController::EnableOsccThrottle()
 {
-  throttle_enable_->activate();
   throttle_disable_->deactivate();
+  throttle_enable_->activate();
 }
 
 void NiroController::DisableOsccThrottle()
@@ -486,6 +485,7 @@ void NiroController::SecurityDogThreadFunc()
               "nullptr.";
     return;
   }
+
   while (!can_sender_->IsRunning()) 
   { std::this_thread::yield(); }
 
@@ -510,13 +510,12 @@ void NiroController::SecurityDogThreadFunc()
       }
     } 
     else 
-    {
-      horizontal_ctrl_fail = 0;
-    }
+    { horizontal_ctrl_fail = 0; }
 
     // 2. vertical control check
-    if ((mode == Chassis::COMPLETE_AUTO_DRIVE || mode == Chassis::AUTO_SPEED_ONLY) 
-        && !CheckResponse(CHECK_RESPONSE_SPEED_UNIT_FLAG, false ) ) 
+    if ((mode == Chassis::COMPLETE_AUTO_DRIVE 
+        || mode == Chassis::AUTO_SPEED_ONLY) 
+        && !CheckResponse(CHECK_RESPONSE_SPEED_UNIT_FLAG, false) ) 
     {
       ++vertical_ctrl_fail;
       if (vertical_ctrl_fail >= kMaxFailAttempt) 

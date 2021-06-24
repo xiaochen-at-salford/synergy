@@ -187,6 +187,8 @@ void CanbusComponent::PublishChassisDetail()
 {
   ChassisDetail chassis_detail;
   message_manager_->GetSensorData(&chassis_detail);
+  //wip...: temporary test here
+  chassis_detail.mutable_niro()->set_dummy_variable(true);
   ADEBUG << chassis_detail.ShortDebugString();
   chassis_detail_writer_->Write(chassis_detail);
 }
@@ -201,6 +203,7 @@ bool CanbusComponent::Proc()
 
 void CanbusComponent::OnControlCommand(const ControlCommand &control_command) 
 {
+  printf("hi there!");
   int64_t current_timestamp = Time::Now().ToMicrosecond();
   // if command coming too soon, just ignore it.
   if (current_timestamp-last_timestamp_ < FLAGS_min_cmd_interval*1000) 

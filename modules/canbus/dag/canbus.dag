@@ -6,7 +6,7 @@ module_config {
             name: "canbus"
             config_file_path:  "/apollo/modules/canbus/conf/canbus_conf.pb.txt"
             flag_file_path:  "/apollo/modules/canbus/conf/canbus.conf"
-            interval: 10
+            interval: 20
         }
     }
 }

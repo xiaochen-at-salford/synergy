@@ -4,6 +4,7 @@
 #include "modules/canbus/vehicle/niro/protocol/0d113_0x71_brake_disable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d114_0x72_brake_command.h"
 #include "modules/canbus/vehicle/niro/protocol/0d115_0x73_brake_report.h"
+
 // Steering protocols
 #include "modules/canbus/vehicle/niro/protocol/0d128_0x80_steering_enable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d129_0x81_steering_disable.h"
@@ -17,7 +18,12 @@
 #include "modules/canbus/vehicle/niro/protocol/0d146_0x92_throttle_command.h"
 #include "modules/canbus/vehicle/niro/protocol/0d147_0x93_throttle_report.h"
 
-// #include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
+// Brake pressure
+#include "modules/canbus/vehicle/niro/protocol/0d544_0x220_brake_pressure.h"
+// Steering angle
+#include "modules/canbus/vehicle/niro/protocol/0d688_0x2B0_steering_angle.h"
+// Wheel speed
+#include "modules/canbus/vehicle/niro/protocol/0d902_0x386_wheel_speed.h"
 
 namespace apollo {
 namespace canbus {
@@ -55,7 +61,9 @@ NiroMessageManager::NiroMessageManager()
   // Throttle protocols
   AddRecvProtocolData<ThrottleReport_0x93, NEED_CHECK>();
 
-  // AddRecvProtocolData<BrakeReport_0x220, need_check>();
+  AddRecvProtocolData<BrakePressure_0x220, NEED_CHECK>();
+  AddRecvProtocolData<SteeringAngle_0x2B0, NEED_CHECK>();
+  AddRecvProtocolData<WheelSpeed_0x386, NEED_CHECK>();
 }
 
 NiroMessageManager::~NiroMessageManager() {}

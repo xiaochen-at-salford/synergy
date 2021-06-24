@@ -43,7 +43,6 @@ cc_binary(
         "//modules/common/configs:vehicle_config_helper",
         "//modules/common/util:message_util",
         "//modules/control/proto:control_cmd_cc_proto",
-        # "//modules/drivers/canbus/proto:oscc_status_cmd_proto",
         "@com_github_gflags_gflags//:gflags",
     ],
 )
