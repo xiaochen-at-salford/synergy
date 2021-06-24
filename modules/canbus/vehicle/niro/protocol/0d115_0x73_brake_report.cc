@@ -12,14 +12,16 @@ BrakeReport_0x73::BrakeReport_0x73() {};
 
 void BrakeReport_0x73::Parse(const std::uint8_t *bytes, int32_t length, ChassisDetail *chassis) 
 const {
-  chassis->mutable_niro()->mutable_brake_report(
-      )->set_brake_report_enabled(brake_report_enabled(bytes, length));
+  chassis->mutable_niro()
+      ->mutable_brake_report()
+      ->set_brake_report_enabled(brake_report_enabled(bytes, length)) ;
 
-  chassis->mutable_niro()->mutable_brake_report(
-      )->set_brake_operator_override(brake_operator_override(bytes, length));
+  chassis->mutable_niro()
+      ->mutable_brake_report()
+      ->set_brake_operator_override(brake_operator_override(bytes, length)) ;
 
-  chassis->mutable_niro()->mutable_brake_report(
-      )->set_brake_dtcs(brake_dtcs(bytes, length));
+  chassis->mutable_niro()->mutable_brake_report()
+      ->set_brake_dtcs(brake_dtcs(bytes, length)) ;
 }
 
 bool BrakeReport_0x73::brake_report_enabled(const std::uint8_t *bytes, int32_t length) 

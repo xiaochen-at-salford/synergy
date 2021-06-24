@@ -21,9 +21,10 @@ void BrakeDisable_0x71::UpdateData(uint8_t *data)
 {
   if (!is_active())
   { 
-    AERROR << "Attempting to use deactivateed OSCC CAN message"
-           << "CAN ID: Ox" << BrakeDisable_0x71::ID
-           << "Check CAN message activation status before calling this function." ;  
+    return;
+    // AINFO << "Attempting to use deactivateed OSCC CAN message"
+    //        << "CAN ID: Ox" << BrakeDisable_0x71::ID
+    //        << "Check CAN message activation status before calling this function." ;  
   }
 
   if (use_magic())

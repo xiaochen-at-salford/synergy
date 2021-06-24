@@ -21,10 +21,11 @@ uint32_t BrakeEnable_0x70::GetPeriod() const
 void BrakeEnable_0x70::UpdateData(uint8_t *data) 
 {
   if (!is_active())
-  { 
-    AERROR << "Attempting to use deactivateed OSCC CAN message"
-           << "CAN ID: Ox" << BrakeEnable_0x70::ID
-           << "Check CAN message activation status before calling this function." ;  
+  {
+    return; 
+    // AERROR << " Attempting to use deactivateed OSCC CAN message"
+    //        << " CAN ID: Ox" << BrakeEnable_0x70::ID
+    //        << " Check CAN message activation status before calling this function." ;  
   }
 
   if (use_magic())

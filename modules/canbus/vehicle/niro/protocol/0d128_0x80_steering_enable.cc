@@ -16,10 +16,11 @@ const {
 void SteeringEnable_0x80::UpdateData(uint8_t *data) 
 {
   if (!is_active())
-  { 
-    AERROR << "Attempting to use deactivateed OSCC CAN message"
-           << "CAN ID: Ox" << SteeringEnable_0x80::ID
-           << "Check CAN message activation status before calling this function." ;  
+  {
+    return; 
+    // AERROR << "Attempting to use deactivateed OSCC CAN message"
+    //        << "CAN ID: Ox" << SteeringEnable_0x80::ID
+    //        << "Check CAN message activation status before calling this function." ;  
   }
 
   if (use_magic())
