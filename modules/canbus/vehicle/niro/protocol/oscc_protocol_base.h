@@ -7,11 +7,10 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-//TODO(xiaochen): Why decimal magical number is 1372 from the OSCC dbc file?
-
 class OsccProtocolBase 
   : public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
  public:
+
   /**
    * @brief First magic byte used in commands and reports to distinguish CAN
    *        frame as coming from OSCC (and not OBD). 
@@ -23,18 +22,6 @@ class OsccProtocolBase
    *        frame as coming from OSCC (and not OBD).
    */
   static const int8_t OSCC_MAGIC_BYTE_1 = 0xCC;
-
-  bool is_active() const;
-
-  void activate();
-
-  void deactivate();
-
-  bool is_auto_active() const;
-  
-  void enable_auto_activation();
-
-  void disable_auto_activation();
 
   bool use_magic() const;
 

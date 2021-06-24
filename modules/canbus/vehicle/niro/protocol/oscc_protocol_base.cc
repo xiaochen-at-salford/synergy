@@ -6,23 +6,23 @@ namespace niro {
 
 // using ::apollo::drivers::canbus::Byte;
 
-bool OsccProtocolBase::is_active()
-const { return is_active_; }
+// bool OsccProtocolBase::is_active()
+// const { return is_active_; }
 
-void OsccProtocolBase::activate()
-{ is_active_ = true; }
+// void OsccProtocolBase::activate()
+// { is_active_ = true; }
 
-void OsccProtocolBase::deactivate()
-{ is_active_ = false; }
+// void OsccProtocolBase::deactivate()
+// { is_active_ = false; }
 
-bool OsccProtocolBase::is_auto_active() 
-const { return is_auto_active_; }
+// bool OsccProtocolBase::is_auto_active() 
+// const { return is_auto_active_; }
 
-void OsccProtocolBase::enable_auto_activation() 
-{ is_auto_active_ = true; }
+// void OsccProtocolBase::enable_auto_activation() 
+// { is_auto_active_ = true; }
 
-void OsccProtocolBase::disable_auto_activation() 
-{ is_auto_active_ = false; }
+// void OsccProtocolBase::disable_auto_activation() 
+// { is_auto_active_ = false; }
 
 bool OsccProtocolBase::use_magic()
 const { return use_magic_; }
