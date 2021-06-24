@@ -16,8 +16,6 @@
 
 #include "modules/drivers/canbus/can_client/can_client_factory.h"
 
-#include "modules/drivers/canbus/can_client/fake/fake_can_client.h"
-#include "modules/drivers/canbus/can_client/socket/socket_can_client_raw.h"
 #include "modules/drivers/canbus/can_client/oscc/oscc_can_client.h"
 
 #include "cyber/common/log.h"
@@ -29,19 +27,12 @@ namespace canbus {
 
 CanClientFactory::CanClientFactory() {}
 
-//wip...
 void CanClientFactory::RegisterCanClients() 
 {
   AINFO << "CanClientFactory::RegisterCanClients";
-  Register(CANCardParameter::FAKE_CAN,
-           []() -> CanClient* { return new can::FakeCanClient(); });
-
-  Register(CANCardParameter::SOCKET_CAN_RAW,
-           []() -> CanClient* { return new can::SocketCanClientRaw(); });
-
-  //Xiaochen: Register the OSCC CAN client here
   Register(CANCardParameter::OSCC_CAN,
-           []() -> CanClient* { return new can::OsccCanClient(); });
+           []() -> CanClient* { return new can::OsccCanClient(); } );
+  AINFO << "Registered OSCC CAN client";
 }
 
 std::unique_ptr<CanClient> 

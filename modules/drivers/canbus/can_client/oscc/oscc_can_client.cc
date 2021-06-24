@@ -110,6 +110,56 @@ ErrorCode OsccCanClient::Send(const std::vector<CanFrame> &frames, int32_t *cons
       return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
     }
 
+    // if (send_frames_[i].can_id == 114 ) 
+    // {
+    //   // typedef struct {
+    //   //   uint8_t magic[2]; /*!< Magic number identifying CAN frame as from OSCC.
+    //   //                      *   Byte 0 should be \ref OSCC_MAGIC_BYTE_0.
+    //   //                      *   Byte 1 should be \ref OSCC_MAGIC_BYTE_1. */
+    //   // float pedal_command; /* Brake Request 0.0 to 1.0 where 1.0 is 100% */
+    //   // uint8_t reserved[2]; /*!< Reserved. */
+    //   // } oscc_brake_command_s;
+
+    //   // oscc_brake_command_s frame;
+    //   // frame.magic[0] = 0x05;
+    //   // frame.magic[1] = 0xCC;
+    //   // frame.pedal_command = static_cast<float>(0.5);
+
+    //   // std::memcpy(&send_frames_[i].data, &frame, sizeof(frame));
+    //   send_frames_[i].data [0] = 0x05;
+    //   send_frames_[i].data [1] = 0xCC;
+    //   float x = 0.5;
+    //   std::memcpy(&(send_frames_[i].data[2]), &x, sizeof(x));
+    //   write(dev_send_, &send_frames_[i], sizeof(send_frames_[i]));
+    //   continue;
+    // }
+
+    // // Throttle command
+    // if (send_frames_[i].can_id == 146 ) 
+    // {
+    //   // typedef struct {
+    //   //   uint8_t magic[2]; /*!< Magic number identifying CAN frame as from OSCC.
+    //   //                      *   Byte 0 should be \ref OSCC_MAGIC_BYTE_0.
+    //   //                      *   Byte 1 should be \ref OSCC_MAGIC_BYTE_1. */
+    //   //   float throttle_command; /* Brake Request 0.0 to 1.0 where 1.0 is 100% */
+    //   //   uint8_t reserved[2]; /*!< Reserved. */
+    //   // } oscc_throttle_command_s;
+
+    //   // oscc_throttle_command_s cmd_frame;
+    //   // cmd_frame.magic[0] = 0x05;
+    //   // cmd_frame.magic[1] = 0xCC;
+    //   // cmd_frame.throttle_command = static_cast<float>(0.7);
+
+    //   // std::memcpy(send_frames_[i].data, &cmd_frame, sizeof(cmd_frame));
+
+    //   send_frames_[i].data [0] = 0x05;
+    //   send_frames_[i].data [1] = 0xCC;
+    //   float x = 0.3;
+    //   std::memcpy(&(send_frames_[i].data[2]), &x, sizeof(x));
+    //   write(dev_send_, &send_frames_[i], sizeof(send_frames_[i]));
+    //   continue;
+    // }
+
     send_frames_[i].can_id = frames[i].id;
     send_frames_[i].can_dlc = frames[i].len;
     std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);

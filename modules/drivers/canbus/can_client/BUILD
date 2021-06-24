@@ -11,8 +11,6 @@ cc_library(
         "//cyber",
         "//modules/common/util:factory",
         "//modules/drivers/canbus/can_client",
-        "//modules/drivers/canbus/can_client/fake:fake_can_client",
-        "//modules/drivers/canbus/can_client/socket:socket_can_client_raw",
         "//modules/drivers/canbus/can_client/oscc:oscc_can_client",
         "//modules/drivers/canbus/common:canbus_common",
         "//modules/drivers/canbus/proto:can_card_parameter_cc_proto",
