@@ -93,6 +93,7 @@ proto_library(
     deps = [
         ":input_debug_proto",
         ":pad_msg_proto",
+        ":oscc_msg_proto",
         "//modules/canbus/proto:chassis_proto",
         "//modules/common/proto:drive_state_proto",
         "//modules/common/proto:header_proto",
@@ -108,6 +109,7 @@ py_proto_library(
         ":control_cmd_proto",
         ":input_debug_py_pb2",
         ":pad_msg_py_pb2",
+        ":oscc_msg_py_pb2",
         "//modules/canbus/proto:chassis_py_pb2",
         "//modules/common/proto:drive_state_py_pb2",
         "//modules/common/proto:header_py_pb2",
@@ -199,6 +201,7 @@ proto_library(
     srcs = ["local_view.proto"],
     deps = [
         ":pad_msg_proto",
+        ":oscc_msg_proto",
         "//modules/canbus/proto:chassis_proto",
         "//modules/common/proto:header_proto",
         "//modules/localization/proto:localization_proto",
@@ -211,6 +214,7 @@ py_proto_library(
     deps = [
         ":local_view_proto",
         ":pad_msg_py_pb2",
+        ":oscc_msg_py_pb2",
         "//modules/canbus/proto:chassis_py_pb2",
         "//modules/common/proto:header_py_pb2",
         "//modules/localization/proto:localization_py_pb2",
@@ -268,6 +272,7 @@ proto_library(
     srcs = ["control_common_conf.proto"],
     deps = [
         ":pad_msg_proto",
+        ":oscc_msg_proto",
         "//modules/canbus/proto:chassis_proto",
     ],
 )
@@ -277,6 +282,7 @@ py_proto_library(
     deps = [
         ":control_common_conf_proto",
         ":pad_msg_py_pb2",
+        ":oscc_msg_py_pb2",
         "//modules/canbus/proto:chassis_py_pb2",
     ],
 )
@@ -296,6 +302,7 @@ proto_library(
         ":lon_controller_conf_proto",
         ":mpc_controller_conf_proto",
         ":pad_msg_proto",
+        ":oscc_msg_proto",
         "//modules/canbus/proto:chassis_proto",
     ],
 )
@@ -308,6 +315,7 @@ py_proto_library(
         ":lon_controller_conf_py_pb2",
         ":mpc_controller_conf_py_pb2",
         ":pad_msg_py_pb2",
+        ":oscc_msg_py_pb2",
         "//modules/canbus/proto:chassis_py_pb2",
     ],
 )
@@ -375,6 +383,29 @@ py_proto_library(
     deps = [
         ":pad_msg_proto",
         "//modules/canbus/proto:chassis_py_pb2",
+        "//modules/common/proto:header_py_pb2",
+    ],
+)
+
+cc_proto_library(
+    name = "oscc_msg_cc_proto",
+    deps = [
+        ":oscc_msg_proto",
+    ],
+)
+
+proto_library(
+    name = "oscc_msg_proto",
+    srcs = ["oscc_msg.proto"],
+    deps = [
+        "//modules/common/proto:header_proto",
+    ],
+)
+
+py_proto_library(
+    name = "oscc_msg_py_pb2",
+    deps = [
+        ":oscc_msg_proto",
         "//modules/common/proto:header_py_pb2",
     ],
 )
