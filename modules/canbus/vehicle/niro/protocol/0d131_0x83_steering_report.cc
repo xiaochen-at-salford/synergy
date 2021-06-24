@@ -12,14 +12,17 @@ SteeringReport_0x83::SteeringReport_0x83() {};
 
 void SteeringReport_0x83::Parse(const std::uint8_t *bytes, int32_t length, ChassisDetail *chassis) 
 const {
-  chassis->mutable_niro()->mutable_steering_report(
-      )->set_steering_report_enabled(steering_report_enabled(bytes, length));
+  chassis->mutable_niro()
+      ->mutable_steering_report()
+      ->set_steering_report_enabled(steering_report_enabled(bytes, length)) ;
 
-  chassis->mutable_niro()->mutable_steering_report(
-      )->set_steering_operator_override(steering_operator_override(bytes, length));
+  chassis->mutable_niro()
+      ->mutable_steering_report()
+      ->set_steering_operator_override(steering_operator_override(bytes, length)) ;
 
-  chassis->mutable_niro()->mutable_steering_report(
-      )->set_steering_dtcs(steering_dtcs(bytes, length));
+  chassis->mutable_niro()
+      ->mutable_steering_report()
+      ->set_steering_dtcs(steering_dtcs(bytes, length)) ;
 }
 
 bool SteeringReport_0x83::steering_report_enabled(const std::uint8_t *bytes, int32_t length) 

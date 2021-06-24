@@ -8,12 +8,9 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-class SteeringAngle_0x2B0 
-  : public OsccProtocolBase,
-    public ::apollo::drivers::canbus::ProtocolData<::apollo::canbus::ChassisDetail> {
-
+class SteeringAngle_0x2B0 : public OsccProtocolBase {
  public:
-  static const int32_t ID = 0x73;
+  static const int32_t ID = 0x2B0;
 
   SteeringAngle_0x2B0();
 

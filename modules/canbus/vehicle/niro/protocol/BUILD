@@ -23,6 +23,9 @@ cc_library(
         ":0d145_0x91_throttle_disable",
         ":0d146_0x92_throttle_command",
         ":0d147_0x93_throttle_report",
+        ":0d544_0x220_brake_pressure",
+        ":0d688_0x2B0_steering_angle",
+        ":0d902_0x386_wheel_speed",
         # ":0d160_0xa0_cld_report",
         # ":0d161_0xa1_cld_configuration_report",
         # ":0d162_0xa2_cld_configure_command",
@@ -224,6 +227,45 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "0d544_0x220_brake_pressure",
+    srcs = ["0d544_0x220_brake_pressure.cc"],
+    hdrs = ["0d544_0x220_brake_pressure.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "0d688_0x2B0_steering_angle",
+    srcs = ["0d688_0x2B0_steering_angle.cc"],
+    hdrs = ["0d688_0x2B0_steering_angle.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
+cc_library(
+    name = "0d902_0x386_wheel_speed",
+    srcs = ["0d902_0x386_wheel_speed.cc"],
+    hdrs = ["0d902_0x386_wheel_speed.h"],
+    copts = CANBUS_COPTS,
+    deps = [
+        ":oscc_protocol_base",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/drivers/canbus/can_comm:message_manager_base",
+        "//modules/drivers/canbus/common:canbus_common",
+    ],
+)
+
 # cc_library(
 #     name = "0d160_0xa0_cld_report",
 #     srcs = ["0d160_0xa0_cld_report.cc"],
@@ -275,5 +317,7 @@ cc_library(
 #         "//modules/drivers/canbus/common:canbus_common",
 #     ],
 # )
+
+
 
 cpplint()
