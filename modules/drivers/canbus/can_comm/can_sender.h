@@ -94,10 +94,9 @@ class SenderMessage {
    */
   int32_t curr_period() const;
 
-  // bool is_active() const;
-
  private:
   uint32_t message_id_ = 0; 
+
  public:
   ProtocolData<SensorType> *protocol_data_ = nullptr;
 
@@ -248,11 +247,6 @@ template <typename SensorType>
 int32_t SenderMessage<SensorType>::curr_period() const 
 { return curr_period_; }
 
-// //TODO(xiaoche)
-// template <typename SensorType>
-// bool SenderMessage<SensorType>::is_active() const 
-// { return is_active_; }
-
 template <typename SensorType>
 void CanSender<SensorType>::PowerSendThreadFunc() 
 {
@@ -271,7 +265,6 @@ void CanSender<SensorType>::PowerSendThreadFunc()
 
   AINFO << "CAN client sender thread starts.";
 
-  //TODO(xiaochen):
   while (is_running_) 
   {
     tm_start = cyber::Time::Now().ToNanosecond() / 1e3;
@@ -279,10 +272,6 @@ void CanSender<SensorType>::PowerSendThreadFunc()
 
     for (auto &message : send_messages_) 
     {
-      // Only send active messages
-      if (!message.protocol_data_->is_active())
-      { continue; } 
-
       bool need_send = NeedSend(message, delta_period);
       message.UpdateCurrPeriod(delta_period);
       new_delta_period = std::min(new_delta_period, message.curr_period());
@@ -290,13 +279,22 @@ void CanSender<SensorType>::PowerSendThreadFunc()
       if (!need_send) 
       { continue; }
 
-      std::vector<CanFrame> can_frames;
-      CanFrame can_frame = message.CanFrame();
-      can_frames.push_back(can_frame);
-      if (can_client_->SendSingleFrame(can_frames) != common::ErrorCode::OK) 
-      { AERROR << "Send msg failed:" << can_frame.CanFrameString(); }
-      if (enable_log()) 
-      { ADEBUG << "send_can_frame#" << can_frame.CanFrameString(); }
+      // Only send active OSCC CAN message
+      if (message.protocol_data_->is_active())
+      {  
+        std::vector<CanFrame> can_frames;
+        CanFrame can_frame = message.CanFrame();
+        can_frames.push_back(can_frame);
+        if (can_client_->SendSingleFrame(can_frames) != common::ErrorCode::OK) 
+        { AERROR << "Send msg failed:" << can_frame.CanFrameString(); }
+        if (enable_log()) 
+        { ADEBUG << "send_can_frame#" << can_frame.CanFrameString(); }
+      }
+      
+      if (message.protocol_data_->is_auto_active())
+      { message.protocol_data_->activate(); }
+      else
+      { message.protocol_data_->deactivate(); }
     }
 
     delta_period = new_delta_period;
@@ -323,11 +321,13 @@ common::ErrorCode CanSender<SensorType>::Init(CanClient *can_client, bool enable
     AERROR << "Duplicated Init request.";
     return common::ErrorCode::CANBUS_ERROR;
   }
+
   if (can_client == nullptr) 
   {
     AERROR << "Invalid can client.";
     return common::ErrorCode::CANBUS_ERROR;
   }
+
   is_init_ = true;
   can_client_ = can_client;
   enable_log_ = enable_log;
@@ -374,7 +374,7 @@ void CanSender<SensorType>::Stop()
 {
   if (is_running_) 
   {
-    AINFO << "Stopping can sender ...";
+    AINFO << "Stopping CAN sender ...";
     is_running_ = false;
     if (thread_ != nullptr && thread_->joinable()) 
     { thread_->join(); }
@@ -383,7 +383,7 @@ void CanSender<SensorType>::Stop()
   else 
   { AERROR << "CanSender is not running."; }
 
-  AINFO << "Can client sender stopped [ok].";
+  AINFO << "CAN client sender stopped [ok].";
 }
 
 template <typename SensorType>

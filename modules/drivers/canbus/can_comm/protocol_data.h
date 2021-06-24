@@ -14,11 +14,6 @@
  * limitations under the License.
  *****************************************************************************/
 
-/**
- * @file
- * @brief The class of ProtocolData
- */
-
 #pragma once
 
 #include <cmath>
@@ -27,19 +22,10 @@
 #include "cyber/common/log.h"
 #include "modules/drivers/canbus/common/canbus_consts.h"
 
-/**
- * @namespace apollo::drivers::canbus
- * @brief apollo::drivers::canbus
- */
 namespace apollo {
 namespace drivers {
 namespace canbus {
 
-/**
- * @class ProtocolData
- *
- * @brief This is the base class of protocol data.
- */
 template <typename SensorType>
 class ProtocolData {
  public:
@@ -49,8 +35,8 @@ class ProtocolData {
    * @param length the length of the input array
    * @return the value of checksum
    */
-  static std::uint8_t CalculateCheckSum(const uint8_t *input,
-                                        const uint32_t length);
+  static std::uint8_t CalculateCheckSum(const uint8_t *input, const uint32_t length);
+
   /**
    * @brief construct protocol data.
    */
@@ -79,8 +65,9 @@ class ProtocolData {
    * @param length the length of the input bytes
    * @param sensor_data the parsed sensor_data
    */
-  virtual void Parse(const uint8_t *bytes, int32_t length,
-                     SensorType *sensor_data) const;
+  virtual void Parse(const uint8_t *bytes, 
+                     int32_t length, 
+                     SensorType *sensor_data ) const;
 
   /**
    * @brief update the data
@@ -101,9 +88,14 @@ class ProtocolData {
   /**
    * @brief If the protocal data is a send message, check if it is active
    */
-  virtual bool is_active() const;
 
-  virtual bool is_active();
+  // For OSCC messages only
+  bool is_active() const;
+  void activate();
+  void deactivate();
+  bool is_auto_active() const;
+  void enable_auto_activation();
+  void disable_auto_activation();
 
  protected:
   bool is_active_ = false;
@@ -115,40 +107,37 @@ class ProtocolData {
 
 template <typename SensorType>
 template <typename T>
-T ProtocolData<SensorType>::BoundedValue(T lower, T upper, T val) {
-  if (lower > upper) {
-    return val;
-  }
-  if (val < lower) {
-    return lower;
-  }
-  if (val > upper) {
-    return upper;
-  }
+T ProtocolData<SensorType>::BoundedValue(T lower, T upper, T val) 
+{
+  if (lower > upper) 
+  { return val; }
+  if (val < lower) 
+  { return lower; }
+  if (val > upper) 
+  { return upper; }
   return val;
 }
 
 // (SUM(input))^0xFF
 template <typename SensorType>
-uint8_t ProtocolData<SensorType>::CalculateCheckSum(const uint8_t *input,
-                                                    const uint32_t length) {
-  return static_cast<uint8_t>(std::accumulate(input, input + length, 0) ^ 0xFF);
-}
+uint8_t ProtocolData<SensorType>::CalculateCheckSum(const uint8_t *input, const uint32_t length) 
+{ return static_cast<uint8_t>(std::accumulate(input, input + length, 0) ^ 0xFF); }
 
 template <typename SensorType>
-uint32_t ProtocolData<SensorType>::GetPeriod() const {
+uint32_t ProtocolData<SensorType>::GetPeriod() 
+const {
   const uint32_t CONST_PERIOD = 100 * 1000;
   return CONST_PERIOD;
 }
 
 template <typename SensorType>
-int32_t ProtocolData<SensorType>::GetLength() const {
-  return data_length_;
-}
+int32_t ProtocolData<SensorType>::GetLength() 
+const { return data_length_; }
 
 template <typename SensorType>
-void ProtocolData<SensorType>::Parse(const uint8_t *bytes, int32_t length,
-                                     SensorType *sensor_data) const {}
+void ProtocolData<SensorType>::Parse(const uint8_t *bytes, 
+                                     int32_t length,
+                                     SensorType *sensor_data ) const {}
 
 template <typename SensorType>
 void ProtocolData<SensorType>::UpdateData(uint8_t * /*data*/) {}
@@ -158,11 +147,27 @@ void ProtocolData<SensorType>::Reset() {}
 
 template <typename SensorType>
 bool ProtocolData<SensorType>::is_active() 
-{ return is_active_; }
+const { return is_active_; }
 
 template <typename SensorType>
-bool ProtocolData<SensorType>::is_active() 
-const { return is_active_; }
+void ProtocolData<SensorType>::activate() 
+{ is_active_ = true; }
+
+template <typename SensorType>
+void ProtocolData<SensorType>::deactivate() 
+{ is_active_ = false; }
+
+template <typename SensorType>
+bool ProtocolData<SensorType>::is_auto_active() 
+const { return is_auto_active_; }
+
+template <typename SensorType>
+void ProtocolData<SensorType>::enable_auto_activation() 
+{ is_auto_active_ = true; }
+
+template <typename SensorType>
+void ProtocolData<SensorType>::disable_auto_activation() 
+{ is_auto_active_ = false; }
 
 }  // namespace canbus
 }  // namespace drivers
