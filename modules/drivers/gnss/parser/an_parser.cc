@@ -157,7 +157,8 @@ void AnParser::process_system_state_msg()
   // Convert roll, pitch, yaw from radians to quaternion format
   float phi = system_state_packet_.orientation[0] / 2.0f;
   float theta = system_state_packet_.orientation[1] / 2.0f;
-  float psi = system_state_packet_.orientation[2] / 2.0f;
+  // Add "-", AN and Apollo use oppposite z axes
+  float psi = - system_state_packet_.orientation[2] / 2.0f;
   float sin_phi = sinf(phi);
   float cos_phi = cosf(phi);
   float sin_theta = sinf(theta);
