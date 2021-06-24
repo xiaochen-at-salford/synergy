@@ -77,6 +77,16 @@ class VehicleController {
   virtual common::ErrorCode EnableSteeringOnlyMode() = 0;
   virtual common::ErrorCode EnableSpeedOnlyMode() = 0;
 
+  // OSCC specific dirving mode comands
+  virtual void EnableOscc() = 0;
+  virtual void DisableOscc() = 0;
+  virtual void EnableOsccBrake() = 0;
+  virtual void DisableOsccBrake() = 0;
+  virtual void EnableOsccSteering() = 0;
+  virtual void DisableOsccSteering() = 0;
+  virtual void EnableOsccThrottle() = 0;
+  virtual void DisableOsccThrottle() = 0;
+
   /**
    * @brief NEUTRAL, REVERSE, DRIVE
    */
