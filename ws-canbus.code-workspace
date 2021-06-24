@@ -101,14 +101,18 @@
 			"activityBar.inactiveForeground": "#15202b99",
 			"activityBarBadge.background": "#bc6363",
 			"activityBarBadge.foreground": "#e7e7e7",
-			"statusBar.background": "#9c9dd5",
+			"statusBar.background": "#9c9cd5",
 			"statusBar.foreground": "#15202b",
-			"statusBarItem.hoverBackground": "#787ac6",
-			"titleBar.activeBackground": "#9c9dd5",
+			"statusBarItem.hoverBackground": "#7878c6",
+			"titleBar.activeBackground": "#9c9cd5",
 			"titleBar.activeForeground": "#15202b",
-			"titleBar.inactiveBackground": "#9c9dd599",
+			"titleBar.inactiveBackground": "#9c9cd599",
 			"titleBar.inactiveForeground": "#15202b99"
 		},
-		"peacock.remoteColor": "#9c9dd5"
+		"peacock.remoteColor": "#9c9cd5",
+		"python.analysis.extraPaths": [
+			"/home/xiaochen/ros1-ws-moveit/devel/lib/python2.7/dist-packages",
+			"/opt/ros/melodic/lib/python2.7/dist-packages"
+		]
 	}
 }
