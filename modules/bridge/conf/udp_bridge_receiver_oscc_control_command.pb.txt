@@ -1,0 +1,4 @@
+topic_name: "/apollo/control"
+bind_port: 8900
+proto_name: "ControlCommand"
+enable_timeout: false

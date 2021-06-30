@@ -12,6 +12,8 @@ module_config {
       }
    }
 
+
+
     components {
 
         class_name: "UDPBridgeSenderComponent<localization::LocalizationEstimate>"
