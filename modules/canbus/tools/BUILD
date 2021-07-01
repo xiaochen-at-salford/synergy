@@ -47,4 +47,20 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "niro_pad",
+    srcs = ["niro_pad.cc"],
+    deps = [
+        "//cyber",
+        "//modules/canbus/common:canbus_common",
+        "//modules/canbus/proto:chassis_detail_cc_proto",
+        "//modules/canbus/vehicle:vehicle_controller_base",
+        "//modules/common/adapters:adapter_gflags",
+        "//modules/common/configs:vehicle_config_helper",
+        "//modules/common/util:message_util",
+        "//modules/control/proto:control_cmd_cc_proto",
+        "@com_github_gflags_gflags//:gflags",
+    ],
+)
+
 cpplint()

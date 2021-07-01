@@ -20,18 +20,8 @@
 #include "modules/control/proto/oscc_msg.pb.h"
 #include "modules/control/proto/pad_msg.pb.h"
 
-// gflags
-DEFINE_double(throttle_inc_delta, 2.0, "throttle pedal command delta percentage.");
-DEFINE_double(brake_inc_delta, 2.0, "brake pedal delta percentage");
-DEFINE_double(steer_inc_delta, 2.0, "steer delta percentage");
-// TODO(ALL) : switch the acceleration cmd or pedal cmd
-// default : use pedal cmd
-DEFINE_bool(use_acceleration, false, "switch to use acceleration instead of throttle pedal and brake pedal" );
-
 namespace {
   
-// typedef ::apollo::drivers::canbus::OsccStatusCommand::Type OsccStatusCommandType;
-
 using apollo::canbus::Chassis;
 using apollo::common::VehicleSignal;
 using apollo::control::ControlCommand;
@@ -52,7 +42,6 @@ const uint32_t KEYCODE_LF2 = 0x61;  // 'a'
 const uint32_t KEYCODE_RT1 = 0x44;  // 'D'
 const uint32_t KEYCODE_RT2 = 0x64;  // 'd'
 
-// const uint32_t KEYCODE_O = 0x30;  // '0'
 // Keys for pad messages
 const uint32_t KEYCODE_DRIVE_MODE_MANUL = 0x30;  // '0'
 const uint32_t KEYCODE_DRIVE_MODE_AUTO = 0x31;  // '1'
@@ -72,17 +61,8 @@ const uint32_t KEYCODE_STEERING_DISABLE = 0x78;  // 'x'
 const uint32_t KEYCODE_THROTTLE_ENABLE = 0x54;  // 'T'
 const uint32_t KEYCODE_THROTTLE_DISABLE = 0x74;  // 't'
 
-const uint32_t KEYCODE_HELP = 0x68;   // 'h'
+const uint32_t KEYCODE_HELP = 0x68;  // 'h'
 const uint32_t KEYCODE_HELP2 = 0x48;  // 'H'
-
-// acetua brake = x * scale + offset
-double brake_percent = 40;
-int brake_counter = 0;
-double throttle_percent = 30;
-int throttle_counter = 0;
-double steering_percent = 100;
-double steering_percent_var = steering_percent;
-int steering_counter = 0;
 
 class Teleop {
  public:
@@ -116,12 +96,6 @@ class Teleop {
     printf("                     [x] Disable Steering \n");
     printf("                     [T] Enable Throttle \n");
     printf("                     [t] Disable Throttle \n");
-    printf("\n-----------------------------------------------------------\n");
-    printf("Driving Control Messages: \n");
-    printf("                     [W/w] Throttle \n");
-    printf("                     [S/s] Break \n");
-    printf("                     [A/a] Left Steering \n");
-    printf("                     [D/d] Right Steering \n");
     printf("\n-----------------------------------------------------------\n");
     printf("Exit: Ctrl + C, then press enter to normal terminal\n");
     printf("===========================================================\n");
@@ -169,101 +143,6 @@ class Teleop {
 
       switch (c) 
       {
-        case KEYCODE_UP1:  // accelerate
-        case KEYCODE_UP2:
-          // control_command_.set_throttle(50);
-          throttle_counter += 5;
-          // // TODO(xiaochen): Check this flag later
-          // if (!FLAGS_use_acceleration) 
-          // { 
-          //   brake = control_command_.brake();
-          //   throttle = control_command_.throttle();
-          // }
-          // if (brake > 1e-6) 
-          // {
-          //   //TODO(xiaochen): Check this flag later
-          //   brake = GetCommand(brake, -FLAGS_brake_inc_delta);
-          //   if (!FLAGS_use_acceleration) 
-          //   { control_command_.set_brake(brake); } 
-          //   else 
-          //   {
-          //     dec = brake / 100 * vehicle_params_.max_deceleration();
-          //     control_command_.set_acceleration(dec);
-          //   }
-          // } 
-          // else 
-          // {
-          //   throttle = GetCommand(throttle, FLAGS_throttle_inc_delta);
-          //   if (!FLAGS_use_acceleration) 
-          //   { control_command_.set_throttle(throttle); } 
-          //   else 
-          //   {
-          //     acc = throttle / 100 * vehicle_params_.max_acceleration();
-          //     control_command_.set_acceleration(acc);
-          //   }
-          // }
-          // if (!FLAGS_use_acceleration) 
-          // {
-          //   AINFO << "Throttle = " << control_command_.throttle()
-          //         << ", Brake = " << control_command_.brake() ;
-          // } 
-          // else 
-          // { AINFO << "Acceleration = " << control_command_.acceleration(); }
-          break;
-
-        case KEYCODE_DN1:  // decelerate
-        case KEYCODE_DN2:
-          brake_counter += 5;
-          printf("Current brake_counter: %d\n", brake_counter);
-          // control_command_.set_brake(50);
-          // if (!FLAGS_use_acceleration) 
-          // {
-          //   brake = control_command_.brake();
-          //   throttle = control_command_.throttle();
-          // }
-          // if (throttle > 1e-6) 
-          // {
-          //   throttle = GetCommand(throttle, -FLAGS_throttle_inc_delta);
-          //   if (!FLAGS_use_acceleration) 
-          //   { control_command_.set_throttle(throttle); } 
-          //   else 
-          //   {
-          //     acc = throttle / 100 * vehicle_params_.max_acceleration();
-          //     control_command_.set_acceleration(acc);
-          //   }
-          // } else 
-          // {
-          //   brake = GetCommand(brake, FLAGS_brake_inc_delta);
-          //   if (!FLAGS_use_acceleration) 
-          //   { control_command_.set_brake(brake); } 
-          //   else 
-          //   {
-          //     dec = brake / 100 * vehicle_params_.max_deceleration();
-          //     control_command_.set_acceleration(dec);
-          //   }
-          // }
-          // if (!FLAGS_use_acceleration) 
-          // {
-          //   AINFO << "Throttle = " << control_command_.throttle()
-          //         << ", Brake = " << control_command_.brake();
-          // } 
-          // else 
-          // { AINFO << "Acceleration = " << control_command_.acceleration(); }
-          break;
-
-        case KEYCODE_LF1:  // stear left
-        case KEYCODE_LF2:
-          printf("hi there");
-          steering_counter += 20;  
-          steering_percent_var = - steering_percent; 
-          break;
-
-        case KEYCODE_RT1:  // stear right
-        case KEYCODE_RT2:  
-          steering_counter += 20; 
-          steering_percent_var = steering_percent; 
-          break;
-
         case KEYCODE_DRIVE_MODE_MANUL:
           control_command_.mutable_pad_msg()
               ->set_driving_mode(DrivingMode::Chassis_DrivingMode_COMPLETE_MANUAL) ;
@@ -334,7 +213,6 @@ class Teleop {
           break;
 
         default:
-          control_command_.set_brake(70);
           printf("%X\n", c);
           break;
       }
@@ -363,38 +241,6 @@ class Teleop {
   void Send() 
   {
     apollo::common::util::FillHeader("control", &control_command_);
-    // printf("hehe\n");
-    // control_command_.set_brake(70);
-    if (brake_counter > 0)
-    { 
-      control_command_.set_brake(brake_percent);
-      brake_counter -= 1;
-      if (brake_counter == 0)
-      { printf("brake_counter return to 0\n");}
-    }
-    // else
-    // { control_command_.set_brake(-1.0); }
-
-    if (throttle_counter > 0)
-    { 
-      control_command_.set_throttle(throttle_percent);
-      throttle_counter -= 1;
-      if (throttle_counter == 0)
-      { printf("throttle_counter return to 0\n");}
-    }
-    // else
-    // { control_command_.set_throttle(-1.0);}
-
-    if (steering_counter >= 0)
-    { 
-      control_command_.set_steering_target(steering_percent_var);
-      steering_counter -= 1;
-      if (steering_counter == 0)
-      { printf("brake_counter return to 0\n");}
-    }
-    // else
-    // { control_command_.set_steering_target(0.0); }
-
     control_command_writer_->Write(control_command_);
     ADEBUG << "Control Command send OK:" << control_command_.ShortDebugString();
   }
