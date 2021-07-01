@@ -13,22 +13,33 @@ SteeringAngleCommand_0xB8::SteeringAngleCommand_0xB8()
 
 uint32_t SteeringAngleCommand_0xB8::GetPeriod() 
 const {
-  static const uint32_t PERIOD = 20*1000;
+  static const uint32_t PERIOD = 33*1000; 
   return PERIOD;
 }
 
 void SteeringAngleCommand_0xB8::UpdateData(uint8_t *data) 
 {
+  // data[0] = 1;
+  // float scale = 10;
+  // int16_t angle = static_cast<int16_t>(scale*steering_angle_percent_);
+  // // int16_t angle = static_cast<int16_t>(scale*60);
+  // std::memcpy(&(data[1]), &angle, sizeof(angle));
+  // int16_t max_vel = static_cast<int16_t>(scale*30);
+  // std::memcpy(&(data[3]), &max_vel, sizeof(max_vel));
+
   set_p_steering_angle_cmd_flags(data, steering_angle_cmd_flags_);
   set_p_steering_angle_cmd_angle(data, steering_angle_percent_);
   set_p_steering_angle_cmd_max_velocity(data, max_steering_velocity_percent_);
+
+  // printf("update data steering angle percent %f\n",  steering_angle_percent_);
 }
 
 void SteeringAngleCommand_0xB8::Reset() 
 {
-  disable_magic_use();
+  activate();
   enable_auto_activation();
-  steering_angle_cmd_flags_ = false;
+  disable_magic_use();
+  steering_angle_cmd_flags_ = true;
   steering_angle_percent_ = 0.0;
   max_steering_velocity_percent_ = 0.0;
 }
@@ -56,10 +67,19 @@ void SteeringAngleCommand_0xB8::set_p_steering_angle_cmd_flags(uint8_t *data, bo
 
 void SteeringAngleCommand_0xB8::set_p_steering_angle_cmd_angle(uint8_t *data, double steering_angle_percent) 
 {
-  float scale = 10.0;
-  float angle = ProtocolData::BoundedValue(-100.0, 100.0, steering_angle_percent) / 100.0 * 600.0;
+  // | Niro (degrees) | OSCC DBC (degees) | APOLLO (percent) | 
+  // | (-485, 485)    | (-600, 600)       | (-100, 100)      |
+  // float angle = ProtocolData::BoundedValue(-100.0, 100.0, steering_angle_percent);
+  double apollo_scale = 3;
+  steering_angle_percent *= apollo_scale;
+  float angle = ProtocolData::BoundedValue(-25.0, 25.0, steering_angle_percent);
+  angle = angle / 100.0 * 470.0;
+  float scale = 10.0; // Defined by OSCC
   int16_t x = static_cast<int16_t>(scale*angle);
-  std::memcpy(&data[1], &angle, sizeof(x));
+  // int16_t x = static_cast<int16_t>(scale*60);
+  // "+" : Left   "-": Right
+  x *= -1;
+  std::memcpy(&data[1], &x, sizeof(x));
 }
 
 void SteeringAngleCommand_0xB8::set_p_steering_angle_cmd_max_velocity(uint8_t *data, double max_steering_velocity_percent)

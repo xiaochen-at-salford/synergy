@@ -25,12 +25,7 @@ const {
 double SteeringAngle_0x2B0::steering_angle(const std::uint8_t *bytes, int32_t length) 
 const {
   int16_t raw = (bytes[1] << 8) | bytes[0];
-  return -((double)raw * 0.1);
-
-  // Byte t(bytes);
-  // int8_t x0 = t.get_byte(0, 1);
-  // int8_t x1 = t.get_byte(1, 1);
-  // return -static_cast<double>((x1<<8) || x0);
+  return -((double)raw * 0.1); // 0.1 is a scalar from OSCC
 }
 
 }  // namespace niro

@@ -8,11 +8,6 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-/* From the KIA Niro DBC file:
- * BO_ 144 THROTTLE_ENABLE: 8 THROTTLE
- *     SG_ throttle_enable_magic : 0|16@1+ (1,0) [0|0] "" THROTTLE
- */
-
 class ThrottleEnable_0x90 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0x90;

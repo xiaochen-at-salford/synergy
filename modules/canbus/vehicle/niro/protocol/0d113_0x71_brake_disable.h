@@ -8,10 +8,6 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-// From the KIA Niro DBC file:
-// BO_ 113 BRAKE_DISABLE: 8 BRAKE
-//    SG_ brake_disable_magic : 0|16@1+ (1,0) [0|0] "" BRAKE
-
 class BrakeDisable_0x71 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0x71;

@@ -8,13 +8,6 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-/* From the KIA Niro DBC file
- * BO_ 184 STEERING_ANGLE_COMMAND: 8 STEERING_CTRL
- *    SG_ steering_angle_cmd_flags : 0|8@1+ (1,0) [0|0] "" STEERING_CTRL
- *    SG_ steering_angle_cmd_angle : 8|16@1- (0.1,0) [-600|600] "degrees" STEERING_CTRL
- *    SG_ steering_angle_cmd_max_velocity : 24|16@1- (0.1,0) [-0|800] "degrees/second" STEERING_CTRL
- */
-
 class SteeringAngleCommand_0xB8 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0xB8;

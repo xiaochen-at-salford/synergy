@@ -9,11 +9,7 @@ namespace niro {
 using ::apollo::drivers::canbus::Byte;
 
 ThrottleDisable_0x91::ThrottleDisable_0x91() 
-{
-  enable_magic_use(); 
-  disable_auto_activation();
-  Reset(); 
-}
+{ Reset(); }
 
 uint32_t ThrottleDisable_0x91::GetPeriod() 
 const {
@@ -24,23 +20,18 @@ const {
 void ThrottleDisable_0x91::UpdateData(uint8_t *data) 
 {
   if (!is_active())
-  { 
-    AERROR << "Attempting to use deactivateed OSCC CAN message"
-           << "CAN ID: Ox" << ThrottleDisable_0x91::ID
-           << "Check CAN message activation status before calling this function." ;  
-  }
+  { return; }
 
   if (use_magic())
   { set_p_magic(data); }
-
-  if (is_auto_active())
-  { activate(); }
-  else
-  { deactivate(); }
 }
 
 void ThrottleDisable_0x91::Reset() 
-{ deactivate(); }
+{ 
+  enable_magic_use(); 
+  disable_auto_activation();
+  deactivate(); 
+}
 
 ThrottleDisable_0x91 *ThrottleDisable_0x91::set_throttle_disable()
 {

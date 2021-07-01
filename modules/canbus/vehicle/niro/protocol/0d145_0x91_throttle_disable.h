@@ -8,11 +8,6 @@ namespace apollo {
 namespace canbus {
 namespace niro {
 
-/* From the KIA Niro DBC file:
- * BO_ 128 STEERING_ENABLE: 8 STEERING
- *     SG_ steering_enable_magic : 0|16@1+ (1,0) [0|0] "" STEERING
- */
-
 class ThrottleDisable_0x91 : public OsccProtocolBase {
  public:
   static const int32_t ID = 0x91;

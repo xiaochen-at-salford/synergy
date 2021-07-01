@@ -1,11 +1,18 @@
 #include "modules/canbus/vehicle/niro/protocol/0d114_0x72_brake_command.h"
 
+#include <cmath>
+
 namespace apollo {
 namespace canbus {
 namespace niro {
 
 BrakeCommand_0x72::BrakeCommand_0x72() 
-{ Reset(); }
+{
+  enable_magic_use();
+  enable_auto_activation();
+  activate();
+  Reset(); 
+}
 
 uint32_t BrakeCommand_0x72::GetPeriod() const 
 {
@@ -15,30 +22,15 @@ uint32_t BrakeCommand_0x72::GetPeriod() const
 
 void BrakeCommand_0x72::UpdateData(uint8_t *data) 
 {
-  if (!is_active())
-  { 
-    return;
-    // AERROR << "Attempting to use deactivateed OSCC CAN message"
-    //        << "CAN ID: Ox" << BrakeCommand_0x72::ID
-    //        << "Check CAN message activation status before calling this function." ;  
-  }
-
   set_p_magic(data);
   set_p_brake_pedal_command(data, brake_pedal_percent_);
-
-  if (use_magic())
-  { set_p_magic(data); }
-
-  if (is_auto_active())
-  { activate(); }
-  else 
-  { deactivate(); }
 }
 
 void BrakeCommand_0x72::Reset() 
 { 
-  enable_magic_use();
+  activate();
   enable_auto_activation();
+  enable_magic_use();
   brake_pedal_percent_ = 0.0; 
 }
 
@@ -50,10 +42,32 @@ BrakeCommand_0x72 *BrakeCommand_0x72::set_brake_pedal_command(double brake_pedal
 
 void BrakeCommand_0x72::set_p_brake_pedal_command(uint8_t *data, double brake_pedal_percent) 
 {
-  brake_pedal_percent = ProtocolData::BoundedValue(0.0, 100.0, brake_pedal_percent);
-  // For OSCC, the range ofpedal command is [0,1]
-  float x = static_cast<float>(brake_pedal_percent / 100.0);
+  // Clean
+  if (brake_pedal_percent < 0)
+  {
+    float x = static_cast<float>(0.0);
+    memcpy(&data[2], &x, sizeof(x));
+    return;
+  }
+  // double scale = 3.5; // medium
+  // double scale = 3; // feel good?
+  // double scale = 2.5; // not work
+  // double offset = 0.0;
+
+  // The nonlinear mapping: ln(a*x+b)
+  // | Apollo | OSCC | 
+  // | 10%    | 30%  |
+  // | 50%    | 90%  |
+  brake_pedal_percent /= 100;
+  double scale = 0.35491472516316813;
+  double offset = 1.3143673350596863;
+  brake_pedal_percent = brake_pedal_percent*scale + offset;
+  brake_pedal_percent = log(brake_pedal_percent);
+  brake_pedal_percent = ProtocolData::BoundedValue(0.0, 1.0, brake_pedal_percent);
+  float x = static_cast<float>(brake_pedal_percent);
+  // float x = static_cast<float>(0.0);
   memcpy(&data[2], &x, sizeof(x));
+  // printf("brake command percent: %f\n", brake_pedal_percent );
 }
 
 }  // namespace niro

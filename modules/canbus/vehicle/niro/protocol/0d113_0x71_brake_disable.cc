@@ -9,7 +9,11 @@ namespace niro {
 using ::apollo::drivers::canbus::Byte;
 
 BrakeDisable_0x71::BrakeDisable_0x71() 
-{ Reset(); }
+{
+  enable_magic_use();
+  disable_auto_activation();
+  Reset(); 
+}
 
 uint32_t BrakeDisable_0x71::GetPeriod() const 
 {
@@ -20,27 +24,17 @@ uint32_t BrakeDisable_0x71::GetPeriod() const
 void BrakeDisable_0x71::UpdateData(uint8_t *data) 
 {
   if (!is_active())
-  { 
-    return;
-    // AINFO << "Attempting to use deactivateed OSCC CAN message"
-    //        << "CAN ID: Ox" << BrakeDisable_0x71::ID
-    //        << "Check CAN message activation status before calling this function." ;  
-  }
+  { return; }
 
   if (use_magic())
   { set_p_magic(data); }
-
-  if (is_auto_active())
-  { activate(); }
-  else 
-  { deactivate(); }
 }
 
 void BrakeDisable_0x71::Reset() 
 {
-  enable_magic_use();
-  disable_auto_activation();
   deactivate(); 
+  disable_auto_activation();
+  enable_magic_use();
 }
 
 BrakeDisable_0x71 *BrakeDisable_0x71::set_brake_disable()

@@ -128,7 +128,7 @@ ErrorCode OsccCanClient::Send(const std::vector<CanFrame> &frames, int32_t *cons
     //   // std::memcpy(&send_frames_[i].data, &frame, sizeof(frame));
     //   send_frames_[i].data [0] = 0x05;
     //   send_frames_[i].data [1] = 0xCC;
-    //   float x = 0.5;
+    //   float x = 0.7;
     //   std::memcpy(&(send_frames_[i].data[2]), &x, sizeof(x));
     //   write(dev_send_, &send_frames_[i], sizeof(send_frames_[i]));
     //   continue;
@@ -158,6 +158,63 @@ ErrorCode OsccCanClient::Send(const std::vector<CanFrame> &frames, int32_t *cons
     //   std::memcpy(&(send_frames_[i].data[2]), &x, sizeof(x));
     //   write(dev_send_, &send_frames_[i], sizeof(send_frames_[i]));
     //   continue;
+    // }
+
+    // if (send_frames_[i].can_id == 114 ) 
+    // {
+    //   // typedef struct {
+    //   //   uint8_t magic[2]; /*!< Magic number identifying CAN frame as from OSCC.
+    //   //                      *   Byte 0 should be \ref OSCC_MAGIC_BYTE_0.
+    //   //                      *   Byte 1 should be \ref OSCC_MAGIC_BYTE_1. */
+    //   // float pedal_command; /* Brake Request 0.0 to 1.0 where 1.0 is 100% */
+    //   // uint8_t reserved[2]; /*!< Reserved. */
+    //   // } oscc_brake_command_s;
+
+    //   // oscc_brake_command_s frame;
+    //   // frame.magic[0] = 0x05;
+    //   // frame.magic[1] = 0xCC;
+    //   // frame.pedal_command = static_cast<float>(0.5);
+
+    //   // std::memcpy(&send_frames_[i].data, &frame, sizeof(frame));
+    //   send_frames_[i].data [0] = 0x05;
+    //   send_frames_[i].data [1] = 0xCC;
+    //   float x = 0.3;
+    //   std::memcpy(&(send_frames_[i].data[2]), &x, sizeof(x));
+    //   write(dev_send_, &send_frames_[i], sizeof(send_frames_[i]));
+    //   continue;
+    // }
+
+    // // Steering Angle Command
+    // if (send_frames_[i].can_id == 184) 
+    // {
+    //   // send_frames_[i].data[0] = 0x05;
+    //   // send_frames_[i].data[1] = 0xCC;
+    //   send_frames_[i].data[0] = 1;
+    //   float scale = 10;
+    //   int16_t angle = static_cast<int16_t>(scale*0);
+    //   std::memcpy(&(send_frames_[i].data[1]), &angle, sizeof(angle));
+    //   int16_t max_vel = static_cast<int16_t>(scale*300);
+    //   std::memcpy(&(send_frames_[i].data[3]), &max_vel, sizeof(max_vel));
+    //   write(dev_send_, &send_frames_[i], sizeof(send_frames_[i]));
+    //   continue;
+    // }
+
+    // Monitor Steering Angle Command
+    // if (send_frames_[i].can_id == 184) 
+    // {
+    //   // send_frames_[i].data[0] = 0x05;
+    //   // send_frames_[i].data[1] = 0xCC;
+    //   send_frames_[i].data[0] = 1;
+    //   float scale = 10;
+    //   int16_t angle = static_cast<int16_t>(scale*-100);
+    //   std::memcpy(&(send_frames_[i].data[1]), &angle, sizeof(angle));
+    //   int16_t max_vel = static_cast<int16_t>(scale*800);
+    //   std::memcpy(&(send_frames_[i].data[3]), &max_vel, sizeof(max_vel));
+    //   write(dev_send_, &send_frames_[i], sizeof(send_frames_[i]));
+
+    //   printf("hello here\n");
+    //   continue;
+      
     // }
 
     send_frames_[i].can_id = frames[i].id;

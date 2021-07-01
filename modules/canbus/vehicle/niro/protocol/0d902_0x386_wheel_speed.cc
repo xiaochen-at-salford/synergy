@@ -15,21 +15,22 @@ WheelSpeed_0x386::WheelSpeed_0x386() {};
 
 void WheelSpeed_0x386::Parse(const std::uint8_t *bytes, int32_t length, ChassisDetail *chassis_detail) 
 const {
+  double scale = 1/1.609344; // kph -> mph
   chassis_detail->mutable_niro()
       ->mutable_wheel_speeds()
-      ->set_left_rear(wheel_speed_left_rear(bytes, length)) ;
+      ->set_left_rear(wheel_speed_left_rear(bytes, length)*scale) ;
 
   chassis_detail->mutable_niro()
       ->mutable_wheel_speeds()
-      ->set_right_rear(wheel_speed_right_rear(bytes, length)) ;
+      ->set_right_rear(wheel_speed_right_rear(bytes, length)*scale) ;
 
   chassis_detail->mutable_niro()
       ->mutable_wheel_speeds()
-      ->set_left_front(wheel_speed_left_front(bytes, length)) ;
+      ->set_left_front(wheel_speed_left_front(bytes, length)*scale) ;
 
   chassis_detail->mutable_niro()
       ->mutable_wheel_speeds()
-      ->set_right_front(wheel_speed_right_front(bytes, length)) ;
+      ->set_right_front(wheel_speed_right_front(bytes, length)*scale) ;
 
   // Used for debug
   // chassis_detail->mutable_niro()
