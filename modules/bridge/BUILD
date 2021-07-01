@@ -22,6 +22,8 @@ cc_library(
         "//modules/common/monitor_log",
         "//modules/common/util",
         "//modules/planning/proto:planning_cc_proto",
+        "//modules/control/proto:control_cmd_cc_proto",
+        "//modules/canbus/proto:chassis_cc_proto",
         "@com_github_gflags_gflags//:gflags",
     ],
 )
