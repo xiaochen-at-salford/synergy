@@ -10,13 +10,16 @@
 namespace apollo {
 namespace canbus {
 
-class NiroVehicleFactory : public AbstractVehicleFactory {
+using ::apollo::canbus::ChassisDetail;
+
+class NiroVehicleFactory 
+    : public AbstractVehicleFactory {
  public:
   virtual ~NiroVehicleFactory() = default;
 
   std::unique_ptr<VehicleController> CreateVehicleController() override;
 
-  std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>
+  std::unique_ptr<MessageManager<ChassisDetail>>
   CreateMessageManager() override;
 };
 

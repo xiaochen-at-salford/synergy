@@ -33,7 +33,6 @@ bool CanbusComponent::Init()
   AINFO << "The canbus conf file is loaded: " << FLAGS_canbus_conf_file;
   ADEBUG << "Canbus_conf:" << canbus_conf_.ShortDebugString();
 
-  // Init can client
   auto can_factory = CanClientFactory::Instance();
   can_factory->RegisterCanClients();
   can_client_ = can_factory->CreateCANClient(canbus_conf_.can_card_parameter());
@@ -61,8 +60,9 @@ bool CanbusComponent::Init()
   }
   AINFO << "Message manager is successfully created.";
 
-  if (can_receiver_.Init(
-         can_client_.get(), message_manager_.get(), canbus_conf_.enable_receiver_log() ) != ErrorCode::OK ) 
+  if (can_receiver_.Init(can_client_.get(), 
+                         message_manager_.get(), 
+                         canbus_conf_.enable_receiver_log() ) != ErrorCode::OK ) 
   {
     AERROR << "Failed to init can receiver.";
     return false;
@@ -85,8 +85,8 @@ bool CanbusComponent::Init()
   }
   AINFO << "The vehicle controller is successfully created.";
 
-  if (vehicle_controller_->Init(
-         canbus_conf_.vehicle_parameter(), &can_sender_, message_manager_.get() ) != ErrorCode::OK ) 
+  if (vehicle_controller_->Init(canbus_conf_.vehicle_parameter(), 
+                                &can_sender_, message_manager_.get() ) != ErrorCode::OK ) 
   {
     AERROR << "Failed to init vehicle controller.";
     return false;
@@ -128,7 +128,6 @@ bool CanbusComponent::Init()
   }
 
   chassis_writer_ = node_->CreateWriter<Chassis>(FLAGS_chassis_topic);
-
   chassis_detail_writer_ = node_->CreateWriter<ChassisDetail>(FLAGS_chassis_detail_topic);
 
   // 1. init and start the can card hardware
@@ -187,8 +186,6 @@ void CanbusComponent::PublishChassisDetail()
 {
   ChassisDetail chassis_detail;
   message_manager_->GetSensorData(&chassis_detail);
-  //wip...: temporary test here
-  chassis_detail.mutable_niro()->set_dummy_variable(true);
   ADEBUG << chassis_detail.ShortDebugString();
   chassis_detail_writer_->Write(chassis_detail);
 }
@@ -203,7 +200,6 @@ bool CanbusComponent::Proc()
 
 void CanbusComponent::OnControlCommand(const ControlCommand &control_command) 
 {
-  printf("hi there!");
   int64_t current_timestamp = Time::Now().ToMicrosecond();
   // if command coming too soon, just ignore it.
   if (current_timestamp-last_timestamp_ < FLAGS_min_cmd_interval*1000) 

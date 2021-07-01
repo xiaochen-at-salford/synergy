@@ -90,40 +90,48 @@ ErrorCode VehicleController::Update(const ControlCommand &control_command)
   //TODO(xiaochen): Add OSCC control
   if (control_command.has_oscc_msg())
   {
+    // printf("Received OSCC control command from keyboard\n");
     AINFO << "CAN bus received OSCC messages: "
           << control_command.oscc_msg().ShortDebugString() ;
-    
     switch (control_command.oscc_msg().action())
     {
       case control::OsccAction::ENABLE_ALL:
+        printf("Received OSCC_ENABLE_ALL command from the keyboard\n");
         EnableOscc(); 
         break;
 
       case control::OsccAction::DISABLE_ALL:
+        printf("Received OSCC_DISABLE_ALL command from the keyboard\n");
         DisableOscc();
         break;
       
       case control::OsccAction::ENABLE_BRAKE:
+        printf("Received OSCC_ENABLE_BRAKE command from the keyboard\n");
         EnableOsccBrake();
         break;
 
       case control::OsccAction::DISABLE_BRAKE:
-        EnableOsccBrake();
+        printf("Received OSCC_DISABLE_BRAKE command from the keyboard\n");
+        DisableOsccBrake();
         break;
 
       case control::OsccAction::ENABLE_STEERING:
+        printf("Received OSCC_ENABLE_STEERING command from the keyboard\n");
         EnableOsccSteering();
         break;
 
       case control::OsccAction::DISABLE_STEERING:
+        printf("Received OSCC_DISALBE_STEERING command from the keyboard\n");
         DisableOsccSteering();
         break;
 
       case control::OsccAction::ENABLE_THROTTLE:
+        printf("Received OSCC_ENABLE_THROTTLE command from the keyboard\n");
         EnableOsccThrottle();
         break;
 
       case control::OsccAction::DISABLE_THROTTLE:
+        printf("Received OSCC_DISALBE_THROTTLE command from the keyboard\n");
         DisableOsccThrottle();
         break;
     }
@@ -160,38 +168,47 @@ ErrorCode VehicleController::Update(const ControlCommand &control_command)
     }
   }
 
-  if (driving_mode() == Chassis::COMPLETE_AUTO_DRIVE 
-      || driving_mode() == Chassis::AUTO_SPEED_ONLY ) 
-  {
-    // Gear(control_command.gear_location());
-    Throttle(control_command.throttle());
-    // Acceleration(control_command.acceleration());
-    Brake(control_command.brake());
-    // SetEpbBreak(control_command);
-    SetLimits();
-  }
 
-  if (driving_mode() == Chassis::COMPLETE_AUTO_DRIVE 
-      || driving_mode() == Chassis::AUTO_STEER_ONLY) 
-  {
-    const double steering_rate_threshold = 1.0;
-    if (control_command.steering_rate() > steering_rate_threshold) 
-    { Steer(control_command.steering_target(), control_command.steering_rate());
-    } 
-    else {
-      Steer(control_command.steering_target());
-    }
-  }
+  // Throttle(30);
+  // Brake(50);
+  Throttle(control_command.throttle());
+  Brake(control_command.brake());
+  // Steer(control_command.steering_target());
+  Steer(control_command.steering_target(), 100);
+  // Steer(-90);
 
-  if ((driving_mode() == Chassis::COMPLETE_AUTO_DRIVE 
-          || driving_mode() == Chassis::AUTO_SPEED_ONLY 
-          || driving_mode() == Chassis::AUTO_STEER_ONLY ) 
-       && control_command.has_signal() ) 
-  {
-    SetHorn(control_command);
-    SetTurningSignal(control_command);
-    SetBeam(control_command);
-  }
+  // if (driving_mode() == Chassis::COMPLETE_AUTO_DRIVE 
+  //     || driving_mode() == Chassis::AUTO_SPEED_ONLY ) 
+  // {
+  //   // Gear(control_command.gear_location());
+  //   Throttle(control_command.throttle());
+  //   // Acceleration(control_command.acceleration());
+  //   Brake(control_command.brake());
+  //   // SetEpbBreak(control_command);
+  //   SetLimits();
+  // }
+
+  // if (driving_mode() == Chassis::COMPLETE_AUTO_DRIVE 
+  //     || driving_mode() == Chassis::AUTO_STEER_ONLY) 
+  // {
+  //   const double steering_rate_threshold = 1.0;
+  //   if (control_command.steering_rate() > steering_rate_threshold) 
+  //   { Steer(control_command.steering_target(), control_command.steering_rate());
+  //   } 
+  //   else {
+  //     Steer(control_command.steering_target());
+  //   }
+  // }
+
+  // if ((driving_mode() == Chassis::COMPLETE_AUTO_DRIVE 
+  //         || driving_mode() == Chassis::AUTO_SPEED_ONLY 
+  //         || driving_mode() == Chassis::AUTO_STEER_ONLY ) 
+  //      && control_command.has_signal() ) 
+  // {
+  //   SetHorn(control_command);
+  //   SetTurningSignal(control_command);
+  //   SetBeam(control_command);
+  // }
 
   return ErrorCode::OK;
 }

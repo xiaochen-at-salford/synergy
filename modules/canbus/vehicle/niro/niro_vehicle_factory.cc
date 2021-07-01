@@ -8,14 +8,16 @@
 namespace apollo {
 namespace canbus {
 
+using ::apollo::canbus::ChassisDetail;
+
 std::unique_ptr<VehicleController>
 NiroVehicleFactory::CreateVehicleController() 
 { return std::unique_ptr<VehicleController>(new niro::NiroController()); }
 
-std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>
+std::unique_ptr<MessageManager<ChassisDetail>>
 NiroVehicleFactory::CreateMessageManager() 
 {
-  return std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>(
+  return std::unique_ptr<MessageManager<ChassisDetail>>(
       new niro::NiroMessageManager() );
 }
 

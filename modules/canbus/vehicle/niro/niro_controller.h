@@ -6,46 +6,39 @@
 #include "modules/canbus/proto/canbus_conf.pb.h"
 #include "modules/canbus/proto/chassis.pb.h"
 #include "modules/canbus/proto/vehicle_parameter.pb.h"
-// Brake command protocols
+#include "modules/canbus/vehicle/vehicle_controller.h"
+#include "modules/common/proto/error_code.pb.h"
+#include "modules/control/proto/control_cmd.pb.h"
 #include "modules/canbus/vehicle/niro/protocol/0d112_0x70_brake_enable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d113_0x71_brake_disable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d114_0x72_brake_command.h"
-// Steering command protocols
 #include "modules/canbus/vehicle/niro/protocol/0d128_0x80_steering_enable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d129_0x81_steering_disable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d130_0x82_steering_torque_command.h"
 #include "modules/canbus/vehicle/niro/protocol/0d184_0xb8_steering_angle_command.h"
-// Throttle command protocols 
 #include "modules/canbus/vehicle/niro/protocol/0d144_0x90_throttle_enable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d145_0x91_throttle_disable.h"
 #include "modules/canbus/vehicle/niro/protocol/0d146_0x92_throttle_command.h"
-
-// #include "modules/canbus/vehicle/niro/protocol/dec544_hex220_brake_pressure.h"
-
-#include "modules/canbus/vehicle/vehicle_controller.h"
-#include "modules/common/proto/error_code.pb.h"
-#include "modules/control/proto/control_cmd.pb.h"
 
 namespace apollo {
 namespace canbus {
 namespace niro {
 
+using ::apollo::common::ErrorCode;
+using ::apollo::canbus::ChassisDetail;
+
 class NiroController final : public VehicleController {
  public:
   NiroController() {}
-
   virtual ~NiroController();
 
-  ::apollo::common::ErrorCode Init(
-      const VehicleParameter& params,
-      CanSender<::apollo::canbus::ChassisDetail>* const can_sender,
-      MessageManager<::apollo::canbus::ChassisDetail>* const message_manager )
-      override ;
+  ErrorCode Init(
+      const VehicleParameter &params,
+      CanSender<ChassisDetail>* const can_sender,
+      MessageManager<ChassisDetail>* const message_manager ) override;
 
   bool Start() override;
-
   void Stop() override;
-
   Chassis chassis() override;
   
   //TODO(xiaochen):
@@ -56,52 +49,22 @@ class NiroController final : public VehicleController {
  private:
   // main logical function for operation the car enter or exit the auto driving
   void Emergency() override;
-  ::apollo::common::ErrorCode EnableAutoMode() override;
-  ::apollo::common::ErrorCode DisableAutoMode() override;
-  ::apollo::common::ErrorCode EnableSteeringOnlyMode() override;
-  ::apollo::common::ErrorCode EnableSpeedOnlyMode() override;
+  ErrorCode EnableAutoMode() override;
+  ErrorCode DisableAutoMode() override;
+  ErrorCode EnableSteeringOnlyMode() override;
+  ErrorCode EnableSpeedOnlyMode() override;
 
-  /**
-   * @brief Enable all OSCC channels: brake, steering, and throttle
-   */
   void EnableOscc();
-
-  /**
-   * @brief Disable all OSCC channels: brake, sttering, and throotle 
-   */
   void DisableOscc();
-
-  /**
-   * @brief Enable the OSCC brake channel
-   */
   void EnableOsccBrake();
-
-  /**
-   * @brief Disable the OSCC brake channel
-   */
   void DisableOsccBrake();
-
-  /**
-   * @brief Enable the OSCC steering channel
-   */
   void EnableOsccSteering();
-
-  /**
-   * @brief Disable the OSCC steering channel
-   */
   void DisableOsccSteering();
-
-  /**
-   * @brief Enable the OSCC throttle channel
-   */
   void EnableOsccThrottle();
-
-  /**
-   * @brief Disable the OSCC throttle channel
-   */
   void DisableOsccThrottle();
 
-  void Gear(Chassis::GearPosition state) override {}; // API disabled
+  void Gear(Chassis::GearPosition state) override 
+  { AERROR << "API disabled for KIA Niro"; };
 
   /**
    * @brief Apply the percentage of brake pedal
@@ -119,12 +82,13 @@ class NiroController final : public VehicleController {
 
   /**
    * @brief Apply the percentage of steering angle with the upper max angular velocity
-   * @param angle_percent [%]:[-100.0, 100.0] := [degrees]:[-600.0, +600.0] 
+   * @param angle_percent [%]:[-100.0, 100.0] := [degrees]:[-470.0, +470.0] 
+   *                      "-":= right, "+":= left
    */
   void Steer(double angle_percent) override;
 
   /**
-   * @brief Wrapper of "void SteerByAngle(double angle_percent, double angle_speed_percent)"
+   * @brief Steer with specified max angular velocity
    */
   void Steer(double angle_percent, double max_angular_velocity_percent=100.0) override;
 
@@ -165,16 +129,13 @@ class NiroController final : public VehicleController {
   void set_chassis_error_code(const Chassis::ErrorCode& error_code);
 
  private:
-  // Brake command protocols
   BrakeEnable_0x70 *brake_enable_ = nullptr;
   BrakeDisable_0x71 *brake_disable_ = nullptr;
   BrakeCommand_0x72 *brake_command_ = nullptr;
-  // Steeringc command protocols
   SteeringEnable_0x80 *steering_enable_ = nullptr;
   SteeringDisable_0x81 *steering_disable_ = nullptr;
   SteeringTorqueCommand_0x82 *steering_torque_command_ = nullptr;
   SteeringAngleCommand_0xB8  *steering_angle_command_ = nullptr;
-  // Throttle command protocols
   ThrottleEnable_0x90 *throttle_enable_ = nullptr;
   ThrottleDisable_0x91 *throttle_disable_ = nullptr;
   ThrottleCommand_0x92 *throttle_command_ = nullptr; 
