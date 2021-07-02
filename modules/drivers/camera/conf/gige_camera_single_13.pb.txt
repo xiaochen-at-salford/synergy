@@ -24,8 +24,8 @@ trigger_internal: 0
 trigger_fps: 20
 channel_name: "/apollo/sensor/camera/single_13/image"
 device_wait_ms: 2000
-spin_rate: 200
-output_type: YUYV
+spin_rate: 1000
+output_type: RGB
 
 compress_conf {
     output_channel: "/apollo/sensor/camera/single/image/compressed"

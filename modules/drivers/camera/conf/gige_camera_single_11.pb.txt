@@ -1,5 +1,5 @@
 device_ip: "192.168.0.11"
-frame_id: "camera_single_11"
+frame_id: "camera_front_12mm"
 pixel_format: "yuyv"
 width: 1624
 height: 1240
@@ -22,12 +22,12 @@ white_balance: 4000
 bytes_per_pixel: 2
 trigger_internal: 0
 trigger_fps: 20
-channel_name: "/apollo/sensor/camera/single_11/image"
+channel_name: "/apollo/sensor/camera/front_12mm/image"
 device_wait_ms: 2000
-spin_rate: 200
-output_type: YUYV
+spin_rate: 1000
+output_type: RGB
 
 compress_conf {
-    output_channel: "/apollo/sensor/camera/single/image/compressed"
+    output_channel: "/apollo/sensor/camera/front_12mm/image/compressed"
     image_pool_size: 100
 }

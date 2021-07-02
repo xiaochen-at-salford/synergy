@@ -7,7 +7,7 @@ module_config {
       class_name : "SynCameraComponent"
       config {
         name : "camera_front_left"
-        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_left.pb.txt"
+        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_single_10.pb.txt"
       }
     }
 
@@ -15,7 +15,7 @@ module_config {
       class_name : "SynCameraComponent"
       config {
         name : "camera_front_right"
-        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_right.pb.txt"
+        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_single_11.pb.txt"
       }
     }
 
