@@ -78,10 +78,7 @@ void SynCameraComponent::run()
 {
   running_.exchange(true);
 
-
-
-  while (!cyber::IsShutdown()) 
-  {
+  while (!cyber::IsShutdown()) {
     // if (!camera_device_->is_grabbing())
     // {
     //   AINFO << "The Gige camera is not grabbing. Start to reconnect...";

@@ -148,8 +148,14 @@ cc_library(
 
 cc_library(
     name = "gige_camera",
-    srcs = ["gige_cam.cc"],
-    hdrs = ["gige_cam.h"],
+    srcs = [
+        "gige_cam.cc",
+        "util.cc", 
+    ],
+    hdrs = [
+        "gige_cam.h",
+        "util.h",
+    ],
     deps = [
         "//modules/drivers/camera/hikro:hikro_lib",
         "//cyber",

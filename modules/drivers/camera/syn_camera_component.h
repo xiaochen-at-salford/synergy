@@ -23,8 +23,8 @@ using apollo::drivers::camera::config::HikroConfig;
 
 class SynCameraComponent : public Component<> {
  public:
-  bool Init() override;
   ~SynCameraComponent();
+  bool Init() override;
 
  private:
   void run();
@@ -34,7 +34,7 @@ class SynCameraComponent : public Component<> {
   std::shared_ptr<HikroConfig> camera_config_;
   CameraImagePtr raw_image_ = nullptr;
   std::vector<std::shared_ptr<Image>> pb_image_buffer_;
-  uint32_t spin_rate_ = 100;
+  uint32_t spin_rate_ = 500;
   uint32_t device_wait_ = 2000;
   int index_ = 0;
   int buffer_size_ = 16;

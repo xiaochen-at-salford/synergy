@@ -2,6 +2,7 @@
 #include <string>
 
 #include "modules/drivers/camera/gige_cam.h"
+#include "modules/drivers/camera/util.h"
 
 #include <unistd.h>
 
@@ -50,10 +51,12 @@ bool GigeCam::init(const std::shared_ptr<HikroConfig> &camera_config)
 
   // Pxiel format
   if (config_->pixel_format() == "yuyv") 
-  { pixel_format_ = V4L2_PIX_FMT_YUYV; } 
+  { 
+    pixel_format_ = V4L2_PIX_FMT_YUYV; 
+    MV_CC_SetPixelFormat(mv_handle_, PixelType_Gvsp_YUV422_YUYV_Packed);
+  } 
   else 
   {
-    pixel_format_ = V4L2_PIX_FMT_YUYV;
     AERROR << "Wrong pixel fromat:" << config_->pixel_format()
            << ",must be yuyv";
     return false;
@@ -220,7 +223,7 @@ bool GigeCam::open_device(void)
   mv_res = MV_CC_SetGainMode(mv_handle_, config_->gain_mode());
   MVCC_ENUMVALUE pstValue;
   MV_CC_GetGainMode(mv_handle_, &pstValue);
-  std::cout << "hehe value: " << pstValue.nCurValue << std::endl;
+  // std::cout << "hehe value: " << pstValue.nCurValue << std::endl;
 
   if (mv_res != MV_OK)
   {
@@ -377,6 +380,7 @@ bool GigeCam::read_frame(CameraImagePtr raw_image)
   return true;
 }
 
+//TODO(xiaochen): Add YUYV to RGB conversion
 bool GigeCam::process_image(MV_FRAME_OUT& frame, CameraImagePtr dest_image)
 {
   if (frame.pBufAddr == nullptr || dest_image == nullptr)
@@ -387,8 +391,16 @@ bool GigeCam::process_image(MV_FRAME_OUT& frame, CameraImagePtr dest_image)
 
   if (config_->output_type() == YUYV)
   {
-    memcpy(dest_image->image, frame.pBufAddr, dest_image->width * dest_image->height * 2);
+    memcpy(dest_image->image, 
+           frame.pBufAddr, 
+           dest_image->width * dest_image->height * 2 );
   }
+  else if (config_->output_type() == RGB)
+  {
+    yuyv2rgb_avx((unsigned char*)frame.pBufAddr, 
+                 (unsigned char*)dest_image->image,
+                 dest_image->width * dest_image->height );
+  } 
   else 
   {
     AERROR << "unsupported output format: " << config_->output_type();
