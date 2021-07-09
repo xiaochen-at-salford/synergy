@@ -63,10 +63,10 @@ class FusionCameraDetectionComponent : public apollo::cyber::Component<> {
       const FusionCameraDetectionComponent&) = delete;
 
   bool Init() override;
-
- private:
   void OnReceiveImage(const std::shared_ptr<apollo::drivers::Image>& in_message,
                       const std::string& camera_name);
+
+ private:
   int InitConfig();
   int InitSensorInfo();
   int InitAlgorithmPlugin();
@@ -76,10 +76,6 @@ class FusionCameraDetectionComponent : public apollo::cyber::Component<> {
   int InitMotionService();
   void SetCameraHeightAndPitch();
   void OnMotionService(const MotionServiceMsgType& message);
-  bool SetCameraHeight(
-       const std::string &sensor_name,
-       const std::string &params_dir, float default_camera_height,
-       float *camera_height);
 
   int InternalProc(
       const std::shared_ptr<apollo::drivers::Image const>& in_message,
