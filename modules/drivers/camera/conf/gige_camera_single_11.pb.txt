@@ -3,7 +3,7 @@ frame_id: "camera_front_12mm"
 pixel_format: "yuyv"
 width: 1624
 height: 1240
-frame_rate: 5
+frame_rate: 10
 monochrome: false
 brightness: 100
 contrast: -1
@@ -11,11 +11,11 @@ saturation: -1
 sharpness: -1
 gain_mode: GAIN_MODE_CONTINUOUS
 gain: 23.98
-gamma_enable: true
+gamma_enable: false
 gamma_selector: GAMMA_SELECTOR_SRGB
 auto_focus: false
 focus: -1
-auto_exposure: false
+auto_exposure: true
 exposure: 100
 auto_white_balance: true
 white_balance: 4000
