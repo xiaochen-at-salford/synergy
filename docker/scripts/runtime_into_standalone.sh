@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-
 ###############################################################################
-# Copyright 2017 The Apollo Authors. All Rights Reserved.
+# Copyright 2021 The Apollo Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,15 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ###############################################################################
-DOCKER_USER="${USER}"
-DEV_CONTAINER="apollo_dev_${USER}"
+
+RUNTIME_CONTAINER="apollo_runtime_standalone_${USER}"
 
 xhost +local:root 1>/dev/null 2>&1
 
-docker exec \
-    -u "${DOCKER_USER}" \
-    -e HISTFILE=/apollo/.dev_bash_hist \
-    -it "${DEV_CONTAINER}" \
+docker exec -u "${USER}" \
+    -it "${RUNTIME_CONTAINER}" \
     /bin/bash
 
 xhost -local:root 1>/dev/null 2>&1

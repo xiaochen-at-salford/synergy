@@ -18,7 +18,7 @@
 CURR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 source "${CURR_DIR}/docker_base.sh"
 
-VERSION_X86_64="cyber-x86_64-18.04-20210202_1105"
+VERSION_X86_64="cyber-x86_64-18.04-20210315_1535"
 TESTING_VERSION_X86_64="cyber-x86_64-18.04-testing-20210108_1510"
 
 #L4T
@@ -38,7 +38,6 @@ USE_LOCAL_IMAGE=0
 CUSTOM_DIST=
 CUSTOM_VERSION=
 GEOLOC=
-GEO_REGISTRY=
 
 function _target_arch_check() {
     local arch="$1"
@@ -198,6 +197,7 @@ function determine_target_version_and_arch() {
     fi
     CUSTOM_VERSION="${version}"
 }
+
 
 function setup_devices_and_mount_volumes() {
     local __retval="$1"
@@ -372,8 +372,8 @@ function main() {
 
     postrun_start_user "${CYBER_CONTAINER}"
 
-    ok "Congrats, you have successfully finished setting up Apollo cyber docker environment." \
-        "To login into cyber container, please run the following command:"
+    ok "Congratulations! You have successfully finished setting up CyberRT Docker environment."
+    ok "To log into the newly created CyberRT container, please run the following command:"
     ok "  bash docker/scripts/cyber_into.sh"
     ok "Enjoy!"
 }
