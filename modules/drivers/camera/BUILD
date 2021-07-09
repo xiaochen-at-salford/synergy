@@ -48,6 +48,19 @@ cc_binary(
     ],
 )
 
+cc_binary(
+    name = "libsyn_fhd_camera_component.so",
+    linkopts = [
+        "-latomic",
+    ],
+    linkshared = True,
+    linkstatic = False,
+    deps = [
+        ":syn_fhd_camera_component_lib",
+        "@boost",
+    ],
+)
+
 # TODO(xiaochen-at-salford)
 cc_library(
     name = "syn_camera_component_lib",
@@ -60,6 +73,24 @@ cc_library(
         "//modules/common/proto:error_code_cc_proto",
         "//modules/common/proto:header_cc_proto",
         "//modules/drivers/proto:sensor_image_cc_proto",
+    ],
+)
+
+cc_library(
+    name = "syn_fhd_camera_component_lib",
+    srcs = ["syn_fhd_camera_component.cc"],
+    hdrs = ["syn_fhd_camera_component.h"],
+    copts = CAMERA_COPTS,
+    deps = [
+        ":gige_camera",
+        "//cyber",
+        "//modules/common/proto:error_code_cc_proto",
+        "//modules/common/proto:header_cc_proto",
+        "//modules/drivers/proto:sensor_image_cc_proto",
+        "@opencv//:core",
+        "@opencv//:highgui",
+        "@opencv//:imgproc",
+        "@opencv//:imgcodecs",
     ],
 )
 
