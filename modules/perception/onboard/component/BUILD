@@ -99,7 +99,6 @@ cc_library(
         ":fusion_component",
         ":radar_detection_component",
         ":recognition_component",
-        ":segmentation_component",
     ],
     alwayslink = True,
 )
@@ -126,8 +125,18 @@ cc_library(
         "//modules/common/util:string_util",
         "//modules/perception/common/sensor_manager",
         "//modules/perception/lib/registerer",
-        "//modules/perception/lidar/app:lidar_obstacle_detection",
         "//modules/perception/lidar/common",
+        "//modules/perception/lidar/app:lidar_obstacle_detection",
+        "//modules/perception/lidar/lib/ground_detector/spatio_temporal_ground_detector",
+        "//modules/perception/lidar/lib/interface",
+        "//modules/perception/lidar/lib/object_builder",
+        "//modules/perception/lidar/lib/object_filter_bank/roi_boundary_filter",
+        "//modules/perception/lidar/lib/roi_filter/hdmap_roi_filter",
+        "//modules/perception/lidar/lib/scene_manager/ground_service",
+        "//modules/perception/lidar/lib/scene_manager/roi_service",
+        "//modules/perception/lidar/lib/detector/point_pillars_detection:point_pillars_detection",
+        "//modules/perception/lidar/lib/detector/cnn_segmentation:cnn_segmentation",
+        "//modules/perception/lidar/lib/detector/ncut_segmentation:ncut_segmentation",
         "//modules/perception/onboard/common_flags",
         "//modules/perception/onboard/proto:lidar_component_config_cc_proto",
         "//modules/perception/onboard/transform_wrapper",
@@ -157,6 +166,7 @@ cc_library(
         "//modules/perception/onboard/proto:fusion_component_config_cc_proto",
         "@eigen",
     ],
+    alwayslink = True,
 )
 
 cc_library(
@@ -198,6 +208,7 @@ cc_library(
         "//modules/perception/radar/lib/tracker/filter:adaptive_kalman_filter",
         "//modules/perception/radar/lib/tracker/matcher:hm_matcher",
     ],
+    alwayslink = True,
 )
 
 cc_library(
@@ -223,34 +234,7 @@ cc_library(
         "//modules/perception/lidar/lib/tracker/multi_lidar_fusion:mlf_tracker",
         "//modules/perception/onboard/proto:lidar_component_config_cc_proto",
     ],
-)
-
-cc_library(
-    name = "segmentation_component",
-    srcs = ["segmentation_component.cc"],
-    hdrs = ["segmentation_component.h"],
-    deps = [
-        ":lidar_inner_component_messages",
-        "//cyber/time:clock",
-        "//modules/common/util:string_util",
-        "//modules/perception/common/sensor_manager",
-        "//modules/perception/lib/registerer",
-        "//modules/perception/lidar/app:lidar_obstacle_segmentation",
-        "//modules/perception/lidar/common",
-        "//modules/perception/lidar/lib/ground_detector/spatio_temporal_ground_detector",
-        "//modules/perception/lidar/lib/interface",
-        "//modules/perception/lidar/lib/object_builder",
-        "//modules/perception/lidar/lib/object_filter_bank/roi_boundary_filter",
-        "//modules/perception/lidar/lib/roi_filter/hdmap_roi_filter",
-        "//modules/perception/lidar/lib/scene_manager/ground_service",
-        "//modules/perception/lidar/lib/scene_manager/roi_service",
-        "//modules/perception/lidar/lib/segmentation/cnnseg:cnn_segmentation",
-        "//modules/perception/lidar/lib/segmentation/ncut:ncut_segmentation",
-        "//modules/perception/onboard/common_flags",
-        "//modules/perception/onboard/proto:lidar_component_config_cc_proto",
-        "//modules/perception/onboard/transform_wrapper",
-        "@eigen",
-    ],
+    alwayslink = True,
 )
 
 cpplint()

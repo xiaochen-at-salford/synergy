@@ -1,9 +1,9 @@
-device_ip: "192.168.1.10"
-frame_id: "camera_single_10"
+device_ip: "192.168.0.10"
+frame_id: "camera_front_6mm"
 pixel_format: "yuyv"
-width: 800
-height: 600
-frame_rate: 30
+width: 1624
+height: 1240
+frame_rate: 5
 monochrome: false
 brightness: 100
 contrast: -1
@@ -11,23 +11,23 @@ saturation: -1
 sharpness: -1
 gain_mode: GAIN_MODE_CONTINUOUS
 gain: 23.98
-gamma_enable: true
+gamma_enable: false
 gamma_selector: GAMMA_SELECTOR_SRGB
 auto_focus: false
 focus: -1
-auto_exposure: false
+auto_exposure: true
 exposure: 100
 auto_white_balance: true
 white_balance: 4000
 bytes_per_pixel: 2
 trigger_internal: 0
 trigger_fps: 20
-channel_name: "/apollo/sensor/camera/single_10/image"
+channel_name: "/apollo/sensor/camera/front_6mm/image"
 device_wait_ms: 2000
-spin_rate: 200
-output_type: YUYV
+spin_rate: 1000
+output_type: RGB
 
 compress_conf {
-    output_channel: "/apollo/sensor/camera/single/image/compressed"
+    output_channel: "/apollo/sensor/camera/front_6mm/image/compressed"
     image_pool_size: 100
 }

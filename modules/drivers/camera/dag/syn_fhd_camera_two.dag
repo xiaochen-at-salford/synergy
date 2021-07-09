@@ -1,0 +1,22 @@
+# Define all coms in DAG streaming.
+module_config {
+    module_library : "/apollo/bazel-bin/modules/drivers/camera/libsyn_fhd_camera_component.so"
+
+
+    components {
+      class_name : "SynFhdCameraComponent"
+      config {
+        name : "camera_front_left"
+        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_single_11.pb.txt"
+      }
+    }
+
+    components {
+      class_name : "SynFhdCameraComponent"
+      config {
+        name : "camera_front_right"
+        config_file_path : "/apollo/modules/drivers/camera/conf/gige_camera_single_12.pb.txt"
+      }
+    }
+
+}

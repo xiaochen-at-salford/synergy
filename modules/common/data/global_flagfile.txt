@@ -75,3 +75,9 @@
 --local_utm_zone_id=30
 
 --map_dir=/apollo/modules/map/data/wolverhampton_map
+
+--map_dir=/apollo/modules/map/data/wolverhampton_4
+
+--map_dir=/apollo/modules/map/data/wolverhampton_3
+
+--map_dir=/apollo/modules/map/data/wolverhampton_4
